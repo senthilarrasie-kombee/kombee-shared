@@ -43,7 +43,7 @@ const TabNavigation = () => {
                 component={Settings} 
                 options={{ 
                     title: "Settings",
-                    tabBarIcon: ({ color, size }) => <Icon name="settings-outline" color={color} size={size} />
+                    tabBarIcon: ({ color, size }) => <Icon name="settings-sharp" color={color} size={size} />
                 }} 
             />
         </Tab.Navigator>
