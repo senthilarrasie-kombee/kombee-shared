@@ -1,9 +1,9 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import { MainStack } from './navigationTypes';
 import { NavigationContainer } from '@react-navigation/native';
-import Login from '@/features/login';
+import Login from '@features/auth/screens/LoginScreen';
 import TabNavigation from './tabNavigation';
-import { ROUTES } from '@/constants/routes';
+import { ROUTES } from '@app/routes';
 
 const Stack = createStackNavigator<MainStack>();
 

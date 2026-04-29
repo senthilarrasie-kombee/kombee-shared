@@ -1,4 +1,4 @@
-import { ROUTES } from '../../constants/routes';
+import { ROUTES } from '@app/routes';
 
 // navigation types
 type MainStack = {

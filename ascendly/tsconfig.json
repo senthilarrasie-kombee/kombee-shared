@@ -4,7 +4,16 @@
     "types": ["jest"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@app/*": ["src/app/*"],
+      "@app": ["src/app"],
+      "@features/*": ["src/features/*"],
+      "@features": ["src/features"],
+      "@shared/*": ["src/shared/*"],
+      "@shared": ["src/shared"],
+      "@core/*": ["src/core/*"],
+      "@core": ["src/core"],
+      "@store/*": ["src/store/*"],
+      "@store": ["src/store"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],

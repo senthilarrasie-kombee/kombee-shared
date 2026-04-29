@@ -7,7 +7,7 @@ import {
   ViewStyle, 
   Platform 
 } from 'react-native';
-import { useTheme, FontFamily, Spacing } from '@/core/theme';
+import { useTheme, FontFamily, Spacing } from '@shared/theme';
 
 interface AppTextInputProps extends TextInputProps {
   containerStyle?: ViewStyle;

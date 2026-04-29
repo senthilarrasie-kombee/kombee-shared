@@ -9,13 +9,13 @@ import {
   Text
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { LoginType } from '@/types';
+import { LoginType } from '@features/auth/types';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { createStyles } from './styles';
-import { useTheme } from '@/core/theme';
-import { ROUTES } from '@/constants/routes';
-import { AppButton, AppTextInput, AppText } from '@/components';
-import { Spacing } from '@/core/theme';
+import { createStyles } from './LoginStyles';
+import { useTheme } from '@shared/theme';
+import { ROUTES } from '@app/routes';
+import { AppButton, AppTextInput, AppText } from '@shared/components';
+import { Spacing } from '@shared/theme';
 
 const Login = ({ title, children }: LoginType) => {
   const [email, setEmail] = useState<string>('');

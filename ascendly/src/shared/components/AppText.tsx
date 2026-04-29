@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, TextProps } from 'react-native';
-import { useTheme, FontFamily, FontSize } from '@/core/theme';
+import { useTheme, FontFamily, FontSize } from '@shared/theme';
 
 interface AppTextProps extends TextProps {
   children: React.ReactNode;

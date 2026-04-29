@@ -1,10 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { createStyles } from './styles';
-import { DashboardType } from '@/types';
-import { useTheme } from '@/core/theme';
+import { createStyles } from './DashboardStyles';
+import { DashboardType } from '@features/dashboard/types';
+import { useTheme } from '@shared/theme';
 
-import { AppButton } from '@/components';
+import { AppButton } from '@shared/components';
 
 const Dashboard: React.FC<DashboardType> = ({ children }) => {
     const [count, setCount] = useState(0);

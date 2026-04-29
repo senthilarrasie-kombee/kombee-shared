@@ -3,5 +3,5 @@
 // Export Store Layer
 
 // Export Presentation Layer
-export { default } from './presentation/screens/Dashboard';
+export { default } from './screens/DashboardScreen';
 

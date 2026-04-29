@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions, Platform } from 'react-native';
-import { LightColors, FontFamily, Spacing } from '@/core/theme';
+import { LightColors, FontFamily, Spacing } from '@shared/theme';
 
 const { width, height } = Dimensions.get('window');
 

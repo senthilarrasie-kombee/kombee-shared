@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Switch, Appearance, useColorScheme } from 'react-native';
-import { AppText } from '@/components';
-import { useTheme, Spacing } from '@/core/theme';
+import { AppText } from '@shared/components';
+import { useTheme, Spacing } from '@shared/theme';
 
 const SettingsScreen = () => {
   const { colors } = useTheme();

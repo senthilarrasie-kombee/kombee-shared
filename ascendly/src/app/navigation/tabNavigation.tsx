@@ -2,12 +2,12 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { MainStack } from './navigationTypes';
-import Login from '@/features/login';
-import Dashboard from '@/features/dashboard';
-import HabitsList from '@/features/habits/presentation/screens/HabitsList';
-import Profile from '@/features/profile/presentation/screens/Profile';
-import Settings from '@/features/settings/presentation/screens/Settings';
-import { ROUTES } from '@/constants/routes';
+import Login from '@features/auth/screens/LoginScreen';
+import Dashboard from '@features/dashboard/screens/DashboardScreen';
+import HabitsList from '@features/habits/screens/HabitsListScreen';
+import Profile from '@features/profile/screens/ProfileScreen';
+import Settings from '@features/settings/screens/SettingsScreen';
+import { ROUTES } from '@app/routes';
 
 const Tab = createBottomTabNavigator<MainStack>();
 
