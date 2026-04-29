@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
-  Text, 
   View, 
-  TextInput, 
-  TouchableOpacity, 
   KeyboardAvoidingView, 
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-  ScrollView
+  ScrollView,
+  Text
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LoginType } from '@/types';
@@ -16,16 +14,17 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { createStyles } from './styles';
 import { useTheme } from '@/core/theme';
 import { ROUTES } from '@/constants/routes';
-import { AppButton } from '@/components';
+import { AppButton, AppTextInput, AppText } from '@/components';
 import { Spacing } from '@/core/theme';
 
 const Login = ({ title, children }: LoginType) => {
   const [email, setEmail] = useState<string>('');
-    const [Password, setPassword] = useState<string>('');
-
+    const [password, setPassword] = useState<string>('');
+const [enableSignIn, setEnableSigIn] = useState<boolean>(false);
   const navigation = useNavigation<any>();
   const { colors } = useTheme();
-  
+  const [emailError, setEmailError] = useState<string>('');
+  const [passwordError, setPasswordError] = useState<string>('');
   const styles = useMemo(() => createStyles(colors), [colors]);
   
   useEffect(() => {
@@ -40,9 +39,37 @@ await new Promise(resolve => setTimeout(() => {console.log("Step 2"); resolve(nu
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if(password.trim().length >0 && email.trim().length >0) {
+    setEnableSigIn(true);
+  }else{
+    setEnableSigIn(false);
+  }
+  }, [password, email]);
+
 
   const handleLogin = () => {
     navigation.navigate(ROUTES.MAIN_TAB);
+  };
+
+  const handleEmailChange = (text: string) => {
+    const cleanText = text.replace(/\s/g, '');
+    if(cleanText.includes('@')  || cleanText.length === 0) {
+      setEmailError('');
+    }else{
+      setEmailError('Please enter a valid email');
+    }
+    setEmail(cleanText);
+  };
+
+  const handlePasswordChange = (text: string) => {
+    const cleanText = text.replace(/\s/g, '');
+    if(cleanText.length === 0 || cleanText.length >= 6) {
+      setPasswordError('');
+    } else {
+      setPasswordError('Password must be at least 6 characters');
+    }
+    setPassword(cleanText);
   };
 
   return (
@@ -64,33 +91,31 @@ await new Promise(resolve => setTimeout(() => {console.log("Step 2"); resolve(nu
           >
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <View style={styles.content}>
-                <Text style={styles.title}>Login</Text>
-                <Text style={styles.subtitle}>Welcome to Sara Shopping!</Text>
+                <AppText style={styles.title}>Login</AppText>
+                <AppText style={styles.subtitle}>Welcome to Ascendly!</AppText>
 
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Email"
-                    placeholderTextColor={colors.textSecondary}
-                    value={email}
-                    onChangeText={setEmail}
-                    autoCapitalize="none"
-                    keyboardType="email-address"
-                  />
-                </View>
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    placeholderTextColor={colors.textSecondary}
-                    value={Password}
-                    onChangeText={setPassword}
-                    autoCapitalize="none"
-                    secureTextEntry={true}
-                  />
-                </View>
-                {/*  */}
+                <AppTextInput
+                  placeholder="Email"
+                  containerStyle={{marginBottom: emailError ? 0 : 20 }}
+                  value={email}
+                  onChangeText={handleEmailChange}
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                  maxLength={30}
+                />
+                {emailError ? <AppText style={{ color: 'red' , marginTop:0, paddingTop:0, marginBottom: 20, paddingBottom:0}}>{emailError}</AppText> : null}
+                <AppTextInput
+                  placeholder="Password"
+                  containerStyle={{marginBottom: passwordError ? 0 : 20 }}
+                  value={password}
+                  onChangeText={handlePasswordChange}
+                  autoCapitalize="none"
+                  secureTextEntry={true}
+                  maxLength={20}
+                />
+                {passwordError ? <AppText style={{ color: 'red' , marginTop:0, paddingTop:0, marginBottom: 20, paddingBottom:0}}>{passwordError}</AppText> : null}
                 <AppButton 
+                disabled={!enableSignIn}
                   title="Sign In"
                   onPress={handleLogin}
                   style={{ marginTop: Spacing.s2 }}

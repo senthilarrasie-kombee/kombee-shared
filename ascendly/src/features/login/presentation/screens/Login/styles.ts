@@ -21,7 +21,7 @@ export const createStyles = (colors: typeof LightColors) => StyleSheet.create({
   content: {
     flexGrow: 1,
     paddingHorizontal: 24,
-    paddingTop: height * 0.2, // Reduced top padding slightly for better fit
+    paddingTop: height * 0.3,
     paddingBottom: 40,
   },
   title: {
@@ -35,24 +35,6 @@ export const createStyles = (colors: typeof LightColors) => StyleSheet.create({
     marginTop: Spacing.s1,
     marginBottom: 40,
     fontFamily: FontFamily.regular,
-  },
-  inputContainer: {
-    width: '100%',
-    marginBottom: 20,
-  },
-  input: {
-    backgroundColor: colors.background === '#FFFFFF' ? '#F3F4F6' : '#1C1C27',
-    borderRadius: 16,
-    paddingHorizontal: 20,
-    paddingVertical: Platform.OS === 'ios' ? Spacing.s3 : Spacing.s1,
-    color: colors.textPrimary,
-    borderWidth: 1,
-    borderColor: colors.border,
-    fontFamily: FontFamily.regular,
-    fontSize: 16,
-    textAlignVertical: 'center',
-    includeFontPadding: false, 
-    height: 48, 
   },
   button: {
     backgroundColor: colors.primary,

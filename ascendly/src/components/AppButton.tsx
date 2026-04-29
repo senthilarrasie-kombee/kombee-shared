@@ -1,6 +1,7 @@
 import React from 'react';
-import { Pressable, Text, StyleSheet, ViewStyle, TextStyle, Platform } from 'react-native';
+import { Pressable, StyleSheet, ViewStyle, TextStyle, Platform } from 'react-native';
 import { useTheme, FontFamily } from '@/core/theme';
+import AppText from './AppText';
 
 interface AppButtonProps {
   title: string;
@@ -41,7 +42,7 @@ const AppButton: React.FC<AppButtonProps> = ({
         style,
       ]}
     >
-      <Text
+      <AppText
         style={[
           {
             color: '#FFFFFF',
@@ -53,7 +54,7 @@ const AppButton: React.FC<AppButtonProps> = ({
         ]}
       >
         {title}
-      </Text>
+      </AppText>
     </Pressable>
   );
 };
