@@ -95,3 +95,20 @@ To learn more about React Native, take a look at the following resources:
 - [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+
+Figma reference
+
+https://www.figma.com/design/032IxWor55yFPues3sLiCH/Routiner---Habit-Tracker-App--Community-?node-id=356-22791&t=tdGTCz3u2G2Jqbc4-0
+
+https://www.figma.com/design/011Y3HGJ9jJAWEw63wOeRh/Shoppe---eCommerce-Clothing-Fashion-Store-Multi-Purpose-UI-Mobile-App-Design--Community-?node-id=0-12584&t=h8JIcs0FeWIy0XfH-0
+
+https://www.figma.com/design/A6p5HYhGzEEu8iFyEWCpUt/Mobile-UI-Kit--Ecommerce--Community-?node-id=12-2&p=f&t=ZbCpgTu1a9VKJq06-0
+
+profile
+https://www.figma.com/design/fPqkG1M2X9pBsZifZQZPfe/Fitness-Tracker-App--Community-?node-id=0-1&p=f&t=UxhZISTKAWcIkd5T-0
+
+attactive colors
+https://www.figma.com/design/KQEag59ep38yO37Gg1zBgx/Habitly---Habit-Tracker-App-UI-Kit--Preview-?node-id=16427-3&p=f&t=QOIrwtxcnEliAadC-0
+
+homescreen
+https://www.figma.com/design/i0CiC1mQJaWERAm8Z2ToIP/Taskcy---Task-Tracker-App--Community-?node-id=0-1&p=f&t=g5XZ9KR7mSIoWig6-0
