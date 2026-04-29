@@ -17,6 +17,14 @@ import { ROUTES } from '@app/routes';
 import { AppButton, AppTextInput, AppText } from '@shared/components';
 import { Spacing } from '@shared/theme';
 
+/* 
+
+https://medium.com/@ignatovich.dm/implementing-advanced-form-validation-with-formik-and-yup-898d34e17ad0
+
+https://kombee-technologies.atlassian.net/wiki/spaces/HC/pages/4104192013/Overview#Key-Features-%26-Capabilities
+
+*/
+
 const Login = ({ title, children }: LoginType) => {
   const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
