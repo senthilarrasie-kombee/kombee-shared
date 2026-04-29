@@ -6,6 +6,8 @@ export const ROUTES = {
   LOGIN: 'login',
   MAIN_TAB: 'mainTab',
   DASHBOARD: 'dashboard',
-  PRODUCTS_LISTING: 'productsListing',
+  HABITS_LISTING: 'habitsListing',
+  PROFILE: 'profile',
+  SETTINGS: 'settings',
   HOME: 'home', // Included for completeness based on MainStack type
 } as const;
