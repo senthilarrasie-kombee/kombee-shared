@@ -6,14 +6,19 @@ export const LightColors = {
   textSecondary: '#666666',
   primary: '#1E5BFF',
   border: '#E5E7EB',
-
+  error: '#FF4B4B',
+  blob1: '#C7D2FE',
+  blob2: '#d5dcf5ff',
 };
 
 export const DarkColors = {
   background: '#0F0F14',
   transparent: 'transparent',
-  textPrimary: '#F0F0F5',
-  textSecondary: '#9E9EB8',
+  textPrimary: '#fff',
+  textSecondary: '#e8eeff',
   primary: '#4D7FFF',
-  border: '#2A2A3C',
+  border: '#9E9EB8',
+  error: '#FF5252',
+  blob1: '#C7D2FE',
+  blob2: '#d5dcf5ff',
 };

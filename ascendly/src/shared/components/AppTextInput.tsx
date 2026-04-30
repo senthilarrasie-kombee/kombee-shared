@@ -12,11 +12,15 @@ import { useTheme, FontFamily, Spacing } from '@shared/theme';
 interface AppTextInputProps extends TextInputProps {
   containerStyle?: ViewStyle;
   inputStyle?: ViewStyle;
+  error?: string | boolean;
+  rightElement?: React.ReactNode;
 }
 
 const AppTextInput: React.FC<AppTextInputProps> = ({ 
   containerStyle, 
   inputStyle, 
+  error,
+  rightElement,
   ...props 
 }) => {
   const { colors } = useTheme();
@@ -24,31 +28,47 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
   const styles = StyleSheet.create({
     container: {
       width: '100%',
-      marginBottom: 20,
+      marginBottom: error ? Spacing.s1 : 20,
     },
-    input: {
+    inputContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
       backgroundColor: colors.background === '#FFFFFF' ? '#F3F4F6' : '#1C1C27',
       borderRadius: 16,
-      paddingHorizontal: 20,
-      paddingVertical: Platform.OS === 'ios' ? Spacing.s3 : Spacing.s1,
-      color: colors.textPrimary,
       borderWidth: 1,
-      borderColor: colors.border,
+      borderColor: error ? colors.error : colors.border,
+      height: 48,
+    },
+    input: {
+      flex: 1,
+      paddingHorizontal: 20,
+      paddingVertical: Platform.OS === 'ios' ? Spacing.s3 : 0,
+      color: colors.textPrimary,
       fontFamily: FontFamily.regular,
       fontSize: 16,
-      textAlignVertical: 'center',
       includeFontPadding: false,
-      height: 48,
+    },
+    rightElementContainer: {
+      paddingRight: 15,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });
 
   return (
     <View style={[styles.container, containerStyle]}>
-      <TextInput
-        style={[styles.input, inputStyle]}
-        placeholderTextColor={colors.textSecondary}
-        {...props}
-      />
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={[styles.input, inputStyle]}
+          placeholderTextColor={colors.textSecondary}
+          {...props}
+        />
+        {rightElement && (
+          <View style={styles.rightElementContainer}>
+            {rightElement}
+          </View>
+        )}
+      </View>
     </View>
   );
 };

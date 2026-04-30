@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   View, 
   KeyboardAvoidingView, 
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-  ScrollView,
-  Text
+  ScrollView
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LoginType } from '@features/auth/types';
@@ -14,70 +13,17 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { createStyles } from './LoginStyles';
 import { useTheme } from '@shared/theme';
 import { ROUTES } from '@app/routes';
-import { AppButton, AppTextInput, AppText } from '@shared/components';
-import { Spacing } from '@shared/theme';
+import LoginComponent from '../components/Login';
+import RegisterComponent from '../components/Register';
 
-/* 
-
-https://medium.com/@ignatovich.dm/implementing-advanced-form-validation-with-formik-and-yup-898d34e17ad0
-
-https://kombee-technologies.atlassian.net/wiki/spaces/HC/pages/4104192013/Overview#Key-Features-%26-Capabilities
-
-*/
-
-const Login = ({ title, children }: LoginType) => {
-  const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-const [enableSignIn, setEnableSigIn] = useState<boolean>(false);
+const AuthScreen = ({ title, children }: LoginType) => {
+  const [isLogin, setIsLogin] = useState(true);
   const navigation = useNavigation<any>();
   const { colors } = useTheme();
-  const [emailError, setEmailError] = useState<string>('');
-  const [passwordError, setPasswordError] = useState<string>('');
   const styles = useMemo(() => createStyles(colors), [colors]);
-  
-  useEffect(() => {
 
-    // dev: JS/TS concepts
-    // dev: async program
-    const fetchData = async () => {
-      console.log("Step 1");
-await new Promise(resolve => setTimeout(() => {console.log("Step 2"); resolve(null); }, 1000));
-      console.log("Step 3");
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if(password.trim().length >0 && email.trim().length >0) {
-    setEnableSigIn(true);
-  }else{
-    setEnableSigIn(false);
-  }
-  }, [password, email]);
-
-
-  const handleLogin = () => {
+  const handleSuccess = () => {
     navigation.navigate(ROUTES.MAIN_TAB);
-  };
-
-  const handleEmailChange = (text: string) => {
-    const cleanText = text.replace(/\s/g, '');
-    if(cleanText.includes('@')  || cleanText.length === 0) {
-      setEmailError('');
-    }else{
-      setEmailError('Please enter a valid email');
-    }
-    setEmail(cleanText);
-  };
-
-  const handlePasswordChange = (text: string) => {
-    const cleanText = text.replace(/\s/g, '');
-    if(cleanText.length === 0 || cleanText.length >= 6) {
-      setPasswordError('');
-    } else {
-      setPasswordError('Password must be at least 6 characters');
-    }
-    setPassword(cleanText);
   };
 
   return (
@@ -98,36 +44,18 @@ await new Promise(resolve => setTimeout(() => {console.log("Step 2"); resolve(nu
             keyboardShouldPersistTaps="handled"
           >
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              <View style={styles.content}>
-                <AppText style={styles.title}>Login</AppText>
-                <AppText style={styles.subtitle}>Welcome to Ascendly!</AppText>
-
-                <AppTextInput
-                  placeholder="Email"
-                  containerStyle={{marginBottom: emailError ? 0 : 20 }}
-                  value={email}
-                  onChangeText={handleEmailChange}
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                  maxLength={30}
-                />
-                {emailError ? <AppText style={{ color: 'red' , marginTop:0, paddingTop:0, marginBottom: 20, paddingBottom:0}}>{emailError}</AppText> : null}
-                <AppTextInput
-                  placeholder="Password"
-                  containerStyle={{marginBottom: passwordError ? 0 : 20 }}
-                  value={password}
-                  onChangeText={handlePasswordChange}
-                  autoCapitalize="none"
-                  secureTextEntry={true}
-                  maxLength={20}
-                />
-                {passwordError ? <AppText style={{ color: 'red' , marginTop:0, paddingTop:0, marginBottom: 20, paddingBottom:0}}>{passwordError}</AppText> : null}
-                <AppButton 
-                disabled={!enableSignIn}
-                  title="Sign In"
-                  onPress={handleLogin}
-                  style={{ marginTop: Spacing.s2 }}
-                />
+              <View style={{ flex: 1 }}>
+                {isLogin ? (
+                  <LoginComponent 
+                    onToggle={() => setIsLogin(false)} 
+                    onSuccess={handleSuccess} 
+                  />
+                ) : (
+                  <RegisterComponent 
+                    onToggle={() => setIsLogin(true)} 
+                    onSuccess={handleSuccess} 
+                  />
+                )}
               </View>
             </TouchableWithoutFeedback>
           </ScrollView>
@@ -137,6 +65,4 @@ await new Promise(resolve => setTimeout(() => {console.log("Step 2"); resolve(nu
   );
 };
 
-
-export default Login;
-
+export default AuthScreen;
