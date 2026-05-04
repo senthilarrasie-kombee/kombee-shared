@@ -2,7 +2,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { MainStack } from './navigationTypes';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from '@features/auth/screens/LoginScreen';
+import EditProfile from '@features/profile/screens/EditProfileScreen';
 import TabNavigation from './tabNavigation';
+import HabitDetails from '@features/habits/screens/HabitDetailsScreen';
 import { ROUTES } from '@app/routes';
 
 const Stack = createStackNavigator<MainStack>();
@@ -20,6 +22,8 @@ const MainStackNavigation = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen name={ROUTES.MAIN_TAB} component={TabNavigation} />
+        <Stack.Screen name={ROUTES.EDIT_PROFILE} component={EditProfile} />
+        <Stack.Screen name={ROUTES.HABIT_DETAILS} component={HabitDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );

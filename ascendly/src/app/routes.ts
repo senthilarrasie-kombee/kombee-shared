@@ -8,6 +8,8 @@ export const ROUTES = {
   DASHBOARD: 'dashboard',
   HABITS_LISTING: 'habitsListing',
   PROFILE: 'profile',
+  EDIT_PROFILE: 'editProfile',
   SETTINGS: 'settings',
   HOME: 'home', // Included for completeness based on MainStack type
+  HABIT_DETAILS: 'habitDetails',
 } as const;

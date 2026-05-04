@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator<MainStack>();
 
 const TabNavigation = () => {
     return (
-        <Tab.Navigator screenOptions={{ headerTitleAlign: 'center' }}>
+        <Tab.Navigator screenOptions={{ headerShown: false }}>
             <Tab.Screen 
                 name={ROUTES.DASHBOARD} 
                 component={Dashboard} 

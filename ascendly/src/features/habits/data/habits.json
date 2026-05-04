@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "title": "Morning Exercise",
+    "description": "30 minutes of cardio and stretching",
+    "createdDate": "2026-04-25",
+    "status": "active",
+    "daysTarget": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    "completedDates": ["2026-04-28", "2026-04-29", "2026-04-30"],
+    "streak": 3,
+    "goal": "Improve fitness and stamina"
+  },
+  {
+    "id": 2,
+    "title": "Read Books",
+    "description": "Read at least 20 pages",
+    "createdDate": "2026-04-20",
+    "status": "active",
+    "daysTarget": ["Monday", "Wednesday", "Friday", "Sunday"],
+    "completedDates": ["2026-04-21", "2026-04-23", "2026-04-27"],
+    "streak": 1,
+    "goal": "Gain knowledge and improve focus"
+  },
+  {
+    "id": 3,
+    "title": "Meditation",
+    "description": "10 minutes mindfulness meditation",
+    "createdDate": "2026-04-15",
+    "status": "active",
+    "daysTarget": ["Daily"],
+    "completedDates": ["2026-05-01", "2026-05-02", "2026-05-03"],
+    "streak": 3,
+    "goal": "Reduce stress and improve mental clarity"
+  },
+  {
+    "id": 4,
+    "title": "Drink Water",
+    "description": "Drink at least 3 liters of water",
+    "createdDate": "2026-04-10",
+    "status": "active",
+    "daysTarget": ["Daily"],
+    "completedDates": ["2026-05-01", "2026-05-02"],
+    "streak": 2,
+    "goal": "Stay hydrated and healthy"
+  },
+  {
+    "id": 5,
+    "title": "Learn Flutter",
+    "description": "Practice Flutter for 1 hour",
+    "createdDate": "2026-04-05",
+    "status": "paused",
+    "daysTarget": ["Saturday", "Sunday"],
+    "completedDates": ["2026-04-06", "2026-04-12", "2026-04-19"],
+    "streak": 0,
+    "goal": "Become proficient in mobile app development"
+  }
+]

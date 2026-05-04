@@ -32,12 +32,13 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
     },
     inputContainer: {
       flexDirection: 'row',
-      alignItems: 'center',
+      alignItems: props.multiline ? 'flex-start' : 'center',
       backgroundColor: colors.background === '#FFFFFF' ? '#F3F4F6' : '#1C1C27',
       borderRadius: 16,
       borderWidth: 1,
       borderColor: error ? colors.error : colors.border,
-      height: 48,
+      minHeight: 48,
+      height: props.multiline ? undefined : 48,
     },
     input: {
       flex: 1,
