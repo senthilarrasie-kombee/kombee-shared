@@ -3,6 +3,9 @@
   "compilerOptions": {
     "types": ["jest"],
     "baseUrl": ".",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
     "paths": {
       "@app/*": ["src/app/*"],
       "@app": ["src/app"],

@@ -1,4 +1,4 @@
 // Core exports
 export * from './api';
 export * from './utils';
-export * from './theme';
+export * from '../shared/theme';

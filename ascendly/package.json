@@ -14,7 +14,8 @@
     "logs": "react-native log-android",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@react-native/new-app-screen": "0.85.2",
