@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
-import { View, ScrollView, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
+import { View, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import { useTheme } from '@shared/theme';
@@ -21,7 +22,7 @@ const HabitDetailsScreen = () => {
   const isActive = habit.status === 'active';
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       <AppHeader title="Habit Details" showBack />
       

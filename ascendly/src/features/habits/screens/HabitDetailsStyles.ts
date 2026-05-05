@@ -116,6 +116,8 @@ export const createHabitDetailsStyles = (colors: typeof LightColors, isDark: boo
   dayText: {
     fontSize: FontSize.sm,
     fontFamily: FontFamily.semiBold,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   footer: {
     flexDirection: 'row',

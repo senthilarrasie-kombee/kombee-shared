@@ -15,7 +15,9 @@ const AppText: React.FC<AppTextProps> = ({ style, children, ...props }) => {
         { 
           color: colors.textPrimary, 
           fontFamily: FontFamily.regular, 
-          fontSize: FontSize.md 
+          fontSize: FontSize.md,
+          includeFontPadding: false,
+          textAlignVertical: 'center',
         }, 
         style
       ]} 

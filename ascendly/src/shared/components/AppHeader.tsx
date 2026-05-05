@@ -45,19 +45,19 @@ const AppHeader: React.FC<AppHeaderProps> = ({
     <View style={styles.header}>
       {showBack && (
         <TouchableOpacity 
-          style={[styles.backButton, { borderColor: colors.border }]}
+          style={[styles.backButton, { backgroundColor: colors.primary + '10' }]}
           onPress={handleBack}
         >
-          <Icon name="chevron-back" size={24} color={colors.textPrimary} />
+          <Icon name="chevron-back" size={24} color={colors.primary} />
         </TouchableOpacity>
       )}
       
       {showMenu && (
         <TouchableOpacity 
-          style={[styles.backButton, { borderColor: colors.border }]}
+          style={[styles.backButton, { backgroundColor: colors.primary + '10' }]}
           onPress={handleMenu}
         >
-          <Icon name="menu" size={24} color={colors.textPrimary} />
+          <Icon name="menu" size={24} color={colors.primary} />
         </TouchableOpacity>
       )}
 
@@ -77,14 +77,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    height: 64,
   },
   backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 1,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
   },
