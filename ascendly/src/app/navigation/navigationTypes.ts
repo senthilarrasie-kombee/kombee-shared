@@ -11,6 +11,7 @@ type MainStack = {
     [ROUTES.EDIT_PROFILE]: undefined;
     [ROUTES.SETTINGS]: undefined;
     [ROUTES.MAIN_TAB]: undefined;
+    [ROUTES.DRAWER]: undefined;
     [ROUTES.HABIT_DETAILS]: { habit: Habit };
 };
 

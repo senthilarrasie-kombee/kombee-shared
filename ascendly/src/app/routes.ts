@@ -11,5 +11,6 @@ export const ROUTES = {
   EDIT_PROFILE: 'editProfile',
   SETTINGS: 'settings',
   HOME: 'home', // Included for completeness based on MainStack type
+  DRAWER: 'drawer',
   HABIT_DETAILS: 'habitDetails',
 } as const;

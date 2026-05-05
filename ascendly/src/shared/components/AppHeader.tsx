@@ -8,15 +8,19 @@ import AppText from './AppText';
 interface AppHeaderProps {
   title: string;
   showBack?: boolean;
+  showMenu?: boolean;
   rightElement?: React.ReactNode;
   onBackPress?: () => void;
+  onMenuPress?: () => void;
 }
 
 const AppHeader: React.FC<AppHeaderProps> = ({ 
   title, 
   showBack = false, 
+  showMenu = false,
   rightElement,
-  onBackPress
+  onBackPress,
+  onMenuPress
 }) => {
   const { colors } = useTheme();
   const navigation = useNavigation();
@@ -29,18 +33,35 @@ const AppHeader: React.FC<AppHeaderProps> = ({
     }
   };
 
+  const handleMenu = () => {
+    if (onMenuPress) {
+      onMenuPress();
+    } else {
+      (navigation as any).openDrawer();
+    }
+  };
+
   return (
     <View style={styles.header}>
-      {showBack ? (
+      {showBack && (
         <TouchableOpacity 
           style={[styles.backButton, { borderColor: colors.border }]}
           onPress={handleBack}
         >
           <Icon name="chevron-back" size={24} color={colors.textPrimary} />
         </TouchableOpacity>
-      ) : (
-        <View style={styles.placeholder} />
       )}
+      
+      {showMenu && (
+        <TouchableOpacity 
+          style={[styles.backButton, { borderColor: colors.border }]}
+          onPress={handleMenu}
+        >
+          <Icon name="menu" size={24} color={colors.textPrimary} />
+        </TouchableOpacity>
+      )}
+
+      {!showBack && !showMenu && <View style={styles.placeholder} />}
       
       <AppText style={styles.headerTitle}>{title}</AppText>
       

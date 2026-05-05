@@ -4,9 +4,13 @@ import { LightColors } from '@shared/theme';
 export const createStyles = (colors: typeof LightColors) => StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.background,
+  },
+  content: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.background,
+    paddingHorizontal: 20,
   },
   title: {
     fontSize: 24,

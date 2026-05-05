@@ -23,7 +23,7 @@ const AuthScreen = ({ title, children }: LoginType) => {
   const styles = useMemo(() => createStyles(colors), [colors]);
 
   const handleSuccess = () => {
-    navigation.navigate(ROUTES.MAIN_TAB);
+    navigation.navigate(ROUTES.DRAWER);
   };
 
   return (

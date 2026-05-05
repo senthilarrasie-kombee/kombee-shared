@@ -3,7 +3,7 @@ import { MainStack } from './navigationTypes';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from '@features/auth/screens/LoginScreen';
 import EditProfile from '@features/profile/screens/EditProfileScreen';
-import TabNavigation from './tabNavigation';
+import DrawerNavigation from './drawerNavigation';
 import HabitDetails from '@features/habits/screens/HabitDetailsScreen';
 import { ROUTES } from '@app/routes';
 
@@ -21,7 +21,7 @@ const MainStackNavigation = () => {
           component={Login}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name={ROUTES.MAIN_TAB} component={TabNavigation} />
+        <Stack.Screen name={ROUTES.DRAWER} component={DrawerNavigation} />
         <Stack.Screen name={ROUTES.EDIT_PROFILE} component={EditProfile} />
         <Stack.Screen name={ROUTES.HABIT_DETAILS} component={HabitDetails} />
       </Stack.Navigator>
