@@ -8,17 +8,18 @@ import { AppButton, AppHeader } from '@shared/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import ConfirmModal from '@shared/components/ConfirmModal';
+import { STRINGS } from '@shared/constants/strings';
 
 const Dashboard: React.FC<DashboardType> = ({ children }) => {
     const [count, setCount] = useState(0);
     const { colors } = useTheme();
     const styles = useMemo(() => createStyles(colors), [colors]);
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
     const [isExitModalVisible, setIsExitModalVisible] = useState(false);
     const [pendingAction, setPendingAction] = useState<any>(null);
 
     React.useEffect(() => {
-      const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+      const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
         // Prevent default behavior of leaving the screen
         e.preventDefault();
 
@@ -50,9 +51,9 @@ const Dashboard: React.FC<DashboardType> = ({ children }) => {
 
             <ConfirmModal
               isVisible={isExitModalVisible}
-              title="Exit Dashboard?"
-              message="Are you sure you want to leave the dashboard? Any unsaved changes might be lost."
-              confirmText="Exit"
+              title={STRINGS.EXIT_APP.TITLE}
+              message={STRINGS.EXIT_APP.MESSAGE}
+              confirmText={STRINGS.EXIT_APP.CONFIRM}
               onConfirm={confirmExit}
               onCancel={() => setIsExitModalVisible(false)}
               type="info"

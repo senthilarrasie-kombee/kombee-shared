@@ -5,7 +5,7 @@ import { Habit } from '../types/habit';
 import { useTheme } from '@shared/theme';
 import AppText from '@shared/components/AppText';
 import { styles } from './HabitCardStyles';
-import { calculateStreak } from '../utils/habitUtils';
+import { calculateStreak } from '@shared/utils/habitUtils';
 
 import categoriesData from '../data/categories.json';
 

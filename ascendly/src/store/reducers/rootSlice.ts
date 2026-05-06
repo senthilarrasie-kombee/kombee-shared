@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { Habit } from '@features/habits/types/habit';
-import habitsData from '@features/habits/data/habits.json';
+
+import { UserProfile, getUserHabits, addHabit, updateHabit as updateHabitFirestore, deleteHabit as deleteHabitFirestore } from '@core/firebase/firestore';
 
 interface RootState {
   isLoaderVisible: boolean;
@@ -9,6 +10,8 @@ interface RootState {
   error: string | null;
   toastMessage: string | null;
   isDarkMode: boolean;
+  user: UserProfile | null;
+  isAuthenticated: boolean;
 }
 
 const initialState: RootState = {
@@ -18,21 +21,31 @@ const initialState: RootState = {
   error: null,
   toastMessage: null,
   isDarkMode: false,
+  user: null,
+  isAuthenticated: false,
 };
 
 // Async Thunk for fetching habits
 export const fetchHabits = createAsyncThunk(
   'root/fetchHabits',
-  async (isRefresh: boolean = false, { dispatch, rejectWithValue }) => {
+  async (isRefresh: boolean = false, { dispatch, getState, rejectWithValue }) => {
     try {
       if (!isRefresh) dispatch(setLoaderVisible(true));
       
-      // Simulate network delay
-      await new Promise((resolve) => setTimeout(() => resolve(null), 1500));
+      const state = getState() as any;
+      const uid = state.root.user?.uid;
       
-      console.log('Fetched Habits Data:', habitsData);
-      return habitsData as Habit[];
+      if (!uid) {
+        console.warn('Fetch Habits: No UID found in state');
+        return [];
+      }
+
+      const habits = await getUserHabits(uid);
+      
+      console.log(`Fetched ${habits.length} habits from Firestore`);
+      return habits as unknown as Habit[];
     } catch (error) {
+      console.error('Fetch Habits Error:', error);
       return rejectWithValue('Failed to fetch habits');
     } finally {
       if (!isRefresh) dispatch(setLoaderVisible(false));
@@ -43,21 +56,24 @@ export const fetchHabits = createAsyncThunk(
 // Async Thunk for adding a habit
 export const addHabitAsync = createAsyncThunk(
   'root/addHabit',
-  async (habit: Omit<Habit, 'id' | 'createdDate'>, { dispatch, rejectWithValue }) => {
+  async (habit: Omit<Habit, 'id' | 'createdDate'>, { dispatch, getState, rejectWithValue }) => {
     try {
       dispatch(setLoaderVisible(true));
-      // Simulate network delay
-      await new Promise((resolve) => setTimeout(() => resolve(null), 1500));
       
-      const newHabit: Habit = {
+      const state = getState() as any;
+      const uid = state.root.user?.uid;
+      
+      if (!uid) throw new Error('No user authenticated');
+
+      const result = await addHabit(uid, {
         ...habit,
-        id: Math.floor(Math.random() * 1000000), // Simulate ID generation
         createdDate: new Date().toISOString(),
-      } as Habit;
+      });
       
-      console.log('✅ Habit Created Successfully:', newHabit);
-      return newHabit;
+      console.log('✅ Habit Saved to Firestore:', result.id);
+      return result as Habit;
     } catch (error) {
+      console.error('Add Habit Error:', error);
       return rejectWithValue('Failed to add habit');
     } finally {
       dispatch(setLoaderVisible(false));
@@ -68,15 +84,21 @@ export const addHabitAsync = createAsyncThunk(
 // Async Thunk for updating a habit
 export const updateHabitAsync = createAsyncThunk(
   'root/updateHabit',
-  async (habit: Habit, { dispatch, rejectWithValue }) => {
+  async (habit: Habit, { dispatch, getState, rejectWithValue }) => {
     try {
       dispatch(setLoaderVisible(true));
-      // Simulate network delay
-      await new Promise((resolve) => setTimeout(() => resolve(null), 1500));
       
-      console.log('✨ Habit Updated Successfully:', habit);
-      return habit;
+      const state = getState() as any;
+      const uid = state.root.user?.uid;
+      
+      if (!uid) throw new Error('No user authenticated');
+
+      const result = await updateHabitFirestore(uid, habit);
+      
+      console.log('✨ Habit Updated in Firestore:', habit.id);
+      return result as Habit;
     } catch (error) {
+      console.error('Update Habit Error:', error);
       return rejectWithValue('Failed to update habit');
     } finally {
       dispatch(setLoaderVisible(false));
@@ -87,15 +109,21 @@ export const updateHabitAsync = createAsyncThunk(
 // Async Thunk for deleting a habit
 export const deleteHabitAsync = createAsyncThunk(
   'root/deleteHabit',
-  async (habitId: number, { dispatch, rejectWithValue }) => {
+  async (habitId: string | number, { dispatch, getState, rejectWithValue }) => {
     try {
       dispatch(setLoaderVisible(true));
-      // Simulate network delay
-      await new Promise((resolve) => setTimeout(() => resolve(null), 1500));
       
-      console.log('🗑️ Habit Deleted Successfully, ID:', habitId);
+      const state = getState() as any;
+      const uid = state.root.user?.uid;
+      
+      if (!uid) throw new Error('No user authenticated');
+
+      await deleteHabitFirestore(uid, habitId.toString());
+      
+      console.log('🗑️ Habit Deleted from Firestore, ID:', habitId);
       return habitId;
     } catch (error) {
+      console.error('Delete Habit Error:', error);
       return rejectWithValue('Failed to delete habit');
     } finally {
       dispatch(setLoaderVisible(false));
@@ -128,6 +156,14 @@ const rootSlice = createSlice({
     setDarkMode: (state, action: PayloadAction<boolean>) => {
       state.isDarkMode = action.payload;
     },
+    setUser: (state, action: PayloadAction<UserProfile | null>) => {
+      state.user = action.payload;
+      state.isAuthenticated = !!action.payload;
+    },
+    logout: (state) => {
+      state.user = null;
+      state.isAuthenticated = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -155,12 +191,12 @@ const rootSlice = createSlice({
         }
         state.toastMessage = 'Habit updated successfully! ✨';
       })
-      .addCase(deleteHabitAsync.fulfilled, (state, action: PayloadAction<number>) => {
+      .addCase(deleteHabitAsync.fulfilled, (state, action: PayloadAction<string | number>) => {
         state.habits = state.habits.filter(h => h.id !== action.payload);
         state.toastMessage = 'Habit deleted successfully! 🗑️';
       });
   },
 });
 
-export const { setLoaderVisible, setHabits, setToast, toggleDarkMode, setDarkMode, updateHabit } = rootSlice.actions;
+export const { setLoaderVisible, setHabits, setToast, toggleDarkMode, setDarkMode, updateHabit, setUser, logout } = rootSlice.actions;
 export default rootSlice.reducer;

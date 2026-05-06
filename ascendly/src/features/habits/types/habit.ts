@@ -11,7 +11,7 @@ export interface HabitCompletion {
 }
 
 export interface Habit {
-  id: number;
+  id: string | number;
   categoryId: string;
   isOneTime: boolean;
   priority: HabitPriority;

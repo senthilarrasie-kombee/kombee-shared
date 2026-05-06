@@ -27,7 +27,7 @@ import ConfirmModal from '@shared/components/ConfirmModal';
 import { MainStack } from '@app/navigation/navigationTypes';
 import { ROUTES } from '@app/routes';
 import { Habit, HabitPriority, HabitFrequency, HabitDurationType, HabitTimeOfDay, HabitStatus } from '../types/habit';
-import { getFrequencyDescription, getOrdinal } from '../utils/habitUtils';
+import { getFrequencyDescription, getOrdinal } from '@shared/utils/habitUtils';
 import categoriesData from '../data/categories.json';
 import { useDispatch } from 'react-redux';
 import { addHabitAsync, updateHabitAsync, deleteHabitAsync } from '@store/reducers/rootSlice';

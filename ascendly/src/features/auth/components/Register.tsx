@@ -12,6 +12,9 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { signUpWithEmail } from '@core/firebase/auth';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@store/reducers/rootSlice';
 import { useTheme, Spacing } from '@shared/theme';
 import { AppButton, AppTextInput, AppText } from '@shared/components';
 import { createStyles } from '../screens/LoginStyles';
@@ -39,16 +42,28 @@ const validationSchema = Yup.object().shape({
 
 const Register: React.FC<RegisterProps> = ({ onToggle, onSuccess }) => {
   const { colors } = useTheme();
+  const dispatch = useDispatch();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const [registerLoading, setRegisterLoading] = React.useState(false);
 
   const formik = useFormik({
     initialValues: { name: '', email: '', password: '', confirmPassword: '' },
     validationSchema,
-    onSubmit: (values) => {
-      console.log('Register values:', values);
-      onSuccess();
+    onSubmit: async (values) => {
+      try {
+        setRegisterLoading(true);
+        const userCredential = await signUpWithEmail(values.email, values.password, values.name);
+        if (userCredential) {
+          dispatch(setUser(userCredential.user));
+          onSuccess();
+        }
+      } catch (error) {
+        console.error('Registration Error:', error);
+      } finally {
+        setRegisterLoading(false);
+      }
     },
   });
 
@@ -127,8 +142,8 @@ const Register: React.FC<RegisterProps> = ({ onToggle, onSuccess }) => {
       ) : null}
 
       <AppButton 
-        disabled={!formik.isValid || !formik.dirty}
-        title="Create Account"
+        disabled={!formik.isValid || !formik.dirty || registerLoading}
+        title={registerLoading ? "Creating Account..." : "Create Account"}
         onPress={formik.handleSubmit}
         style={{ marginTop: Spacing.s2 }}
       />

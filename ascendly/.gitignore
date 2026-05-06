@@ -75,3 +75,4 @@ yarn-error.log
 
 # Environments
 .env*
+!.env.example

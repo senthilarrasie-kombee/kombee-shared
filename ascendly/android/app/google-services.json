@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "156955514963",
+    "project_id": "ascendly-uat",
+    "storage_bucket": "ascendly-uat.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156955514963:android:bcaf7f12136ea711d50ea6",
+        "android_client_info": {
+          "package_name": "com.ascendly.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "156955514963-6ac88n481k7orvvtanle8kb8epb2p54s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ascendly.staging",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "156955514963-rlgsnl6vcgt4v2trspad6vsst797rp90.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAbFw10_VZn9VPnvs96mq9_X-M87-WCnI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "156955514963-rlgsnl6vcgt4v2trspad6vsst797rp90.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

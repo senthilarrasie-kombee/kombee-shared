@@ -55,6 +55,10 @@ const AllHabitsScreen = () => {
     dispatch(fetchHabits(true));
   }, [dispatch]);
 
+  React.useEffect(() => {
+    dispatch(fetchHabits(false));
+  }, [dispatch]);
+
   // Combined search and filter logic
   const filteredHabits = useMemo(() => {
     let result = [...allHabits];

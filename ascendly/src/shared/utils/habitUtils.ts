@@ -1,9 +1,55 @@
-import { Habit } from '../types/habit';
+import { Habit } from '@features/habits/types/habit';
+
+const MONTHS_LONG = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
+];
+
+const MONTHS_SHORT = [
+  'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
+  'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'
+];
+
+export function formatDisplayDate(dateStr: any): string {
+  if (!dateStr) return 'N/A';
+  
+  try {
+    let datePart = '';
+
+    // Handle Firestore Timestamp objects ({_seconds, _nanoseconds})
+    if (typeof dateStr === 'object' && (dateStr._seconds !== undefined || dateStr.seconds !== undefined)) {
+      const seconds = dateStr._seconds ?? dateStr.seconds;
+      const date = new Date(seconds * 1000);
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const monthName = MONTHS_SHORT[month - 1] || 'N/A';
+      return `${monthName}, ${day}, ${year}`;
+    }
+
+    if (typeof dateStr !== 'string') return 'N/A';
+
+    // Handle ISO strings and YYYY-MM-DD
+    datePart = dateStr.split('T')[0];
+    const parts = datePart.split('-');
+    if (parts.length !== 3) return dateStr;
+
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10);
+    const day = parseInt(parts[2], 10);
+    
+    const monthName = MONTHS_SHORT[month - 1] || 'N/A';
+    return `${monthName}, ${day}, ${year}`;
+  } catch (e) {
+    console.warn('Date formatting failed:', e);
+    return 'N/A';
+  }
+}
 
 export function getFrequencyDescription(habit: Partial<Habit>): string {
   const start = habit.startDate ? new Date(habit.startDate) : new Date();
   const day = start.getDate();
-  const month = start.toLocaleString('default', { month: 'long' });
+  const month = MONTHS_LONG[start.getMonth()];
 
   if (habit.isOneTime) {
     return `One-time task on ${month} ${day}`;

@@ -11,7 +11,7 @@ import ConfirmModal from '@shared/components/ConfirmModal';
 import { MainStack } from '@app/navigation/navigationTypes';
 import { ROUTES } from '@app/routes';
 import { createHabitDetailsStyles } from './HabitDetailsStyles';
-import { calculateStreak } from '../utils/habitUtils';
+import { calculateStreak, formatDisplayDate } from '@shared/utils/habitUtils';
 import { useDispatch } from 'react-redux';
 import { deleteHabitAsync } from '@store/reducers/rootSlice';
 
@@ -31,13 +31,7 @@ const HabitDetailsScreen = () => {
 
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
-  const formatDisplayDate = (dateStr: string | undefined) => {
-    if (!dateStr) return 'N/A';
-    const [year, month, day] = dateStr.split('T')[0].split('-').map(Number);
-    const date = new Date(year, month - 1, day);
-    const monthName = date.toLocaleString('en-US', { month: 'short' }).toUpperCase();
-    return `${monthName}, ${day}, ${year}`;
-  };
+
 
   const handleDelete = () => {
     setIsDeleteModalVisible(true);
@@ -48,7 +42,7 @@ const HabitDetailsScreen = () => {
     setIsDeleteModalVisible(false);
     try {
       await dispatch(deleteHabitAsync(habit.id)).unwrap();
-      navigation.navigate(ROUTES.HABITS_LISTING);
+      navigation.goBack();
     } catch (error) {
       console.error('Failed to delete habit:', error);
     }

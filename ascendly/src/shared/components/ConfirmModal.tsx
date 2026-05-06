@@ -12,7 +12,8 @@ interface ConfirmModalProps {
   cancelText?: string;
   onConfirm: () => void;
   onCancel: () => void;
-  type?: 'danger' | 'info';
+  type?: 'danger' | 'info' | 'logout' | 'success';
+  showCancel?: boolean;
 }
 
 const ConfirmModal: React.FC<ConfirmModalProps> = ({
@@ -23,10 +24,13 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   cancelText = 'Cancel',
   onConfirm,
   onCancel,
-  type = 'danger'
+  type = 'danger',
+  showCancel = true
 }) => {
   const { colors, isDark } = useTheme();
   const isDanger = type === 'danger';
+  const isLogout = type === 'logout';
+  const isSuccess = type === 'success';
 
   return (
     <Modal
@@ -42,12 +46,12 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
         ]}>
           <View style={[
             styles.iconContainer, 
-            { backgroundColor: isDanger ? '#EF444415' : colors.primary + '15' }
+            { backgroundColor: isDanger ? '#EF444415' : isLogout ? colors.primary + '15' : isSuccess ? '#10B98115' : colors.primary + '15' }
           ]}>
             <Icon 
-              name={isDanger ? "trash-outline" : "information-circle-outline"} 
+              name={isDanger ? "trash-outline" : isLogout ? "log-out-outline" : isSuccess ? "checkmark-circle-outline" : "information-circle-outline"} 
               size={32} 
-              color={isDanger ? "#EF4444" : colors.primary} 
+              color={isDanger ? "#EF4444" : isLogout ? colors.primary : isSuccess ? "#10B981" : colors.primary} 
             />
           </View>
 
@@ -60,20 +64,22 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           </AppText>
 
           <View style={styles.buttonContainer}>
-            <TouchableOpacity 
-              style={[styles.button, styles.cancelButton, { borderColor: isDark ? '#3F3F46' : '#E2E8F0' }]} 
-              onPress={onCancel}
-            >
-              <AppText style={[styles.buttonText, { color: colors.textSecondary }]}>
-                {cancelText}
-              </AppText>
-            </TouchableOpacity>
-
+            {showCancel && (
+              <TouchableOpacity 
+                style={[styles.button, styles.cancelButton, { borderColor: isDark ? '#3F3F46' : '#E2E8F0' }]} 
+                onPress={onCancel}
+              >
+                <AppText style={[styles.buttonText, { color: colors.textSecondary }]}>
+                  {cancelText}
+                </AppText>
+              </TouchableOpacity>
+            )}
+            
             <TouchableOpacity 
               style={[
                 styles.button, 
                 styles.confirmButton, 
-                { backgroundColor: isDanger ? '#EF4444' : colors.primary }
+                { backgroundColor: isDanger ? '#EF4444' : isSuccess ? '#10B981' : colors.primary }
               ]} 
               onPress={onConfirm}
             >
