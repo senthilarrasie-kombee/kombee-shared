@@ -7,10 +7,11 @@ export const ROUTES = {
   MAIN_TAB: 'mainTab',
   DASHBOARD: 'dashboard',
   HABITS_LISTING: 'habitsListing',
-  PROFILE: 'profile',
+  ACCOUNT: 'account',
+  ALL_HABITS: 'allHabits',
   EDIT_PROFILE: 'editProfile',
-  SETTINGS: 'settings',
   HOME: 'home', // Included for completeness based on MainStack type
   DRAWER: 'drawer',
   HABIT_DETAILS: 'habitDetails',
+  HABIT_FORM: 'habitForm',
 } as const;

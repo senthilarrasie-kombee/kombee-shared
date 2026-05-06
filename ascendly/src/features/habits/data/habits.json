@@ -1,57 +1,438 @@
 [
   {
     "id": 1,
-    "title": "Morning Exercise",
-    "description": "30 minutes of cardio and stretching",
-    "createdDate": "2026-04-25",
+    "categoryId": "learning",
+    "isOneTime": false,
+    "priority": "medium",
+    "title": "Learn Java",
+    "description": "Daily coding practice and theory",
+    "duration": "45",
+    "durationType": "minutes",
+    "frequency": "daily",
+    "targetPerWeek": 7,
+    "createdDate": "2026-04-01T00:00:00Z",
+    "startDate": "2026-04-10T00:00:00Z",
+    "endDate": "2026-12-31T00:00:00Z",
+    "updatedAt": "2026-05-05T00:00:00Z",
     "status": "active",
-    "daysTarget": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-    "completedDates": ["2026-04-28", "2026-04-29", "2026-04-30"],
-    "streak": 3,
-    "goal": "Improve fitness and stamina"
+    "daysTarget": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ],
+    "goal": "Master backend development",
+    "lastSyncedAt": "2026-05-05T10:00:00Z",
+    "isDirty": false,
+    "isFavorite": true,
+    "timeOfDay": "anytime",
+    "completions": [
+      {
+        "date": "2026-04-20",
+        "note": "Felt productive today"
+      },
+      {
+        "date": "2026-04-21"
+      },
+      {
+        "date": "2026-04-22"
+      },
+      {
+        "date": "2026-04-23"
+      },
+      {
+        "date": "2026-04-24"
+      },
+      {
+        "date": "2026-04-25"
+      },
+      {
+        "date": "2026-04-26"
+      },
+      {
+        "date": "2026-04-27"
+      },
+      {
+        "date": "2026-04-28"
+      },
+      {
+        "date": "2026-04-29"
+      },
+      {
+        "date": "2026-04-30"
+      },
+      {
+        "date": "2026-05-01"
+      },
+      {
+        "date": "2026-05-02"
+      },
+      {
+        "date": "2026-05-03"
+      },
+      {
+        "date": "2026-05-04"
+      }
+    ]
   },
   {
     "id": 2,
-    "title": "Read Books",
-    "description": "Read at least 20 pages",
-    "createdDate": "2026-04-20",
+    "categoryId": "mental",
+    "isOneTime": false,
+    "priority": "high",
+    "title": "Deep Work",
+    "description": "Uninterrupted focus on core projects",
+    "duration": "2",
+    "durationType": "hours",
+    "frequency": "custom",
+    "targetPerWeek": 5,
+    "createdDate": "2026-04-15T00:00:00Z",
+    "startDate": "2026-04-15T00:00:00Z",
+    "endDate": "2027-04-15T00:00:00Z",
+    "updatedAt": "2026-05-05T00:00:00Z",
     "status": "active",
-    "daysTarget": ["Monday", "Wednesday", "Friday", "Sunday"],
-    "completedDates": ["2026-04-21", "2026-04-23", "2026-04-27"],
-    "streak": 1,
-    "goal": "Gain knowledge and improve focus"
+    "daysTarget": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ],
+    "goal": "Significant career progress",
+    "lastSyncedAt": "2026-05-05T10:00:00Z",
+    "isDirty": false,
+    "isFavorite": true,
+    "timeOfDay": "anytime",
+    "completions": [
+      {
+        "date": "2026-04-20",
+        "note": "Completed the core module architecture."
+      },
+      {
+        "date": "2026-04-21"
+      },
+      {
+        "date": "2026-04-21"
+      }
+    
+    ]
   },
   {
     "id": 3,
-    "title": "Meditation",
-    "description": "10 minutes mindfulness meditation",
-    "createdDate": "2026-04-15",
+    "categoryId": "lifestyle",
+    "isOneTime": false,
+    "priority": "low",
+    "title": "Skin-care",
+    "description": "Morning and evening routine",
+    "duration": "10",
+    "durationType": "minutes",
+    "frequency": "daily",
+    "targetPerWeek": 7,
+    "createdDate": "2026-04-10T00:00:00Z",
+    "startDate": "2026-04-10T00:00:00Z",
+    "endDate": "2027-04-10T00:00:00Z",
+    "updatedAt": "2026-05-05T00:00:00Z",
     "status": "active",
-    "daysTarget": ["Daily"],
-    "completedDates": ["2026-05-01", "2026-05-02", "2026-05-03"],
-    "streak": 3,
-    "goal": "Reduce stress and improve mental clarity"
+    "daysTarget": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ],
+    "goal": "Better skin health",
+    "lastSyncedAt": "2026-05-05T10:00:00Z",
+    "isDirty": false,
+    "isFavorite": false,
+    "timeOfDay": "anytime",
+    "completions": [
+      {
+        "date": "2026-05-01",
+        "note": "Started using the new moisturizer."
+      },
+      {
+        "date": "2026-05-02"
+      },
+      {
+        "date": "2026-05-03"
+      },
+      {
+        "date": "2026-05-04"
+      }
+    ]
   },
   {
     "id": 4,
-    "title": "Drink Water",
-    "description": "Drink at least 3 liters of water",
-    "createdDate": "2026-04-10",
-    "status": "active",
-    "daysTarget": ["Daily"],
-    "completedDates": ["2026-05-01", "2026-05-02"],
-    "streak": 2,
-    "goal": "Stay hydrated and healthy"
+    "categoryId": "productivity",
+    "isOneTime": true,
+    "priority": "high",
+    "title": "Submit project proposal",
+    "description": "Finalize and send the proposal for the new client",
+    "duration": "",
+    "durationType": "none",
+    "frequency": "custom",
+    "targetPerWeek": 1,
+    "createdDate": "2026-05-01T00:00:00Z",
+    "startDate": "2026-05-01T00:00:00Z",
+    "endDate": "2026-05-01T00:00:00Z",
+    "updatedAt": "2026-05-01T00:00:00Z",
+    "status": "completed",
+    "daysTarget": [
+      "Friday"
+    ],
+    "goal": "Secure new client contract",
+    "lastSyncedAt": "2026-05-05T10:00:00Z",
+    "isDirty": false,
+    "isFavorite": false,
+    "timeOfDay": "anytime",
+    "completions": [
+      {
+        "date": "2026-05-01",
+        "note": "Sent the proposal at 4:30 PM."
+      }
+    ]
   },
   {
     "id": 5,
-    "title": "Learn Flutter",
-    "description": "Practice Flutter for 1 hour",
-    "createdDate": "2026-04-05",
-    "status": "paused",
-    "daysTarget": ["Saturday", "Sunday"],
-    "completedDates": ["2026-04-06", "2026-04-12", "2026-04-19"],
-    "streak": 0,
-    "goal": "Become proficient in mobile app development"
+    "categoryId": "health",
+    "isOneTime": false,
+    "priority": "medium",
+    "title": "Go for a walk",
+    "description": "Minimum 5,000 steps outdoors",
+    "duration": "30",
+    "durationType": "minutes",
+    "frequency": "weekly",
+    "targetPerWeek": 3,
+    "createdDate": "2026-04-20T00:00:00Z",
+    "startDate": "2026-04-20T00:00:00Z",
+    "endDate": "2027-04-20T00:00:00Z",
+    "updatedAt": "2026-05-05T00:00:00Z",
+    "status": "inactive",
+    "daysTarget": [],
+    "goal": "Daily movement and fresh air",
+    "lastSyncedAt": "2026-05-05T10:00:00Z",
+    "isDirty": false,
+    "isFavorite": false,
+    "timeOfDay": "anytime",
+    "completions": [
+      {
+        "date": "2026-05-01",
+        "note": "Walked in the park, felt very refreshing."
+      },
+      {
+        "date": "2026-05-02"
+      },
+      {
+        "date": "2026-05-03"
+      },
+      {
+        "date": "2026-05-04"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "categoryId": "lifestyle",
+    "isOneTime": false,
+    "priority": "high",
+    "title": "Mobile Recharge",
+    "description": "Monthly mobile plan renewal",
+    "duration": "",
+    "durationType": "none",
+    "frequency": "monthly",
+    "targetPerMonth": 1,
+    "createdDate": "2026-05-01T00:00:00Z",
+    "startDate": "2026-05-05T00:00:00Z",
+    "endDate": "2027-05-05T00:00:00Z",
+    "updatedAt": "2026-05-06T00:00:00Z",
+    "status": "active",
+    "daysTarget": [],
+    "datesTarget": [
+      5
+    ],
+    "goal": "Stay connected",
+    "lastSyncedAt": "2026-05-06T00:00:00Z",
+    "isDirty": false,
+    "isFavorite": false,
+    "timeOfDay": "anytime",
+    "completions": []
+  },
+  {
+    "id": 7,
+    "categoryId": "health",
+    "isOneTime": false,
+    "priority": "medium",
+    "title": "Walking",
+    "description": "Outdoor walking on specific dates",
+    "duration": "30",
+    "durationType": "minutes",
+    "frequency": "monthly",
+    "targetPerMonth": 3,
+    "createdDate": "2026-05-01T00:00:00Z",
+    "startDate": "2026-06-01T00:00:00Z",
+    "endDate": "2026-06-30T00:00:00Z",
+    "updatedAt": "2026-05-06T00:00:00Z",
+    "status": "active",
+    "daysTarget": [],
+    "datesTarget": [
+      6,
+      7,
+      8
+    ],
+    "goal": "Improve fitness",
+    "lastSyncedAt": "2026-05-06T00:00:00Z",
+    "isDirty": false,
+    "isFavorite": false,
+    "timeOfDay": "anytime",
+    "completions": []
+  },
+  {
+    "id": 8,
+    "categoryId": "health",
+    "isOneTime": false,
+    "priority": "medium",
+    "title": "Swimming",
+    "description": "Weekly swimming session",
+    "duration": "60",
+    "durationType": "minutes",
+    "frequency": "weekly",
+    "targetPerWeek": 1,
+    "createdDate": "2026-05-01T00:00:00Z",
+    "startDate": "2026-05-01T00:00:00Z",
+    "endDate": "2027-05-01T00:00:00Z",
+    "updatedAt": "2026-05-06T00:00:00Z",
+    "status": "active",
+    "daysTarget": [
+      "Monday"
+    ],
+    "goal": "Full body workout",
+    "lastSyncedAt": "2026-05-06T00:00:00Z",
+    "isDirty": false,
+    "isFavorite": false,
+    "timeOfDay": "anytime",
+    "completions": []
+  },
+  {
+    "id": 9,
+    "categoryId": "health",
+    "isOneTime": false,
+    "priority": "medium",
+    "title": "Jogging (Weekly)",
+    "description": "Jogging on any 3 days of the week",
+    "duration": "20",
+    "durationType": "minutes",
+    "frequency": "weekly",
+    "targetPerWeek": 3,
+    "createdDate": "2026-05-01T00:00:00Z",
+    "startDate": "2026-05-01T00:00:00Z",
+    "endDate": "2027-05-01T00:00:00Z",
+    "updatedAt": "2026-05-06T00:00:00Z",
+    "status": "active",
+    "daysTarget": [],
+    "goal": "Cardio health",
+    "lastSyncedAt": "2026-05-06T00:00:00Z",
+    "isDirty": false,
+    "isFavorite": false,
+    "timeOfDay": "anytime",
+    "completions": []
+  },
+  {
+    "id": 10,
+    "categoryId": "health",
+    "isOneTime": false,
+    "priority": "medium",
+    "title": "Jogging (Monthly)",
+    "description": "Jogging on any 3 days of the month",
+    "duration": "20",
+    "durationType": "minutes",
+    "frequency": "monthly",
+    "targetPerMonth": 3,
+    "createdDate": "2026-05-01T00:00:00Z",
+    "startDate": "2026-05-01T00:00:00Z",
+    "endDate": "2027-05-01T00:00:00Z",
+    "updatedAt": "2026-05-06T00:00:00Z",
+    "status": "active",
+    "daysTarget": [],
+    "datesTarget": [],
+    "goal": "Consistency",
+    "lastSyncedAt": "2026-05-06T00:00:00Z",
+    "isDirty": false,
+    "isFavorite": false,
+    "timeOfDay": "anytime",
+    "completions": []
+  },
+  {
+    "id": 11,
+    "categoryId": "health",
+    "isOneTime": false,
+    "priority": "high",
+    "title": "Health Checkup",
+    "description": "Annual full body checkup",
+    "duration": "",
+    "durationType": "none",
+    "frequency": "yearly",
+    "createdDate": "2026-05-01T00:00:00Z",
+    "startDate": "2026-05-01T00:00:00Z",
+    "endDate": "2030-05-01T00:00:00Z",
+    "updatedAt": "2026-05-06T00:00:00Z",
+    "status": "active",
+    "daysTarget": [],
+    "goal": "Longevity",
+    "lastSyncedAt": "2026-05-06T00:00:00Z",
+    "isDirty": false,
+    "isFavorite": false,
+    "timeOfDay": "anytime",
+    "completions": []
+  },
+  {
+    "id": 12,
+    "categoryId": "lifestyle",
+    "isOneTime": false,
+    "priority": "medium",
+    "title": "Car Service",
+    "description": "Maintain vehicle performance",
+    "duration": "",
+    "durationType": "none",
+    "frequency": "half-yearly",
+    "createdDate": "2026-05-01T00:00:00Z",
+    "startDate": "2026-05-01T00:00:00Z",
+    "endDate": "2030-05-01T00:00:00Z",
+    "updatedAt": "2026-05-06T00:00:00Z",
+    "status": "active",
+    "daysTarget": [],
+    "goal": "Safety",
+    "lastSyncedAt": "2026-05-06T00:00:00Z",
+    "isDirty": false,
+    "isFavorite": false,
+    "timeOfDay": "anytime",
+    "completions": []
+  },
+  {
+    "id": 13,
+    "categoryId": "productivity",
+    "isOneTime": false,
+    "priority": "high",
+    "title": "Tax Filing",
+    "description": "Quarterly business tax submission",
+    "duration": "",
+    "durationType": "none",
+    "frequency": "quarterly",
+    "createdDate": "2026-05-01T00:00:00Z",
+    "startDate": "2026-05-01T00:00:00Z",
+    "endDate": "2030-05-01T00:00:00Z",
+    "updatedAt": "2026-05-06T00:00:00Z",
+    "status": "active",
+    "daysTarget": [],
+    "goal": "Compliance",
+    "lastSyncedAt": "2026-05-06T00:00:00Z",
+    "isDirty": false,
+    "isFavorite": false,
+    "timeOfDay": "anytime",
+    "completions": []
   }
 ]

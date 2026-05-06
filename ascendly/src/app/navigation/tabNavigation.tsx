@@ -1,12 +1,14 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
+import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import FAIcon from 'react-native-vector-icons/FontAwesome6';
 import { MainStack } from './navigationTypes';
 import Login from '@features/auth/screens/LoginScreen';
 import Dashboard from '@features/dashboard/screens/DashboardScreen';
 import HabitsList from '@features/habits/screens/HabitsListScreen';
+import AllHabits from '@features/habits/screens/AllHabitsScreen';
 import Profile from '@features/profile/screens/ProfileScreen';
-import Settings from '@features/settings/screens/SettingsScreen';
 import { ROUTES } from '@app/routes';
 
 const Tab = createBottomTabNavigator<MainStack>();
@@ -26,24 +28,24 @@ const TabNavigation = () => {
                 name={ROUTES.HABITS_LISTING} 
                 component={HabitsList} 
                 options={{ 
-                    title: "Habits",
-                    tabBarIcon: ({ color, size }) => <Icon name="checkmark-circle-outline" color={color} size={size} />
+                    title: "Today",
+                    tabBarIcon: ({ color, size }) => <MIcon name="bullseye-arrow" color={color} size={size} />
                 }} 
             />
             <Tab.Screen 
-                name={ROUTES.PROFILE} 
+                name={ROUTES.ACCOUNT} 
                 component={Profile} 
                 options={{ 
-                    title: "Profile",
-                    tabBarIcon: ({ color, size }) => <Icon name="person-outline" color={color} size={size} />
+                    title: "Account",
+                    tabBarIcon: ({ color, size }) => <Icon name="person-circle-outline" color={color} size={size} />
                 }} 
             />
             <Tab.Screen 
-                name={ROUTES.SETTINGS} 
-                component={Settings} 
+                name={ROUTES.ALL_HABITS} 
+                component={AllHabits} 
                 options={{ 
-                    title: "Settings",
-                    tabBarIcon: ({ color, size }) => <Icon name="settings-sharp" color={color} size={size} />
+                    title: "Habits",
+                    tabBarIcon: ({ color, size }) => <FAIcon name="person-running" color={color} size={size} />
                 }} 
             />
         </Tab.Navigator>

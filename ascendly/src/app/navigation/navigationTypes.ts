@@ -7,12 +7,13 @@ type MainStack = {
     [ROUTES.LOGIN]: undefined;
     [ROUTES.DASHBOARD]: undefined;
     [ROUTES.HABITS_LISTING]: undefined;
-    [ROUTES.PROFILE]: undefined;
+    [ROUTES.ACCOUNT]: undefined;
+    [ROUTES.ALL_HABITS]: undefined;
     [ROUTES.EDIT_PROFILE]: undefined;
-    [ROUTES.SETTINGS]: undefined;
     [ROUTES.MAIN_TAB]: undefined;
     [ROUTES.DRAWER]: undefined;
     [ROUTES.HABIT_DETAILS]: { habit: Habit };
+    [ROUTES.HABIT_FORM]: { habit?: Habit };
 };
 
 export type { MainStack };

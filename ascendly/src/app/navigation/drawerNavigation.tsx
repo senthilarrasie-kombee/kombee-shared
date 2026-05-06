@@ -4,8 +4,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { MainStack } from './navigationTypes';
 import { ROUTES } from '@app/routes';
 import TabNavigation from './tabNavigation';
+import HabitsList from '@features/habits/screens/HabitsListScreen';
+import AllHabits from '@features/habits/screens/AllHabitsScreen';
 import Profile from '@features/profile/screens/ProfileScreen';
-import Settings from '@features/settings/screens/SettingsScreen';
 import { useTheme } from '@shared/theme';
 
 const Drawer = createDrawerNavigator<MainStack>();
@@ -36,22 +37,22 @@ const DrawerNavigation = () => {
         }}
       />
       <Drawer.Screen
-        name={ROUTES.PROFILE}
+        name={ROUTES.ACCOUNT}
         component={Profile}
         options={{
-          drawerLabel: 'Profile',
+          drawerLabel: 'Account',
           drawerIcon: ({ color, size }) => (
-            <Icon name="person-outline" color={color} size={size} />
+            <Icon name="person-circle-outline" color={color} size={size} />
           ),
         }}
       />
       <Drawer.Screen
-        name={ROUTES.SETTINGS}
-        component={Settings}
+        name={ROUTES.ALL_HABITS}
+        component={AllHabits}
         options={{
-          drawerLabel: 'Settings',
+          drawerLabel: 'History',
           drawerIcon: ({ color, size }) => (
-            <Icon name="settings-outline" color={color} size={size} />
+            <Icon name="list-outline" color={color} size={size} />
           ),
         }}
       />

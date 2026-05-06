@@ -111,6 +111,14 @@ export const createProfileStyles = (colors: typeof LightColors) => StyleSheet.cr
   },
   blob: {
     position: 'absolute',
+  },
+  section: {
+    paddingHorizontal: 16,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontFamily: FontFamily.display,
+    fontWeight: 'bold',
   }
 });
 
