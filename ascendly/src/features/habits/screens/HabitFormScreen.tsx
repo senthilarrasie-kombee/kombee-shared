@@ -32,6 +32,7 @@ import { CATEGORIES_DATA as categoriesData } from '@shared/constants/categories'
 import { useDispatch } from 'react-redux';
 import { addHabitAsync, updateHabitAsync, deleteHabitAsync } from '@store/reducers/rootSlice';
 import { createHabitFormStyles } from '../styles/HabitFormStyles';
+import { asyncStorage, ASYNC_STORAGE_KEYS } from '@core/storage';
 
 type HabitFormRouteProp = RouteProp<MainStack, typeof ROUTES.HABIT_FORM>;
 type NavigationProp = StackNavigationProp<MainStack>;
@@ -78,6 +79,17 @@ const HabitFormScreen = () => {
   const isEdit = !!habit;
 
   const styles = useMemo(() => createHabitFormStyles(colors, isDark), [colors, isDark]);
+  const [draftValues, setDraftValues] = useState<any>(null);
+
+  React.useEffect(() => {
+    if (!isEdit) {
+      const loadDraft = async () => {
+        const draft = await asyncStorage.getObject(ASYNC_STORAGE_KEYS.FORM_DRAFT_HABIT);
+        if (draft) setDraftValues(draft);
+      };
+      loadDraft();
+    }
+  }, [isEdit]);
 
   // Form Initial Values
   const initialValues = {
@@ -159,6 +171,7 @@ const HabitFormScreen = () => {
         await dispatch(updateHabitAsync({ ...habit, ...formattedValues })).unwrap();
       } else {
         await dispatch(addHabitAsync(formattedValues)).unwrap();
+        await asyncStorage.removeItem(ASYNC_STORAGE_KEYS.FORM_DRAFT_HABIT);
       }
       setIsSaving(false);
       navigation.goBack();
@@ -175,12 +188,20 @@ const HabitFormScreen = () => {
       <AppHeader title={isEdit ? "Edit Habit" : "Create Habit"} showBack />
       
       <Formik
-        initialValues={initialValues}
+        initialValues={draftValues || initialValues}
         validationSchema={HabitSchema}
         onSubmit={handleSubmit}
+        enableReinitialize
         validateOnMount
       >
         {({ handleChange, handleBlur, handleSubmit, values, setFieldValue, errors, touched, isValid, validateForm }) => {
+          // Save draft as user types (only for new habits)
+          React.useEffect(() => {
+            if (!isEdit) {
+              asyncStorage.setObject(ASYNC_STORAGE_KEYS.FORM_DRAFT_HABIT, values);
+            }
+          }, [values, isEdit]);
+
           // Debugging log to identify why the form is invalid
           if (__DEV__ && !isValid) {
             console.log('--- Form Validation Error ---');

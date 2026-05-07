@@ -9,7 +9,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import ConfirmModal from '@shared/components/ConfirmModal';
 import { STRINGS } from '@shared/constants/strings';
-import { storage, logAllStorageData } from '@core/storage/mmkv';
+import { storage, logAllStorageData, asyncStorage, ASYNC_STORAGE_KEYS } from '@core/storage';
 import { STORAGE_KEYS } from '@core/storage/keys';
 import { LOCAL_APP_VERSION, ONLINE_APP_VERSION } from '@core/config/appVersion';
 
@@ -28,7 +28,16 @@ const Dashboard: React.FC<DashboardType> = ({ children }) => {
       // Store last login
       storage.set(STORAGE_KEYS.APP.LAST_LOGIN, new Date().toISOString());
       
+      // Update Rating Prompt Count
+      const updateRatingPromptCount = async () => {
+        const currentCount = await asyncStorage.getObject<number>(ASYNC_STORAGE_KEYS.RATING_PROMPT_COUNT) || 0;
+        await asyncStorage.setObject(ASYNC_STORAGE_KEYS.RATING_PROMPT_COUNT, currentCount + 1);
+        console.log(`[Dashboard] Visit count for rating: ${currentCount + 1}`);
+      };
+      
+      updateRatingPromptCount();
       logAllStorageData();
+      asyncStorage.logAllData();
     }, []);
 
     useEffect(() => {

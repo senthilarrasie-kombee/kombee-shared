@@ -18,6 +18,10 @@ export const usePushNotifications = () => {
         const token = await getFcmToken();
         if (token) {
           console.log('[FCM] Token:', token);
+          // Persist token to MMKV
+          const { storage } = require('../../storage');
+          const { STORAGE_KEYS } = require('../../storage/keys');
+          storage.set(STORAGE_KEYS.FCM.TOKEN, token);
         }
       }
     };

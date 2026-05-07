@@ -24,6 +24,7 @@ import HabitCard from '../components/HabitCard';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { CATEGORIES_DATA as categoriesData } from '@shared/constants/categories';
 import { createAllHabitsStyles } from '../styles/AllHabitsStyles';
+import { asyncStorage, ASYNC_STORAGE_KEYS } from '@core/storage';
 
 type NavigationProp = StackNavigationProp<MainStack>;
 
@@ -48,6 +49,7 @@ const AllHabitsScreen = () => {
   const isRefreshing = useAppSelector((state) => state.root.loading);
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
   const [filters, setFilters] = useState<Filters>({
     categoryId: null,
@@ -67,7 +69,20 @@ const AllHabitsScreen = () => {
     if (allHabits.length === 0) {
       dispatch(fetchHabits(false));
     }
+    loadSearchHistory();
   }, [dispatch, allHabits.length]);
+
+  const loadSearchHistory = async () => {
+    const history = await asyncStorage.getObject<string[]>(ASYNC_STORAGE_KEYS.SEARCH_HISTORY);
+    if (history) setRecentSearches(history);
+  };
+
+  const saveSearchQuery = async (query: string) => {
+    if (!query.trim()) return;
+    const newHistory = [query, ...recentSearches.filter(s => s !== query)].slice(0, 5);
+    setRecentSearches(newHistory);
+    await asyncStorage.setObject(ASYNC_STORAGE_KEYS.SEARCH_HISTORY, newHistory);
+  };
 
   // Bottom Sheet State for Reflections
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
@@ -227,10 +242,11 @@ const AllHabitsScreen = () => {
             <Icon name="search-outline" size={20} color={colors.textSecondary} style={{ marginRight: 10 }} />
             <TextInput
               placeholder="Search habits..."
-              placeholderTextColor={colors.textSecondary}
+              placeholderTextColor={colors.textSecondary + '80'}
               style={[styles.searchInput, { color: colors.textPrimary }]}
               value={searchQuery}
               onChangeText={setSearchQuery}
+              onSubmitEditing={() => saveSearchQuery(searchQuery)}
             />
             {searchQuery.length > 0 && (
               <TouchableOpacity onPress={() => setSearchQuery('')}>

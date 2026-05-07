@@ -18,3 +18,14 @@ export const STORAGE_KEYS = {
     OFFLINE_QUEUE: 'offline_sync_queue',
   },
 };
+
+export const ASYNC_STORAGE_KEYS = {
+  SEARCH_HISTORY: 'search_history',
+  ONBOARDING_FLAGS: 'onboarding_flags',
+  FORM_DRAFT_HABIT: 'form_draft_habit',
+  RATING_PROMPT_COUNT: 'rating_prompt_count',
+  LAST_DENIED_RATING_DATE: 'last_denied_rating_date',
+  DATE_TIME_PREFERENCES: 'date_time_preferences',
+  FEATURE_FLAGS_CACHE: 'feature_flags_cache',
+  PENDING_ANALYTICS_EVENTS: 'pending_analytics_events',
+};
