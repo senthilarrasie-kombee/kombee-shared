@@ -1,5 +1,5 @@
 import { ROUTES } from '@app/routes';
-import { Habit } from '@features/habits/types/habit';
+import { Habit } from '@shared/types/habit';
 
 // navigation types
 type MainStack = {

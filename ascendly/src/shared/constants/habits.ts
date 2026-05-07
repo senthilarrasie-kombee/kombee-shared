@@ -1,4 +1,4 @@
-[
+export const HABITS_DATA = [
   {
     "id": 1,
     "categoryId": "learning",
@@ -117,7 +117,6 @@
       {
         "date": "2026-04-21"
       }
-    
     ]
   },
   {
@@ -252,9 +251,7 @@
     "updatedAt": "2026-05-06T00:00:00Z",
     "status": "active",
     "daysTarget": [],
-    "datesTarget": [
-      5
-    ],
+    "datesTarget": [5],
     "goal": "Stay connected",
     "lastSyncedAt": "2026-05-06T00:00:00Z",
     "isDirty": false,
@@ -279,11 +276,7 @@
     "updatedAt": "2026-05-06T00:00:00Z",
     "status": "active",
     "daysTarget": [],
-    "datesTarget": [
-      6,
-      7,
-      8
-    ],
+    "datesTarget": [6, 7, 8],
     "goal": "Improve fitness",
     "lastSyncedAt": "2026-05-06T00:00:00Z",
     "isDirty": false,
@@ -307,9 +300,7 @@
     "endDate": "2027-05-01T00:00:00Z",
     "updatedAt": "2026-05-06T00:00:00Z",
     "status": "active",
-    "daysTarget": [
-      "Monday"
-    ],
+    "daysTarget": ["Monday"],
     "goal": "Full body workout",
     "lastSyncedAt": "2026-05-06T00:00:00Z",
     "isDirty": false,
@@ -435,4 +426,4 @@
     "timeOfDay": "anytime",
     "completions": []
   }
-]
+];

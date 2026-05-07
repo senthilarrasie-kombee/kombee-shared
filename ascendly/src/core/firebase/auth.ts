@@ -1,4 +1,6 @@
 import auth, { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, signInWithCredential, GoogleAuthProvider, signOut as firebaseSignOut } from '@react-native-firebase/auth';
+import { storage } from '@core/storage/mmkv';
+import { STORAGE_KEYS } from '@core/storage/keys';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Config from 'react-native-config';
 
@@ -71,6 +73,10 @@ export const signOut = async () => {
     await GoogleSignin.revokeAccess();
     await GoogleSignin.signOut();
     await firebaseSignOut(firebaseAuth);
+    
+    // Clear login session in MMKV
+    storage.set(STORAGE_KEYS.AUTH.IS_LOGGED_IN, false);
+    
     console.log('User signed out successfully');
   } catch (error) {
     console.error('Sign-Out Error:', error);

@@ -8,6 +8,7 @@ import { FIRESTORE_DB_NAME, COLLECTIONS } from '@shared/constants/firebase';
 export interface UserProfile {
   uid: string;
   email: string | null;
+  displayName?: string | null;
   firstName?: string | null;
   lastName?: string | null;
   photoURL: string | null;
@@ -62,6 +63,7 @@ export const syncUserProfile = async (uid: string, user: any, provider: string, 
     const userData: UserProfile = {
       uid: uid,
       email: user.email,
+      displayName: user.displayName || `${firstName} ${lastName || ''}`.trim(),
       firstName: firstName,
       lastName: lastName,
       photoURL: user.photoURL,
@@ -92,6 +94,23 @@ export const syncUserProfile = async (uid: string, user: any, provider: string, 
   } catch (error: any) {
     console.error('Firestore Sync Error:', error);
     return null;
+  }
+};
+
+/**
+ * Fetch a single user profile
+ */
+export const getUserProfile = async (uid: string) => {
+  try {
+    const userDocRef = doc(db, COLLECTIONS.USERS, uid);
+    const userSnapshot = await getDoc(userDocRef);
+    if (userSnapshot.exists()) {
+      return userSnapshot.data() as UserProfile;
+    }
+    return null;
+  } catch (error) {
+    console.error('Firestore Fetch Profile Error:', error);
+    throw error;
   }
 };
 

@@ -8,6 +8,7 @@ import HabitDetails from '@features/habits/screens/HabitDetailsScreen';
 import HabitForm from '@features/habits/screens/HabitFormScreen';
 import { ROUTES } from '@app/routes';
 import { navigationRef } from './navigationService';
+import { getInitialRoute } from '@shared/utils/sessionUtils';
 
 const Stack = createStackNavigator<MainStack>();
 
@@ -15,7 +16,7 @@ const MainStackNavigation = () => {
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
-        initialRouteName={ROUTES.LOGIN}
+        initialRouteName={getInitialRoute()}
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen

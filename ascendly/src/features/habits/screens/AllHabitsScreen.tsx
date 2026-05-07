@@ -1,10 +1,9 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import { 
-  View, 
-  StyleSheet, 
-  FlatList, 
-  StatusBar, 
-  TextInput, 
+  View,
+  FlatList,
+  StatusBar,
+  TextInput,
   TouchableOpacity, 
   Modal, 
   ScrollView,
@@ -16,29 +15,35 @@ import AppHeader from '@shared/components/AppHeader';
 import AppText from '@shared/components/AppText';
 import AppButton from '@shared/components/AppButton';
 import { useAppSelector, useAppDispatch } from '@store';
-import { fetchHabits } from '@store/reducers/rootSlice';
+import { fetchHabits, updateHabitAsync } from '@store/reducers/rootSlice';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ROUTES } from '@app/routes';
 import { MainStack } from '@app/navigation/navigationTypes';
 import HabitCard from '../components/HabitCard';
-import { Habit } from '../types/habit';
 import Icon from 'react-native-vector-icons/Ionicons';
-import categoriesData from '../data/categories.json';
+import { CATEGORIES_DATA as categoriesData } from '@shared/constants/categories';
+import { createAllHabitsStyles } from '../styles/AllHabitsStyles';
 
 type NavigationProp = StackNavigationProp<MainStack>;
 
+import { Habit, HabitPriority, HabitStatus, HabitFrequency, HabitTimeOfDay } from '@shared/types/habit';
+
 interface Filters {
   categoryId: string | null;
-  priority: string | null;
-  status: string | null;
+  priority: HabitPriority | null;
+  status: HabitStatus | null;
+  frequency: HabitFrequency | null;
+  timeOfDay: HabitTimeOfDay | null;
   isOneTime: boolean | null;
+  isFavorite: boolean | null;
 }
 
 const AllHabitsScreen = () => {
   const { colors, isDark } = useTheme();
   const navigation = useNavigation<NavigationProp>();
   const dispatch = useAppDispatch();
+  const styles = useMemo(() => createAllHabitsStyles(colors, isDark), [colors, isDark]);
   const allHabits = useAppSelector((state) => state.root.habits);
   const isRefreshing = useAppSelector((state) => state.root.loading);
 
@@ -48,7 +53,10 @@ const AllHabitsScreen = () => {
     categoryId: null,
     priority: null,
     status: null,
+    frequency: null,
+    timeOfDay: null,
     isOneTime: null,
+    isFavorite: null,
   });
 
   const onRefresh = useCallback(() => {
@@ -56,8 +64,47 @@ const AllHabitsScreen = () => {
   }, [dispatch]);
 
   React.useEffect(() => {
-    dispatch(fetchHabits(false));
-  }, [dispatch]);
+    if (allHabits.length === 0) {
+      dispatch(fetchHabits(false));
+    }
+  }, [dispatch, allHabits.length]);
+
+  // Bottom Sheet State for Reflections
+  const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
+  const [selectedHabitForNote, setSelectedHabitForNote] = useState<Habit | null>(null);
+  const [reflectionNote, setReflectionNote] = useState('');
+
+  const handleActionPress = useCallback((habit: Habit) => {
+    const today = new Date().toISOString().split('T')[0];
+    setSelectedHabitForNote(habit);
+    const existingCompletion = habit.completions.find(c => c.date === today);
+    setReflectionNote(existingCompletion?.note || '');
+    setIsBottomSheetVisible(true);
+  }, []);
+
+  const handleSaveReflection = () => {
+    if (!selectedHabitForNote) return;
+
+    const today = new Date().toISOString().split('T')[0];
+    const updatedCompletions = [...selectedHabitForNote.completions];
+    const todayIndex = updatedCompletions.findIndex(c => c.date === today);
+
+    if (todayIndex > -1) {
+      updatedCompletions[todayIndex] = { ...updatedCompletions[todayIndex], note: reflectionNote };
+    } else {
+      updatedCompletions.push({ date: today, note: reflectionNote });
+    }
+
+    const updatedHabit = {
+      ...selectedHabitForNote,
+      completions: updatedCompletions,
+    };
+
+    dispatch(updateHabitAsync(updatedHabit));
+    setIsBottomSheetVisible(false);
+    setSelectedHabitForNote(null);
+    setReflectionNote('');
+  };
 
   // Combined search and filter logic
   const filteredHabits = useMemo(() => {
@@ -82,8 +129,17 @@ const AllHabitsScreen = () => {
     if (filters.status) {
       result = result.filter(h => h.status === filters.status);
     }
+    if (filters.frequency) {
+      result = result.filter(h => h.frequency === filters.frequency);
+    }
+    if (filters.timeOfDay) {
+      result = result.filter(h => h.timeOfDay === filters.timeOfDay);
+    }
     if (filters.isOneTime !== null) {
       result = result.filter(h => h.isOneTime === filters.isOneTime);
+    }
+    if (filters.isFavorite !== null) {
+      result = result.filter(h => h.isFavorite === filters.isFavorite);
     }
 
     // Sort by createdDate (latest first)
@@ -99,20 +155,24 @@ const AllHabitsScreen = () => {
       categoryId: null,
       priority: null,
       status: null,
+      frequency: null,
+      timeOfDay: null,
       isOneTime: null,
+      isFavorite: null,
     });
   };
 
   const activeFilterCount = Object.values(filters).filter(v => v !== null).length;
 
-  const renderHabitItem = ({ item }: { item: Habit }) => (
+  const renderHabitItem = useCallback(({ item }: { item: Habit }) => (
     <HabitCard 
       item={item} 
       onPress={(h) => navigation.navigate(ROUTES.HABIT_DETAILS, { habit: h })}
+      onActionPress={handleActionPress}
       selectedDate={new Date().toISOString().split('T')[0]}
-      showAction={false}
+      showAction={true}
     />
-  );
+  ), [handleActionPress, navigation]);
 
   const FilterChip = ({ label, isSelected, onPress }: { label: string, isSelected: boolean, onPress: () => void }) => (
     <TouchableOpacity 
@@ -150,6 +210,15 @@ const AllHabitsScreen = () => {
             )}
           </TouchableOpacity>
         }
+        rightElement={
+          <TouchableOpacity 
+            style={styles.headerButton}
+            onPress={onRefresh}
+            disabled={isRefreshing}
+          >
+            <Icon name="refresh-outline" size={24} color={colors.textPrimary} />
+          </TouchableOpacity>
+        }
       />
       
       <View style={styles.content}>
@@ -173,6 +242,11 @@ const AllHabitsScreen = () => {
             <AppText style={[styles.resultsCount, { color: colors.textSecondary }]}>
               Found {filteredHabits.length} {filteredHabits.length === 1 ? 'habit' : 'habits'}
             </AppText>
+            {activeFilterCount > 0 && (
+              <TouchableOpacity onPress={resetFilters}>
+                <AppText style={{ color: colors.primary, fontFamily: FontFamily.semiBold, fontSize: 12 }}>Clear Filters</AppText>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
 
@@ -195,9 +269,16 @@ const AllHabitsScreen = () => {
             <View style={styles.emptyContainer}>
               <Icon name="search-outline" size={60} color={colors.textSecondary} />
               <AppText style={[styles.emptyText, { color: colors.textSecondary }]}>
-                {allHabits.length === 0 ? "No habits created yet." : "No habits match your filters."}
+                {allHabits.length === 0 ? "No habits created yet. Pull down to refresh or create one!" : "No habits match your filters."}
               </AppText>
-              {activeFilterCount > 0 && (
+              {allHabits.length === 0 ? (
+                <View style={{ marginTop: 24, width: '100%' }}>
+                  <AppButton 
+                    title="Create New Habit" 
+                    onPress={() => navigation.navigate(ROUTES.HABIT_FORM, { habit: undefined })} 
+                  />
+                </View>
+              ) : activeFilterCount > 0 && (
                 <TouchableOpacity onPress={resetFilters} style={{ marginTop: 12 }}>
                   <AppText style={{ color: colors.primary, fontFamily: FontFamily.semiBold }}>Clear all filters</AppText>
                 </TouchableOpacity>
@@ -256,7 +337,7 @@ const AllHabitsScreen = () => {
                       key={p}
                       label={p.charAt(0).toUpperCase() + p.slice(1)}
                       isSelected={filters.priority === p}
-                      onPress={() => setFilters(prev => ({ ...prev, priority: prev.priority === p ? null : p }))}
+                      onPress={() => setFilters(prev => ({ ...prev, priority: prev.priority === p ? null : p as HabitPriority }))}
                     />
                   ))}
                 </View>
@@ -266,19 +347,49 @@ const AllHabitsScreen = () => {
               <View style={styles.filterSection}>
                 <AppText style={[styles.filterLabel, { color: colors.textPrimary }]}>Status</AppText>
                 <View style={styles.chipContainer}>
-                  {['active', 'inactive'].map(s => (
+                  {['active', 'paused', 'completed'].map(s => (
                     <FilterChip 
                       key={s}
                       label={s.charAt(0).toUpperCase() + s.slice(1)}
                       isSelected={filters.status === s}
-                      onPress={() => setFilters(prev => ({ ...prev, status: prev.status === s ? null : s }))}
+                      onPress={() => setFilters(prev => ({ ...prev, status: prev.status === s ? null : s as HabitStatus }))}
+                    />
+                  ))}
+                </View>
+              </View>
+
+              {/* Frequency Filter */}
+              <View style={styles.filterSection}>
+                <AppText style={[styles.filterLabel, { color: colors.textPrimary }]}>Frequency</AppText>
+                <View style={styles.chipContainer}>
+                  {['daily', 'weekly', 'monthly', 'quarterly', 'half-yearly', 'yearly', 'custom'].map(f => (
+                    <FilterChip 
+                      key={f}
+                      label={f.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                      isSelected={filters.frequency === f}
+                      onPress={() => setFilters(prev => ({ ...prev, frequency: prev.frequency === f ? null : f as HabitFrequency }))}
+                    />
+                  ))}
+                </View>
+              </View>
+
+              {/* Time of Day Filter */}
+              <View style={styles.filterSection}>
+                <AppText style={[styles.filterLabel, { color: colors.textPrimary }]}>Time of Day</AppText>
+                <View style={styles.chipContainer}>
+                  {['morning', 'afternoon', 'evening', 'night', 'anytime'].map(t => (
+                    <FilterChip 
+                      key={t}
+                      label={t.charAt(0).toUpperCase() + t.slice(1)}
+                      isSelected={filters.timeOfDay === t}
+                      onPress={() => setFilters(prev => ({ ...prev, timeOfDay: prev.timeOfDay === t ? null : t as HabitTimeOfDay }))}
                     />
                   ))}
                 </View>
               </View>
 
               <View style={styles.filterSection}>
-                <AppText style={[styles.filterLabel, { color: colors.textPrimary }]}>Type</AppText>
+                <AppText style={[styles.filterLabel, { color: colors.textPrimary }]}>Type & Preferences</AppText>
                 <View style={{ paddingBottom: 40 }}>
                   <View style={styles.chipContainer}>
                     <FilterChip 
@@ -290,6 +401,11 @@ const AllHabitsScreen = () => {
                       label="Recurring Habit"
                       isSelected={filters.isOneTime === false}
                       onPress={() => setFilters(prev => ({ ...prev, isOneTime: prev.isOneTime === false ? null : false }))}
+                    />
+                    <FilterChip 
+                      label="Favorites ❤️"
+                      isSelected={filters.isFavorite === true}
+                      onPress={() => setFilters(prev => ({ ...prev, isFavorite: prev.isFavorite === true ? null : true }))}
                     />
                   </View>
                 </View>
@@ -305,160 +421,56 @@ const AllHabitsScreen = () => {
           </View>
         </View>
       </Modal>
+
+      {/* Reflection Bottom Sheet */}
+      <Modal
+        visible={isBottomSheetVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setIsBottomSheetVisible(false)}
+      >
+        <TouchableOpacity 
+          style={styles.modalOverlay} 
+          activeOpacity={1} 
+          onPress={() => setIsBottomSheetVisible(false)}
+        >
+          <View style={styles.bottomSheet}>
+            <View style={styles.sheetHeader}>
+              <View style={styles.sheetHandle} />
+              <AppText style={[styles.sheetTitle, { color: colors.textPrimary }]}>
+                Today's Reflection
+              </AppText>
+              <AppText style={[styles.sheetSubtitle, { color: colors.textSecondary }]}>
+                {selectedHabitForNote?.title}
+              </AppText>
+            </View>
+
+            <View style={styles.sheetContent}>
+              <TextInput
+                style={[
+                  styles.sheetInput, 
+                  { color: colors.textPrimary, backgroundColor: isDark ? '#2D2D3A' : '#F1F5F9' }
+                ]}
+                placeholder="How did it go today? (Optional)"
+                placeholderTextColor={colors.textSecondary}
+                value={reflectionNote}
+                onChangeText={setReflectionNote}
+                multiline
+                numberOfLines={4}
+                autoFocus
+              />
+
+              <TouchableOpacity 
+                style={[styles.saveButton, { backgroundColor: colors.primary }]}
+                onPress={handleSaveReflection}
+              >
+                <AppText style={styles.saveButtonText}>Save Reflection</AppText>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  content: {
-    flex: 1,
-  },
-  headerButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-  },
-  filterBadge: {
-    position: 'absolute',
-    top: 6,
-    right: 6,
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    borderWidth: 2,
-    borderColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  filterBadgeText: {
-    color: 'white',
-    fontSize: 8,
-    fontFamily: FontFamily.semiBold,
-  },
-  searchContainer: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 50,
-    borderRadius: 15,
-    paddingHorizontal: 15,
-    borderWidth: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
-    elevation: 2,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 16,
-    fontFamily: FontFamily.regular,
-    paddingVertical: 8,
-  },
-  resultsHeader: {
-    marginTop: 12,
-    paddingHorizontal: 4,
-  },
-  resultsCount: {
-    fontSize: 14,
-    fontFamily: FontFamily.semiBold,
-  },
-  listContent: {
-    paddingBottom: 40,
-  },
-  separator: {
-    height: 10,
-  },
-  emptyContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 80,
-    paddingHorizontal: 40,
-  },
-  emptyText: {
-    fontSize: 16,
-    fontFamily: FontFamily.regular,
-    textAlign: 'center',
-    marginTop: 20,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'flex-end',
-  },
-  modalDismissArea: {
-    flex: 1,
-  },
-  modalContent: {
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    maxHeight: '85%',
-  },
-  modalHeader: {
-    alignItems: 'center',
-    paddingTop: 12,
-    paddingHorizontal: 24,
-    paddingBottom: 16,
-  },
-  modalHandle: {
-    width: 40,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: '#E0E0E0',
-    marginBottom: 20,
-  },
-  modalTitleRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-  },
-  modalTitle: {
-    fontSize: 22,
-    fontFamily: FontFamily.display,
-    fontWeight: 'bold',
-  },
-  modalBody: {
-    paddingHorizontal: 24,
-  },
-  filterSection: {
-    marginBottom: 24,
-  },
-  filterLabel: {
-    fontSize: 16,
-    fontFamily: FontFamily.semiBold,
-    marginBottom: 12,
-  },
-  chipContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginHorizontal: -4,
-  },
-  chip: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-    margin: 4,
-  },
-  chipText: {
-    fontSize: 14,
-    fontFamily: FontFamily.semiBold,
-  },
-  modalFooter: {
-    padding: 24,
-    borderTopWidth: 1,
-    paddingBottom: 40,
-  },
-});
-
 export default AllHabitsScreen;

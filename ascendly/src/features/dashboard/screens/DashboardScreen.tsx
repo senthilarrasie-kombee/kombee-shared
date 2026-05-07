@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { View, Text, TouchableOpacity, BackHandler } from 'react-native';
 import { createStyles } from './DashboardStyles';
-import { DashboardType } from '@features/dashboard/types';
+import { DashboardType } from '@shared/types/dashboard';
 import { useTheme } from '@shared/theme';
 
 import { AppButton, AppHeader } from '@shared/components';
@@ -9,6 +9,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import ConfirmModal from '@shared/components/ConfirmModal';
 import { STRINGS } from '@shared/constants/strings';
+import { storage, logAllStorageData } from '@core/storage/mmkv';
+import { STORAGE_KEYS } from '@core/storage/keys';
+import { LOCAL_APP_VERSION, ONLINE_APP_VERSION } from '@core/config/appVersion';
 
 const Dashboard: React.FC<DashboardType> = ({ children }) => {
     const [count, setCount] = useState(0);
@@ -18,7 +21,27 @@ const Dashboard: React.FC<DashboardType> = ({ children }) => {
     const [isExitModalVisible, setIsExitModalVisible] = useState(false);
     const [pendingAction, setPendingAction] = useState<any>(null);
 
-    React.useEffect(() => {
+    useEffect(() => {
+      // Log versions
+      console.log(`[Version] Local: ${LOCAL_APP_VERSION}, Online: ${ONLINE_APP_VERSION}`);
+      
+      // Store last login
+      storage.set(STORAGE_KEYS.APP.LAST_LOGIN, new Date().toISOString());
+      
+      logAllStorageData();
+    }, []);
+
+    useEffect(() => {
+      const backAction = () => {
+        setIsExitModalVisible(true);
+        return true;
+      };
+
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        backAction
+      );
+
       const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
         // Prevent default behavior of leaving the screen
         e.preventDefault();
@@ -28,7 +51,10 @@ const Dashboard: React.FC<DashboardType> = ({ children }) => {
         setIsExitModalVisible(true);
       });
 
-      return unsubscribe;
+      return () => {
+        backHandler.remove();
+        unsubscribe();
+      };
     }, [navigation]);
 
     const confirmExit = () => {

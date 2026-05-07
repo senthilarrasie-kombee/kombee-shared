@@ -1,4 +1,4 @@
-[
+export const CATEGORIES_DATA = [
   { "id": "health", "name": "Health & Fitness", "icon": "barbell", "color": "#FF6B6B" },
   { "id": "mental", "name": "Mental Wellness", "icon": "heart-circle", "color": "#6BCB77" },
   { "id": "learning", "name": "Learning & Growth", "icon": "book", "color": "#4D96FF" },
@@ -11,4 +11,4 @@
   { "id": "hobbies", "name": "Hobbies & Creativity", "icon": "color-palette", "color": "#FF5DA2" },
   { "id": "spiritual", "name": "Spiritual", "icon": "flower", "color": "#B39CD0" },
   { "id": "bad", "name": "Bad Habit Control", "icon": "ban", "color": "#FF3B3B" }
-]
+];

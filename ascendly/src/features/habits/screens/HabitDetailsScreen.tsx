@@ -10,7 +10,7 @@ import AppText from '@shared/components/AppText';
 import ConfirmModal from '@shared/components/ConfirmModal';
 import { MainStack } from '@app/navigation/navigationTypes';
 import { ROUTES } from '@app/routes';
-import { createHabitDetailsStyles } from './HabitDetailsStyles';
+import { createHabitDetailsStyles } from '../styles/HabitDetailsStyles';
 import { calculateStreak, formatDisplayDate } from '@shared/utils/habitUtils';
 import { useDispatch } from 'react-redux';
 import { deleteHabitAsync } from '@store/reducers/rootSlice';
@@ -18,7 +18,7 @@ import { deleteHabitAsync } from '@store/reducers/rootSlice';
 type HabitDetailsRouteProp = RouteProp<MainStack, typeof ROUTES.HABIT_DETAILS>;
 type NavigationProp = StackNavigationProp<MainStack>;
 
-import categoriesData from '../data/categories.json';
+import { CATEGORIES_DATA as categoriesData } from '@shared/constants/categories';
 
 const HabitDetailsScreen = () => {
   const { colors, isDark } = useTheme();

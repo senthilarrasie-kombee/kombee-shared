@@ -14,6 +14,8 @@ import { setUser } from '@store/reducers/rootSlice';
 import { useTheme, Spacing } from '@shared/theme';
 import { AppButton, AppTextInput, AppText } from '@shared/components';
 import { createStyles } from '../screens/LoginStyles';
+import { storage, logAllStorageData } from '@core/storage/mmkv';
+import { STORAGE_KEYS } from '@core/storage/keys';
 
 interface LoginProps {
   onToggle: () => void;
@@ -39,12 +41,23 @@ const Login: React.FC<LoginProps> = ({ onToggle, onSuccess }) => {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
 
+  useEffect(() => {
+    logAllStorageData();
+  }, []);
+
   const onGoogleButtonPress = async () => {
     try {
       setGoogleLoading(true);
       const userCredential = await signInWithGoogle();
       
       if (userCredential) {
+        // Persist basic user data to MMKV
+        storage.set(STORAGE_KEYS.AUTH.USER_ID, userCredential.user.uid);
+        if (userCredential.user.displayName) {
+          storage.set(STORAGE_KEYS.AUTH.DISPLAY_NAME, userCredential.user.displayName);
+        }
+        storage.set(STORAGE_KEYS.AUTH.IS_LOGGED_IN, true);
+
         // Dispatch user data to store
         dispatch(setUser(userCredential.user));
         onSuccess();
@@ -64,6 +77,13 @@ const Login: React.FC<LoginProps> = ({ onToggle, onSuccess }) => {
         setLoginLoading(true);
         const userCredential = await signInWithEmail(values.email, values.password);
         if (userCredential) {
+          // Persist basic user data to MMKV
+          storage.set(STORAGE_KEYS.AUTH.USER_ID, userCredential.user.uid);
+          if (userCredential.user.displayName) {
+            storage.set(STORAGE_KEYS.AUTH.DISPLAY_NAME, userCredential.user.displayName);
+          }
+          storage.set(STORAGE_KEYS.AUTH.IS_LOGGED_IN, true);
+
           dispatch(setUser(userCredential.user));
           onSuccess();
         }

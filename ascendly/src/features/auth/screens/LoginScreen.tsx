@@ -8,7 +8,7 @@ import {
   ScrollView
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { LoginType } from '@features/auth/types';
+import { LoginType } from '@shared/types/auth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { createStyles } from './LoginStyles';
 import { useTheme } from '@shared/theme';

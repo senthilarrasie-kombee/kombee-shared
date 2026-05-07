@@ -26,12 +26,12 @@ import AppText from '@shared/components/AppText';
 import ConfirmModal from '@shared/components/ConfirmModal';
 import { MainStack } from '@app/navigation/navigationTypes';
 import { ROUTES } from '@app/routes';
-import { Habit, HabitPriority, HabitFrequency, HabitDurationType, HabitTimeOfDay, HabitStatus } from '../types/habit';
+import { Habit, HabitPriority, HabitFrequency, HabitDurationType, HabitTimeOfDay, HabitStatus } from '@shared/types/habit';
 import { getFrequencyDescription, getOrdinal } from '@shared/utils/habitUtils';
-import categoriesData from '../data/categories.json';
+import { CATEGORIES_DATA as categoriesData } from '@shared/constants/categories';
 import { useDispatch } from 'react-redux';
 import { addHabitAsync, updateHabitAsync, deleteHabitAsync } from '@store/reducers/rootSlice';
-import { createHabitFormStyles } from './HabitFormStyles';
+import { createHabitFormStyles } from '../styles/HabitFormStyles';
 
 type HabitFormRouteProp = RouteProp<MainStack, typeof ROUTES.HABIT_FORM>;
 type NavigationProp = StackNavigationProp<MainStack>;

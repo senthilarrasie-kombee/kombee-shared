@@ -9,6 +9,7 @@ import {
   Alert
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { AppText, AppButton, AppHeader } from '@shared/components';
 import ConfirmModal from '@shared/components/ConfirmModal';
@@ -17,10 +18,10 @@ import { useTheme, Spacing, FontFamily, FontSize } from '@shared/theme';
 import { useNavigation } from '@react-navigation/native';
 import { ROUTES } from '@app/routes';
 import { useAppDispatch, useAppSelector } from '@store';
-import { toggleDarkMode, logout } from '@store/reducers/rootSlice';
+import { toggleDarkMode, logout, fetchUserProfile } from '@store/reducers/rootSlice';
 import { signOut } from '@core/firebase/auth';
 import { bulkUploadHabits, deleteUserHabits } from '@core/firebase/firestore';
-import habitsData from '../../habits/data/habits.json';
+import { HABITS_DATA as habitsData } from '@shared/constants/habits';
 import { createProfileStyles } from './ProfileStyles';
 
 const { width } = Dimensions.get('window');
@@ -41,6 +42,15 @@ const AccountScreen = () => {
   const [successConfig, setSuccessConfig] = React.useState({ title: '', message: '' });
   const [isUploading, setIsUploading] = React.useState(false);
   const [isDeleting, setIsDeleting] = React.useState(false);
+  
+  // Fetch user profile whenever screen is focused if not already loaded
+  useFocusEffect(
+    React.useCallback(() => {
+      if (!user) {
+        dispatch(fetchUserProfile());
+      }
+    }, [dispatch, user])
+  );
 
   const handleLogout = () => {
     setIsLogoutModalVisible(true);

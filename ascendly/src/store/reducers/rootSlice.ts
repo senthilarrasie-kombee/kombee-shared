@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Habit } from '@features/habits/types/habit';
+import { Habit } from '@shared/types/habit';
 
-import { UserProfile, getUserHabits, addHabit, updateHabit as updateHabitFirestore, deleteHabit as deleteHabitFirestore } from '@core/firebase/firestore';
+import { UserProfile, getUserHabits, addHabit, updateHabit as updateHabitFirestore, deleteHabit as deleteHabitFirestore, getUserProfile } from '@core/firebase/firestore';
+import { storage } from '@core/storage/mmkv';
+import { STORAGE_KEYS } from '@core/storage/keys';
 
 interface RootState {
   isLoaderVisible: boolean;
@@ -25,18 +27,51 @@ const initialState: RootState = {
   isAuthenticated: false,
 };
 
+// Async Thunk for fetching user profile
+export const fetchUserProfile = createAsyncThunk(
+  'root/fetchUserProfile',
+  async (forceRefresh: boolean | void = false, { dispatch, getState, rejectWithValue }) => {
+    try {
+      const state = getState() as any;
+      // Skip if user already exists and no force refresh requested
+      if (!forceRefresh && state.root.user) {
+        return state.root.user;
+      }
+
+      const uid = storage.getString(STORAGE_KEYS.AUTH.USER_ID);
+      if (!uid) {
+        console.warn('Fetch Profile: No UID found in MMKV');
+        return null;
+      }
+
+      const profile = await getUserProfile(uid);
+      if (profile) {
+        console.log(`Fetched profile for ${uid}`);
+        return profile;
+      }
+      return null;
+    } catch (error) {
+      console.error('Fetch Profile Error:', error);
+      return rejectWithValue('Failed to fetch profile');
+    }
+  }
+);
+
 // Async Thunk for fetching habits
 export const fetchHabits = createAsyncThunk(
   'root/fetchHabits',
-  async (isRefresh: boolean = false, { dispatch, getState, rejectWithValue }) => {
+  async (isRefresh: boolean | void = false, { dispatch, getState, rejectWithValue }) => {
     try {
-      if (!isRefresh) dispatch(setLoaderVisible(true));
-      
       const state = getState() as any;
-      const uid = state.root.user?.uid;
+      // Skip if habits already exist and no refresh requested
+      if (!isRefresh && state.root.habits.length > 0) {
+        return state.root.habits;
+      }
+
+      const uid = storage.getString(STORAGE_KEYS.AUTH.USER_ID);
       
       if (!uid) {
-        console.warn('Fetch Habits: No UID found in state');
+        console.warn('Fetch Habits: No UID found in MMKV');
         return [];
       }
 
@@ -47,8 +82,6 @@ export const fetchHabits = createAsyncThunk(
     } catch (error) {
       console.error('Fetch Habits Error:', error);
       return rejectWithValue('Failed to fetch habits');
-    } finally {
-      if (!isRefresh) dispatch(setLoaderVisible(false));
     }
   }
 );
@@ -60,8 +93,7 @@ export const addHabitAsync = createAsyncThunk(
     try {
       dispatch(setLoaderVisible(true));
       
-      const state = getState() as any;
-      const uid = state.root.user?.uid;
+      const uid = storage.getString(STORAGE_KEYS.AUTH.USER_ID);
       
       if (!uid) throw new Error('No user authenticated');
 
@@ -88,8 +120,7 @@ export const updateHabitAsync = createAsyncThunk(
     try {
       dispatch(setLoaderVisible(true));
       
-      const state = getState() as any;
-      const uid = state.root.user?.uid;
+      const uid = storage.getString(STORAGE_KEYS.AUTH.USER_ID);
       
       if (!uid) throw new Error('No user authenticated');
 
@@ -113,8 +144,7 @@ export const deleteHabitAsync = createAsyncThunk(
     try {
       dispatch(setLoaderVisible(true));
       
-      const state = getState() as any;
-      const uid = state.root.user?.uid;
+      const uid = storage.getString(STORAGE_KEYS.AUTH.USER_ID);
       
       if (!uid) throw new Error('No user authenticated');
 
@@ -169,16 +199,38 @@ const rootSlice = createSlice({
     builder
       .addCase(fetchHabits.pending, (state) => {
         state.loading = true;
+        state.isLoaderVisible = true;
         state.error = null;
       })
       .addCase(fetchHabits.fulfilled, (state, action: PayloadAction<Habit[]>) => {
         state.loading = false;
+        state.isLoaderVisible = false;
         state.habits = action.payload;
         state.toastMessage = 'Habits updated successfully! ✅';
       })
       .addCase(fetchHabits.rejected, (state, action) => {
         state.loading = false;
+        state.isLoaderVisible = false;
         state.error = action.payload as string;
+      })
+      .addCase(fetchUserProfile.pending, (state) => {
+        state.loading = true;
+        state.isLoaderVisible = true;
+        state.error = null;
+      })
+      .addCase(fetchUserProfile.fulfilled, (state, action: PayloadAction<UserProfile | null>) => {
+        state.loading = false;
+        state.isLoaderVisible = false;
+        if (action.payload) {
+          state.user = action.payload;
+          state.isAuthenticated = true;
+        }
+      })
+      .addCase(fetchUserProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.isLoaderVisible = false;
+        state.error = action.payload as string;
+        state.toastMessage = action.payload as string; // Trigger toast
       })
       .addCase(addHabitAsync.fulfilled, (state, action: PayloadAction<Habit>) => {
         state.habits.push(action.payload);

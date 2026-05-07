@@ -1,13 +1,13 @@
 import React, { memo } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Habit } from '../types/habit';
+import { Habit } from '@shared/types/habit';
 import { useTheme } from '@shared/theme';
 import AppText from '@shared/components/AppText';
-import { styles } from './HabitCardStyles';
+import { styles } from '../styles/HabitCardStyles';
 import { calculateStreak } from '@shared/utils/habitUtils';
 
-import categoriesData from '../data/categories.json';
+import { CATEGORIES_DATA as categoriesData } from '@shared/constants/categories';
 
 interface HabitCardProps {
   item: Habit;

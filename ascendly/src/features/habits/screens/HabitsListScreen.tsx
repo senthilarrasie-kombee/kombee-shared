@@ -13,8 +13,8 @@ import { useAppDispatch, useAppSelector } from '@store';
 import { fetchHabits, updateHabit } from '@store/reducers/rootSlice';
 import HabitCard from '../components/HabitCard';
 import HabitListHeader from '../components/HabitListHeader';
-import { createHabitsListStyles } from './HabitsListStyles';
-import { Habit } from '../types/habit';
+import { createHabitsListStyles } from '../styles/HabitsListStyles';
+import { Habit } from '@shared/types/habit';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 type NavigationProp = StackNavigationProp<MainStack>;
@@ -116,8 +116,10 @@ const HabitsListScreen = () => {
   }, [dispatch]);
 
   React.useEffect(() => {
-    dispatch(fetchHabits(false));
-  }, [dispatch]);
+    if (allHabits.length === 0) {
+      dispatch(fetchHabits(false));
+    }
+  }, [dispatch, allHabits.length]);
 
   // useMemo - avoid recalculating active count on every render
   const activeHabitsCount = useMemo(() => 

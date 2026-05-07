@@ -1,4 +1,4 @@
-import { Habit } from '@features/habits/types/habit';
+import { Habit } from '@shared/types/habit';
 
 const MONTHS_LONG = [
   'January', 'February', 'March', 'April', 'May', 'June',
