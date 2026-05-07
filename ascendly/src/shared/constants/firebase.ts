@@ -4,3 +4,8 @@ export const COLLECTIONS = {
   USERS: 'users',
   HABITS: 'habits',
 };
+
+export const FCM_CONSTANTS = {
+  CHANNEL_ID: 'default',
+  CHANNEL_NAME: 'Default Channel',
+};

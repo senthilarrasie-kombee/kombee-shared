@@ -7,12 +7,13 @@ import DrawerNavigation from './drawerNavigation';
 import HabitDetails from '@features/habits/screens/HabitDetailsScreen';
 import HabitForm from '@features/habits/screens/HabitFormScreen';
 import { ROUTES } from '@app/routes';
+import { navigationRef } from './navigationService';
 
 const Stack = createStackNavigator<MainStack>();
 
 const MainStackNavigation = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         initialRouteName={ROUTES.LOGIN}
         screenOptions={{ headerShown: false }}
