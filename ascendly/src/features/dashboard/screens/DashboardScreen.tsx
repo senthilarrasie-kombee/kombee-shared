@@ -68,6 +68,11 @@ const Dashboard: React.FC<DashboardType> = ({children}) => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
 
     const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
+      // If we are navigating to the Login screen (likely a logout), don't show the exit modal
+      if (e.data.action.type === 'RESET' || e.data.action.name === ROUTES.LOGIN) {
+        return;
+      }
+
       // Prevent default behavior of leaving the screen
       e.preventDefault();
 

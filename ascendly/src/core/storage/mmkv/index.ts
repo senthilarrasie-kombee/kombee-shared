@@ -1,4 +1,6 @@
 import {createMMKV} from 'react-native-mmkv';
+import {secureStorage} from '../secureStorage';
+import {STORAGE_KEYS} from '../keys';
 
 export const storage = createMMKV();
 
@@ -26,7 +28,7 @@ export const clearStorage = () => {
   storage.clearAll();
 };
 
-export const logAllStorageData = () => {
+export const logAllStorageData = async () => {
   const allKeys = storage.getAllKeys();
   const storageData = allKeys.reduce((acc: any, key) => {
     // Attempt to get as different types since MMKV doesn't tell us the type easily
@@ -40,4 +42,17 @@ export const logAllStorageData = () => {
   }, {});
 
   console.log('[MMKV] Current Data in Storage:', JSON.stringify(storageData, null, 2));
+
+  // Check Secure Storage
+  const secureUid = await secureStorage.getItem(STORAGE_KEYS.AUTH.USER_ID);
+  console.log(
+    '[Secure Storage] User ID status:',
+    secureUid ? '✅ SECURELY STORED (********)' : '❌ NOT FOUND',
+  );
+
+  // MIGRATION / CLEANUP: If the old user_id is still in MMKV, remove it for security
+  if (storage.contains(STORAGE_KEYS.AUTH.USER_ID)) {
+    console.log('[Cleanup] Removing insecure User ID from MMKV...');
+    storage.remove(STORAGE_KEYS.AUTH.USER_ID);
+  }
 };

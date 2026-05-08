@@ -9,7 +9,7 @@ import {
   deleteHabit as deleteHabitFirestore,
   getUserProfile,
 } from '@core/firebase/firestore';
-import {storage} from '@core/storage/mmkv';
+import {storage, secureStorage} from '@core/storage';
 import {STORAGE_KEYS} from '@core/storage/keys';
 
 interface RootState {
@@ -45,9 +45,9 @@ export const fetchUserProfile = createAsyncThunk(
         return state.root.user;
       }
 
-      const uid = storage.getString(STORAGE_KEYS.AUTH.USER_ID);
+      const uid = await secureStorage.getItem(STORAGE_KEYS.AUTH.USER_ID);
       if (!uid) {
-        console.warn('Fetch Profile: No UID found in MMKV');
+        console.warn('Fetch Profile: No UID found in Secure Storage');
         return null;
       }
 
@@ -75,10 +75,9 @@ export const fetchHabits = createAsyncThunk(
         return state.root.habits;
       }
 
-      const uid = storage.getString(STORAGE_KEYS.AUTH.USER_ID);
-
+      const uid = await secureStorage.getItem(STORAGE_KEYS.AUTH.USER_ID);
       if (!uid) {
-        console.warn('Fetch Habits: No UID found in MMKV');
+        console.warn('Fetch Habits: No UID found in Secure Storage');
         return [];
       }
 
@@ -100,7 +99,7 @@ export const addHabitAsync = createAsyncThunk(
     try {
       dispatch(setLoaderVisible(true));
 
-      const uid = storage.getString(STORAGE_KEYS.AUTH.USER_ID);
+      const uid = await secureStorage.getItem(STORAGE_KEYS.AUTH.USER_ID);
 
       if (!uid) throw new Error('No user authenticated');
 
@@ -127,7 +126,7 @@ export const updateHabitAsync = createAsyncThunk(
     try {
       dispatch(setLoaderVisible(true));
 
-      const uid = storage.getString(STORAGE_KEYS.AUTH.USER_ID);
+      const uid = await secureStorage.getItem(STORAGE_KEYS.AUTH.USER_ID);
 
       if (!uid) throw new Error('No user authenticated');
 
@@ -151,7 +150,7 @@ export const deleteHabitAsync = createAsyncThunk(
     try {
       dispatch(setLoaderVisible(true));
 
-      const uid = storage.getString(STORAGE_KEYS.AUTH.USER_ID);
+      const uid = await secureStorage.getItem(STORAGE_KEYS.AUTH.USER_ID);
 
       if (!uid) throw new Error('No user authenticated');
 

@@ -13,6 +13,8 @@ import {useAppDispatch, useAppSelector} from '@store';
 import {toggleDarkMode, logout, fetchUserProfile} from '@store/reducers/rootSlice';
 import {signOut} from '@core/firebase/auth';
 import {bulkUploadHabits, deleteUserHabits} from '@core/firebase/firestore';
+import {storage, secureStorage} from '@core/storage';
+import {STORAGE_KEYS} from '@core/storage/keys';
 import {HABITS_DATA as habitsData} from '@shared/constants/habits';
 import {createProfileStyles} from './ProfileStyles';
 
@@ -90,6 +92,9 @@ const AccountScreen = () => {
     try {
       setIsLogoutModalVisible(false);
       await signOut();
+      await secureStorage.deleteItem(STORAGE_KEYS.AUTH.USER_ID);
+      await secureStorage.logItem(STORAGE_KEYS.AUTH.USER_ID);
+      storage.set(STORAGE_KEYS.AUTH.IS_LOGGED_IN, false);
       dispatch(logout());
       navigation.reset({
         index: 0,

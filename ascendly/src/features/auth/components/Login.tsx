@@ -9,7 +9,7 @@ import {setUser} from '@store/reducers/rootSlice';
 import {useTheme, Spacing} from '@shared/theme';
 import {AppButton, AppTextInput, AppText} from '@shared/components';
 import {createStyles} from '../screens/LoginStyles';
-import {storage, logAllStorageData} from '@core/storage/mmkv';
+import {storage, secureStorage, logAllStorageData} from '@core/storage';
 import {STORAGE_KEYS} from '@core/storage/keys';
 
 interface LoginProps {
@@ -38,7 +38,10 @@ const Login: React.FC<LoginProps> = ({onToggle, onSuccess}) => {
 
   useEffect(() => {
     console.log("HELLO");
-    logAllStorageData();
+    const checkStorage = async () => {
+      await logAllStorageData();
+    };
+    checkStorage();
   }, []);
 
   const onGoogleButtonPress = async () => {
@@ -47,8 +50,10 @@ const Login: React.FC<LoginProps> = ({onToggle, onSuccess}) => {
       const userCredential = await signInWithGoogle();
 
       if (userCredential) {
-        // Persist basic user data to MMKV
-        storage.set(STORAGE_KEYS.AUTH.USER_ID, userCredential.user.uid);
+        // Persist basic user data
+        await secureStorage.setItem(STORAGE_KEYS.AUTH.USER_ID, userCredential.user.uid);
+        await secureStorage.logItem(STORAGE_KEYS.AUTH.USER_ID);
+        
         if (userCredential.user.displayName) {
           storage.set(STORAGE_KEYS.AUTH.DISPLAY_NAME, userCredential.user.displayName);
         }
