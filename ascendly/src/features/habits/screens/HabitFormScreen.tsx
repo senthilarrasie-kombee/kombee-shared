@@ -26,7 +26,7 @@ import AppText from '@shared/components/AppText';
 import ConfirmModal from '@shared/components/ConfirmModal';
 import { MainStack } from '@app/navigation/navigationTypes';
 import { ROUTES } from '@app/routes';
-import { Habit, HabitPriority, HabitFrequency, HabitDurationType, HabitTimeOfDay, HabitStatus } from '@shared/types/habit';
+import { Habit, HabitPriority, HabitFrequency, HabitDurationType, HabitTimeOfDay, HabitStatus, HabitCompletion } from '@shared/types/habit';
 import { getFrequencyDescription, getOrdinal } from '@shared/utils/habitUtils';
 import { CATEGORIES_DATA as categoriesData } from '@shared/constants/categories';
 import { useDispatch } from 'react-redux';
@@ -265,7 +265,7 @@ const HabitFormScreen = () => {
                     value={values.title}
                   />
                 </View>
-                {touched.title && errors.title && <AppText style={styles.errorText}>{errors.title}</AppText>}
+                {touched.title && typeof errors.title === 'string' && <AppText style={styles.errorText}>{errors.title}</AppText>}
 
                 <View style={[styles.inputContainer, focusedField === 'description' && styles.inputContainerFocused, { marginTop: 12 }]}>
                   <TextInput
@@ -283,7 +283,7 @@ const HabitFormScreen = () => {
                     value={values.description}
                   />
                 </View>
-                {touched.description && errors.description && <AppText style={styles.errorText}>{errors.description}</AppText>}
+                {touched.description && typeof errors.description === 'string' && <AppText style={styles.errorText}>{errors.description}</AppText>}
               </View>
 
               <View style={styles.divider} />
@@ -369,14 +369,14 @@ const HabitFormScreen = () => {
                 </View>
               </View>
               <View style={styles.divider} />
-              {values.completions.some(c => c.note) && (
+              {values.completions.some((c: HabitCompletion) => c.note) && (
                 <View style={styles.section}>
                   <AppText style={styles.sectionTitle}>Recent Notes</AppText>
                   <View style={styles.gap12}>
                     {values.completions
-                      .filter(c => c.note)
-                      .sort((a, b) => b.date.localeCompare(a.date))
-                      .map((c, index) => (
+                      .filter((c: HabitCompletion) => c.note)
+                      .sort((a: HabitCompletion, b: HabitCompletion) => (b.date || '').localeCompare(a.date || ''))
+                      .map((c: HabitCompletion, index: number) => (
                         <View 
                           key={`${c.date}-${index}`} 
                           style={styles.noteCard}
@@ -564,7 +564,7 @@ const HabitFormScreen = () => {
                             ]}
                             onPress={() => {
                               const newDays = isSelected 
-                                ? values.daysTarget.filter(d => d !== day)
+                                ? values.daysTarget.filter((d: string) => d !== day)
                                 : [...values.daysTarget, day];
                               setFieldValue('daysTarget', newDays);
                               setFieldValue('targetPerWeek', newDays.length);
@@ -643,7 +643,7 @@ const HabitFormScreen = () => {
                             ]}
                             onPress={() => {
                               const newDates = isSelected 
-                                ? values.datesTarget.filter(d => d !== date)
+                                ? values.datesTarget.filter((d: number) => d !== date)
                                 : [...values.datesTarget, date];
                               setFieldValue('datesTarget', newDates);
                               setFieldValue('targetPerMonth', newDates.length);
@@ -724,7 +724,7 @@ const HabitFormScreen = () => {
                           key={date}
                           style={[styles.specificDateTag, { backgroundColor: colors.primary + '10', borderColor: colors.primary + '40' }]}
                           onPress={() => {
-                            const newDates = values.specificDatesTarget.filter(d => d !== date);
+                            const newDates = values.specificDatesTarget.filter((d: string) => d !== date);
                             setFieldValue('specificDatesTarget', newDates);
                           }}
                         >
@@ -771,7 +771,7 @@ const HabitFormScreen = () => {
                     value={values.goal}
                   />
                 </View>
-                {touched.goal && errors.goal && <AppText style={styles.errorText}>{errors.goal}</AppText>}
+                {touched.goal && typeof errors.goal === 'string' && <AppText style={styles.errorText}>{errors.goal}</AppText>}
 
                 <AppText style={[styles.switchSublabel, { marginLeft: 0, marginTop: 16, marginBottom: 6 }]}>Duration Type</AppText>
 
@@ -877,7 +877,7 @@ const HabitFormScreen = () => {
                         value={values.duration}
                       />
                     </View>
-                    {touched.duration && errors.duration && <AppText style={styles.errorText}>{errors.duration}</AppText>}
+                    {touched.duration && typeof errors.duration === 'string' && <AppText style={styles.errorText}>{errors.duration}</AppText>}
                     {values.durationType === 'hours' && !errors.duration && (
                       <AppText style={styles.hintText}>
                         Tip: For more flexible scheduling, consider using the 'Custom' frequency in the section above.

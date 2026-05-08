@@ -1,14 +1,16 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { View, Text, TouchableOpacity, BackHandler } from 'react-native';
+import { View, Text, TouchableOpacity, BackHandler, ActivityIndicator, ScrollView } from 'react-native';
+import { apiClient } from '@core/api';
 import { createStyles } from './DashboardStyles';
 import { DashboardType } from '@shared/types/dashboard';
 import { useTheme } from '@shared/theme';
 
-import { AppButton, AppHeader } from '@shared/components';
+import { AppButton, AppHeader, AppText } from '@shared/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import ConfirmModal from '@shared/components/ConfirmModal';
 import { STRINGS } from '@shared/constants/strings';
+import { ROUTES } from '@app/routes';
 import { storage, logAllStorageData, asyncStorage, ASYNC_STORAGE_KEYS } from '@core/storage';
 import { STORAGE_KEYS } from '@core/storage/keys';
 import { LOCAL_APP_VERSION, ONLINE_APP_VERSION } from '@core/config/appVersion';
@@ -20,6 +22,22 @@ const Dashboard: React.FC<DashboardType> = ({ children }) => {
     const navigation = useNavigation<any>();
     const [isExitModalVisible, setIsExitModalVisible] = useState(false);
     const [pendingAction, setPendingAction] = useState<any>(null);
+    const [quote, setQuote] = useState('');
+    const [isQuoteLoading, setIsQuoteLoading] = useState(false);
+
+    const fetchQuote = async () => {
+      setIsQuoteLoading(true);
+      try {
+        const response = await apiClient.get('/api/random'); 
+        if (response.data) {
+          setQuote(`${response.data.quote} — ${response.data.author}`);
+        }
+      } catch (err: any) {
+        console.log("[Dashboard] Quote fetch failed:", err.message);
+      } finally {
+        setIsQuoteLoading(false);
+      }
+    };
 
     useEffect(() => {
       // Log versions
@@ -38,6 +56,7 @@ const Dashboard: React.FC<DashboardType> = ({ children }) => {
       updateRatingPromptCount();
       logAllStorageData();
       asyncStorage.logAllData();
+      fetchQuote();
     }, []);
 
     useEffect(() => {
@@ -75,14 +94,52 @@ const Dashboard: React.FC<DashboardType> = ({ children }) => {
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
             <AppHeader title="Dashboard" showMenu={true} />
-            <View style={styles.content}>
+            <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+              <AppText>API integration module - Using Axios</AppText>
+                <View style={styles.quoteContainer}>
+                    {isQuoteLoading ? (
+                        <ActivityIndicator color={colors.primary} />
+                    ) : (
+                        <>
+                            <Text style={styles.quoteText}>{quote || "Loading inspiration..."}</Text>
+                            <TouchableOpacity onPress={fetchQuote}>
+                                <Text style={{ color: colors.primary, fontWeight: 'bold' }}>Refresh Quote</Text>
+                            </TouchableOpacity>
+                        </>
+                    )}
+                </View>
+
                 <Text style={styles.counterText}>{count}</Text>
                 <AppButton 
-                    title="Increment"
+                    title="Increment Counter"
                     onPress={() => setCount(count + 1)}
+                    style={{ paddingHorizontal: 30, marginBottom: 16 }}
+                />
+
+                <AppButton 
+                    title="Axios API Call Example 1"
+                    onPress={() => navigation.navigate(ROUTES.AXIOS_EXAMPLE)}
+                    style={{ paddingHorizontal: 30, marginBottom: 16 }}
+                />
+
+                <AppButton 
+                    title="Axios API Call Example 2"
+                    onPress={() => navigation.navigate(ROUTES.AXIOS_POKEMON)}
+                    style={{ paddingHorizontal: 30, marginBottom: 16 }}
+                />
+
+                <AppButton 
+                    title="Axios API Call Example 3"
+                    onPress={() => navigation.navigate(ROUTES.AXIOS_PRODUCTS)}
+                    style={{ paddingHorizontal: 30, marginBottom: 16 }}
+                />
+
+                <AppButton 
+                    title="Axios API Call Example 4"
+                    onPress={() => navigation.navigate(ROUTES.AXIOS_WEATHER)}
                     style={{ paddingHorizontal: 30 }}
                 />
-            </View>
+            </ScrollView>
 
             <ConfirmModal
               isVisible={isExitModalVisible}

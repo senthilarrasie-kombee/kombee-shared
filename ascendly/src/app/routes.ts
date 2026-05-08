@@ -10,8 +10,12 @@ export const ROUTES = {
   ACCOUNT: 'account',
   ALL_HABITS: 'allHabits',
   EDIT_PROFILE: 'editProfile',
-  HOME: 'home', // Included for completeness based on MainStack type
+  HOME: 'home',
   DRAWER: 'drawer',
   HABIT_DETAILS: 'habitDetails',
   HABIT_FORM: 'habitForm',
+  AXIOS_EXAMPLE: 'axiosExample',
+  AXIOS_POKEMON: 'axiosPokemon',
+  AXIOS_PRODUCTS: 'axiosProducts',
+  AXIOS_WEATHER: 'axiosWeather',
 } as const;

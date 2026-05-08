@@ -1,7 +1,7 @@
 import { getApp } from '@react-native-firebase/app';
 import firestore, { getFirestore, collection, doc, getDoc, setDoc, addDoc, getDocs, deleteDoc, serverTimestamp, FieldValue } from '@react-native-firebase/firestore';
 
-import messaging from '@react-native-firebase/messaging';
+import { getMessaging, getToken } from '@react-native-firebase/messaging';
 import { Appearance } from 'react-native';
 import { FIRESTORE_DB_NAME, COLLECTIONS } from '@shared/constants/firebase';
 
@@ -48,7 +48,7 @@ export const syncUserProfile = async (uid: string, user: any, provider: string, 
     // Fetch FCM token
     let fcmToken = null;
     try {
-      fcmToken = await messaging().getToken();
+      fcmToken = await getToken(getMessaging());
     } catch (e) {
       console.warn('FCM collection failed:', e);
     }

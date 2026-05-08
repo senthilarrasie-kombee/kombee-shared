@@ -3,6 +3,8 @@
   "compilerOptions": {
     "jsx": "react-native",
     "types": ["jest"],
+    "target": "esnext",
+    "lib": ["esnext"],
     "baseUrl": ".",
     "strict": true,
     "skipLibCheck": true,

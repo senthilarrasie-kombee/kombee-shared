@@ -14,6 +14,10 @@ type MainStack = {
     [ROUTES.DRAWER]: undefined;
     [ROUTES.HABIT_DETAILS]: { habit: Habit };
     [ROUTES.HABIT_FORM]: { habit?: Habit };
+    [ROUTES.AXIOS_EXAMPLE]: undefined;
+    [ROUTES.AXIOS_POKEMON]: undefined;
+    [ROUTES.AXIOS_PRODUCTS]: undefined;
+    [ROUTES.AXIOS_WEATHER]: undefined;
 };
 
 export type { MainStack };

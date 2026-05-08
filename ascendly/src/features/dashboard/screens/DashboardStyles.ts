@@ -8,9 +8,13 @@ export const createStyles = (colors: typeof LightColors) => StyleSheet.create({
   },
   content: {
     flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
+    paddingBottom: 24,
   },
   title: {
     fontSize: 24,
@@ -22,5 +26,23 @@ export const createStyles = (colors: typeof LightColors) => StyleSheet.create({
     fontSize: 48,
     color: colors.primary,
     marginBottom: 30,
+  },
+  quoteContainer: {
+    padding: 20,
+    backgroundColor: colors.background,
+    borderRadius: 15,
+    marginVertical: 20,
+    width: '100%',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  quoteText: {
+    fontSize: 16,
+    fontStyle: 'italic',
+    color: colors.textPrimary,
+    textAlign: 'center',
+    marginBottom: 15,
+    lineHeight: 24,
   },
 });

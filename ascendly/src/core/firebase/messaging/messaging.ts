@@ -1,19 +1,32 @@
-import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
+import messaging, { 
+  getMessaging, 
+  getToken, 
+  registerDeviceForRemoteMessages, 
+  onMessage, 
+  onNotificationOpenedApp, 
+  getInitialNotification,
+  requestPermission as requestFcmPermission,
+  isDeviceRegisteredForRemoteMessages,
+  AuthorizationStatus,
+  FirebaseMessagingTypes 
+} from '@react-native-firebase/messaging';
 import notifee, { AndroidImportance, EventType } from '@notifee/react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
 import { FCM_CONSTANTS } from '../../../shared/constants/firebase';
 import { ROUTES } from '@app/routes';
 import { navigate } from '../../../app/navigation/navigationService';
 
+const messagingInstance = getMessaging();
+
 export const requestPermission = async (): Promise<boolean> => {
   try {
     let granted = false;
 
     if (Platform.OS === 'ios') {
-      const authStatus = await messaging().requestPermission();
+      const authStatus = await requestFcmPermission(messagingInstance);
       granted =
-        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+        authStatus === AuthorizationStatus.AUTHORIZED ||
+        authStatus === AuthorizationStatus.PROVISIONAL;
 
       await notifee.requestPermission();
     } else if (Platform.OS === 'android' && Platform.Version >= 33) {
@@ -34,10 +47,10 @@ export const requestPermission = async (): Promise<boolean> => {
 
 export const getFcmToken = async (): Promise<string | undefined> => {
   try {
-    if (!messaging().isDeviceRegisteredForRemoteMessages) {
-      await messaging().registerDeviceForRemoteMessages();
+    if (!isDeviceRegisteredForRemoteMessages(messagingInstance)) {
+      await registerDeviceForRemoteMessages(messagingInstance);
     }
-    const token = await messaging().getToken();
+    const token = await getToken(messagingInstance);
     return token;
   } catch (error) {
     console.error('[FCM] getFcmToken error:', error);
@@ -114,7 +127,7 @@ export const firebaseBackgroundHandler = async (
 };
 
 export const listenToForegroundMessages = () => {
-  const unsubscribe = messaging().onMessage(async remoteMessage => {
+  const unsubscribe = onMessage(messagingInstance, async remoteMessage => {
     console.log('[FCM] Foreground message received:', remoteMessage);
     await displayLocalNotification(remoteMessage);
   });
@@ -123,12 +136,11 @@ export const listenToForegroundMessages = () => {
 };
 
 export const setupNotificationListeners = () => {
-  messaging().onNotificationOpenedApp(remoteMessage => {
+  onNotificationOpenedApp(messagingInstance, remoteMessage => {
     handleNotificationTap(remoteMessage);
   });
 
-  messaging()
-    .getInitialNotification()
+  getInitialNotification(messagingInstance)
     .then(remoteMessage => {
       if (remoteMessage) {
         handleNotificationTap(remoteMessage);
