@@ -1,4 +1,4 @@
-import { createMMKV } from 'react-native-mmkv';
+import {createMMKV} from 'react-native-mmkv';
 
 export const storage = createMMKV();
 
@@ -33,11 +33,11 @@ export const logAllStorageData = () => {
     const stringVal = storage.getString(key);
     const numberVal = storage.getNumber(key);
     const boolVal = storage.getBoolean(key);
-    
+
     // Prioritize string since most things are strings/JSON
     acc[key] = stringVal ?? numberVal ?? boolVal ?? 'null';
     return acc;
   }, {});
-  
+
   console.log('[MMKV] Current Data in Storage:', JSON.stringify(storageData, null, 2));
 };

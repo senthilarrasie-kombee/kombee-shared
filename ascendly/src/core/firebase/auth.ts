@@ -1,13 +1,22 @@
-import auth, { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, signInWithCredential, GoogleAuthProvider, signOut as firebaseSignOut } from '@react-native-firebase/auth';
-import { storage } from '@core/storage/mmkv';
-import { STORAGE_KEYS } from '@core/storage/keys';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import auth, {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+  signInWithCredential,
+  GoogleAuthProvider,
+  signOut as firebaseSignOut,
+} from '@react-native-firebase/auth';
+import {storage} from '@core/storage/mmkv';
+import {STORAGE_KEYS} from '@core/storage/keys';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import Config from 'react-native-config';
 
 console.log('All Config Variables:', JSON.stringify(Config, null, 2));
 
 // Fallback to the known ID if Config fails to load during debugging
-const WEB_CLIENT_ID = Config.GOOGLE_WEB_CLIENT_ID || '156955514963-rlgsnl6vcgt4v2trspad6vsst797rp90.apps.googleusercontent.com';
+const WEB_CLIENT_ID =
+  Config.GOOGLE_WEB_CLIENT_ID || '156955514963-rlgsnl6vcgt4v2trspad6vsst797rp90.apps.googleusercontent.com';
 
 console.log('Configuring Google Sign-In with Web Client ID:', WEB_CLIENT_ID);
 
@@ -15,24 +24,22 @@ GoogleSignin.configure({
   webClientId: WEB_CLIENT_ID,
 });
 
-
-
-import { syncUserProfile } from './firestore';
-import { generateNumericId } from '@shared/utils/uidGenerator';
+import {syncUserProfile} from './firestore';
+import {generateNumericId} from '@shared/utils/uidGenerator';
 
 const firebaseAuth = getAuth();
 
 export const signInWithGoogle = async (loginType: 'user' | 'admin' = 'user') => {
   try {
     // Check if your device supports Google Play
-    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    
+    await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+
     // Get the users ID token
     const signInResult = await GoogleSignin.signIn();
-    
+
     console.log('Google Sign-In Response:', JSON.stringify(signInResult, null, 2));
 
-    let idToken = signInResult.data?.idToken;
+    const idToken = signInResult.data?.idToken;
     if (!idToken) {
       throw new Error('No ID token found');
     }
@@ -42,7 +49,7 @@ export const signInWithGoogle = async (loginType: 'user' | 'admin' = 'user') => 
 
     // Sign-in the user with the credential
     const userCredential = await signInWithCredential(firebaseAuth, credential);
-    
+
     // Extract provider-specific UID
     const providerUid = userCredential.user.providerData[0]?.uid || userCredential.user.uid;
 
@@ -58,10 +65,10 @@ export const signInWithGoogle = async (loginType: 'user' | 'admin' = 'user') => 
 
     // Sync to Firestore using the provider-specific UID
     const syncedProfile = await syncUserProfile(providerUid, userCredential.user, 'google', loginType);
-    
+
     console.log('Firebase Auth User Credential (Original):', JSON.stringify(userCredential, null, 2));
-    
-    return { ...userCredential, user: syncedProfile || userWithOverriddenUid };
+
+    return {...userCredential, user: syncedProfile || userWithOverriddenUid};
   } catch (error) {
     console.error('Google Sign-In Error:', error);
     throw error;
@@ -73,10 +80,10 @@ export const signOut = async () => {
     await GoogleSignin.revokeAccess();
     await GoogleSignin.signOut();
     await firebaseSignOut(firebaseAuth);
-    
+
     // Clear login session in MMKV
     storage.set(STORAGE_KEYS.AUTH.IS_LOGGED_IN, false);
-    
+
     console.log('User signed out successfully');
   } catch (error) {
     console.error('Sign-Out Error:', error);
@@ -84,23 +91,28 @@ export const signOut = async () => {
   }
 };
 
-export const signUpWithEmail = async (email: string, password: string, displayName: string, loginType: 'user' | 'admin' = 'user') => {
+export const signUpWithEmail = async (
+  email: string,
+  password: string,
+  displayName: string,
+  loginType: 'user' | 'admin' = 'user'
+) => {
   try {
     const cleanEmail = email.trim();
     console.log(`Attempting Sign-Up with email: "${cleanEmail}"`);
     const userCredential = await createUserWithEmailAndPassword(firebaseAuth, cleanEmail, password);
-    
+
     // Update profile with display name
     await updateProfile(userCredential.user, {
       displayName: displayName,
     });
-    
+
     // For email login, generate a persistent 21-digit numeric ID matching Google's format
     const providerUid = generateNumericId(userCredential.user.uid);
 
     // Sync to Firestore using the generated numeric UID
     const syncedProfile = await syncUserProfile(providerUid, userCredential.user, 'email', loginType);
-    
+
     const userWithOverriddenUid = {
       ...userCredential.user.toJSON(),
       uid: providerUid,
@@ -109,9 +121,9 @@ export const signUpWithEmail = async (email: string, password: string, displayNa
       photoURL: userCredential.user.photoURL,
       provider: 'email',
     };
-    
+
     console.log('Firebase Email Sign-Up Success:', JSON.stringify(userCredential, null, 2));
-    return { ...userCredential, user: syncedProfile || userWithOverriddenUid };
+    return {...userCredential, user: syncedProfile || userWithOverriddenUid};
   } catch (error) {
     console.error('Email Sign-Up Error:', error);
     throw error;
@@ -123,13 +135,13 @@ export const signInWithEmail = async (email: string, password: string, loginType
     const cleanEmail = email.trim();
     console.log(`Attempting Sign-In with email: "${cleanEmail}"`);
     const userCredential = await signInWithEmailAndPassword(firebaseAuth, cleanEmail, password);
-    
+
     // For email login, generate a persistent 21-digit numeric ID matching Google's format
     const providerUid = generateNumericId(userCredential.user.uid);
 
     // Sync to Firestore using the generated numeric UID
     const syncedProfile = await syncUserProfile(providerUid, userCredential.user, 'email', loginType);
-    
+
     const userWithOverriddenUid = {
       ...userCredential.user.toJSON(),
       uid: providerUid,
@@ -138,9 +150,9 @@ export const signInWithEmail = async (email: string, password: string, loginType
       photoURL: userCredential.user.photoURL,
       provider: 'email',
     };
-    
+
     console.log('Firebase Email Sign-In Success:', JSON.stringify(userCredential, null, 2));
-    return { ...userCredential, user: syncedProfile || userWithOverriddenUid };
+    return {...userCredential, user: syncedProfile || userWithOverriddenUid};
   } catch (error) {
     console.error('Email Sign-In Error:', error);
     throw error;

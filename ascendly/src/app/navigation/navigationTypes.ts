@@ -1,23 +1,23 @@
-import { ROUTES } from '@app/routes';
-import { Habit } from '@shared/types/habit';
+import {ROUTES} from '@app/routes';
+import {Habit} from '@shared/types/habit';
 
 // navigation types
 type MainStack = {
-    [ROUTES.HOME]: undefined | Record<string, any>;
-    [ROUTES.LOGIN]: undefined;
-    [ROUTES.DASHBOARD]: undefined;
-    [ROUTES.HABITS_LISTING]: undefined;
-    [ROUTES.ACCOUNT]: undefined;
-    [ROUTES.ALL_HABITS]: undefined;
-    [ROUTES.EDIT_PROFILE]: undefined;
-    [ROUTES.MAIN_TAB]: undefined;
-    [ROUTES.DRAWER]: undefined;
-    [ROUTES.HABIT_DETAILS]: { habit: Habit };
-    [ROUTES.HABIT_FORM]: { habit?: Habit };
-    [ROUTES.AXIOS_EXAMPLE]: undefined;
-    [ROUTES.AXIOS_POKEMON]: undefined;
-    [ROUTES.AXIOS_PRODUCTS]: undefined;
-    [ROUTES.AXIOS_WEATHER]: undefined;
+  [ROUTES.HOME]: undefined | Record<string, any>;
+  [ROUTES.LOGIN]: undefined;
+  [ROUTES.DASHBOARD]: undefined;
+  [ROUTES.HABITS_LISTING]: undefined;
+  [ROUTES.ACCOUNT]: undefined;
+  [ROUTES.ALL_HABITS]: undefined;
+  [ROUTES.EDIT_PROFILE]: undefined;
+  [ROUTES.MAIN_TAB]: undefined;
+  [ROUTES.DRAWER]: undefined;
+  [ROUTES.HABIT_DETAILS]: {habit: Habit};
+  [ROUTES.HABIT_FORM]: {habit?: Habit};
+  [ROUTES.AXIOS_EXAMPLE]: undefined;
+  [ROUTES.AXIOS_POKEMON]: undefined;
+  [ROUTES.AXIOS_PRODUCTS]: undefined;
+  [ROUTES.AXIOS_WEATHER]: undefined;
 };
 
-export type { MainStack };
+export type {MainStack};

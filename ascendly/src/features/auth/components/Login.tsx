@@ -1,21 +1,16 @@
-import React, { useMemo, useEffect, useState } from 'react';
-import { 
-  View, 
-  TouchableOpacity,
-  StyleSheet,
-  ActivityIndicator
-} from 'react-native';
+import React, {useMemo, useEffect, useState} from 'react';
+import {View, TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
 import * as Yup from 'yup';
-import { signInWithGoogle, signInWithEmail } from '@core/firebase/auth';
-import { useDispatch } from 'react-redux';
-import { setUser } from '@store/reducers/rootSlice';
-import { useTheme, Spacing } from '@shared/theme';
-import { AppButton, AppTextInput, AppText } from '@shared/components';
-import { createStyles } from '../screens/LoginStyles';
-import { storage, logAllStorageData } from '@core/storage/mmkv';
-import { STORAGE_KEYS } from '@core/storage/keys';
+import {signInWithGoogle, signInWithEmail} from '@core/firebase/auth';
+import {useDispatch} from 'react-redux';
+import {setUser} from '@store/reducers/rootSlice';
+import {useTheme, Spacing} from '@shared/theme';
+import {AppButton, AppTextInput, AppText} from '@shared/components';
+import {createStyles} from '../screens/LoginStyles';
+import {storage, logAllStorageData} from '@core/storage/mmkv';
+import {STORAGE_KEYS} from '@core/storage/keys';
 
 interface LoginProps {
   onToggle: () => void;
@@ -26,15 +21,15 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('Please enter a valid email')
     .required('Email is required')
-    .transform((value) => value.replace(/\s/g, '')),
+    .transform(value => value.replace(/\s/g, '')),
   password: Yup.string()
     .min(6, 'Password must be at least 6 characters')
     .required('Password is required')
-    .transform((value) => value.replace(/\s/g, '')),
+    .transform(value => value.replace(/\s/g, '')),
 });
 
-const Login: React.FC<LoginProps> = ({ onToggle, onSuccess }) => {
-  const { colors } = useTheme();
+const Login: React.FC<LoginProps> = ({onToggle, onSuccess}) => {
+  const {colors} = useTheme();
   const dispatch = useDispatch();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const [showPassword, setShowPassword] = useState(false);
@@ -42,6 +37,7 @@ const Login: React.FC<LoginProps> = ({ onToggle, onSuccess }) => {
   const [loginLoading, setLoginLoading] = useState(false);
 
   useEffect(() => {
+    console.log("HELLO");
     logAllStorageData();
   }, []);
 
@@ -49,7 +45,7 @@ const Login: React.FC<LoginProps> = ({ onToggle, onSuccess }) => {
     try {
       setGoogleLoading(true);
       const userCredential = await signInWithGoogle();
-      
+
       if (userCredential) {
         // Persist basic user data to MMKV
         storage.set(STORAGE_KEYS.AUTH.USER_ID, userCredential.user.uid);
@@ -70,9 +66,9 @@ const Login: React.FC<LoginProps> = ({ onToggle, onSuccess }) => {
   };
 
   const formik = useFormik({
-    initialValues: { email: '', password: '' },
+    initialValues: {email: '', password: ''},
     validationSchema,
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       try {
         setLoginLoading(true);
         const userCredential = await signInWithEmail(values.email, values.password);
@@ -103,7 +99,7 @@ const Login: React.FC<LoginProps> = ({ onToggle, onSuccess }) => {
       <AppTextInput
         placeholder="Email"
         value={formik.values.email}
-        onChangeText={(text) => formik.setFieldValue('email', text.replace(/\s/g, ''))}
+        onChangeText={text => formik.setFieldValue('email', text.replace(/\s/g, ''))}
         onBlur={formik.handleBlur('email')}
         autoCapitalize="none"
         keyboardType="email-address"
@@ -117,7 +113,7 @@ const Login: React.FC<LoginProps> = ({ onToggle, onSuccess }) => {
       <AppTextInput
         placeholder="Password"
         value={formik.values.password}
-        onChangeText={(text) => formik.setFieldValue('password', text.replace(/\s/g, ''))}
+        onChangeText={text => formik.setFieldValue('password', text.replace(/\s/g, ''))}
         onBlur={formik.handleBlur('password')}
         autoCapitalize="none"
         secureTextEntry={!showPassword}
@@ -125,11 +121,7 @@ const Login: React.FC<LoginProps> = ({ onToggle, onSuccess }) => {
         error={formik.touched.password && formik.errors.password}
         rightElement={
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-            <Ionicons 
-              name={showPassword ? "eye-off-outline" : "eye-outline"} 
-              size={20} 
-              color={colors.textSecondary} 
-            />
+            <Ionicons name={showPassword ? 'eye-off-outline' : 'eye-outline'} size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         }
       />
@@ -137,24 +129,23 @@ const Login: React.FC<LoginProps> = ({ onToggle, onSuccess }) => {
         <AppText style={styles.errorText}>{formik.errors.password}</AppText>
       ) : null}
 
-      <AppButton 
+      <AppButton
         disabled={!formik.isValid || !formik.dirty || loginLoading}
-        title={loginLoading ? "Signing In..." : "Sign In"}
+        title={loginLoading ? 'Signing In...' : 'Sign In'}
         onPress={formik.handleSubmit}
-        style={{ marginTop: Spacing.s2 }}
+        style={{marginTop: Spacing.s2}}
       />
 
       <View style={localStyles.dividerContainer}>
-        <View style={[localStyles.divider, { backgroundColor: colors.border }]} />
+        <View style={[localStyles.divider, {backgroundColor: colors.border}]} />
         <AppText style={localStyles.dividerText}>OR</AppText>
-        <View style={[localStyles.divider, { backgroundColor: colors.border }]} />
+        <View style={[localStyles.divider, {backgroundColor: colors.border}]} />
       </View>
 
-      <TouchableOpacity 
-        style={[localStyles.googleButton, { borderColor: colors.border }]} 
+      <TouchableOpacity
+        style={[localStyles.googleButton, {borderColor: colors.border}]}
         onPress={onGoogleButtonPress}
-        disabled={googleLoading}
-      >
+        disabled={googleLoading}>
         {googleLoading ? (
           <ActivityIndicator color={colors.primary} />
         ) : (

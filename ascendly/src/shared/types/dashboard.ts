@@ -1,5 +1,5 @@
-import { PropsWithChildren } from 'react';
+import {PropsWithChildren} from 'react';
 
 export type DashboardType = PropsWithChildren<{
-    title?: string | undefined;
+  title?: string | undefined;
 }>;

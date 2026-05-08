@@ -1,28 +1,27 @@
 import React from 'react';
-import { Text, TextProps } from 'react-native';
-import { useTheme, FontFamily, FontSize } from '@shared/theme';
+import {Text, TextProps} from 'react-native';
+import {useTheme, FontFamily, FontSize} from '@shared/theme';
 
 interface AppTextProps extends TextProps {
   children: React.ReactNode;
 }
 
-const AppText: React.FC<AppTextProps> = ({ style, children, ...props }) => {
-  const { colors } = useTheme();
+const AppText: React.FC<AppTextProps> = ({style, children, ...props}) => {
+  const {colors} = useTheme();
 
   return (
-    <Text 
+    <Text
       style={[
-        { 
-          color: colors.textPrimary, 
-          fontFamily: FontFamily.regular, 
+        {
+          color: colors.textPrimary,
+          fontFamily: FontFamily.regular,
           fontSize: FontSize.md,
           includeFontPadding: false,
           textAlignVertical: 'center',
-        }, 
-        style
-      ]} 
-      {...props}
-    >
+        },
+        style,
+      ]}
+      {...props}>
       {children}
     </Text>
   );

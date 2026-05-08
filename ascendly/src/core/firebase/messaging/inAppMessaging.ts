@@ -10,8 +10,8 @@ export const setInAppMessagesEnabled = async (enabled: boolean) => {
 };
 
 /**
- * Note: The React Native Firebase In-App Messaging API does not currently support 
- * JS-level listeners for message clicks or dismissals. These events are 
+ * Note: The React Native Firebase In-App Messaging API does not currently support
+ * JS-level listeners for message clicks or dismissals. These events are
  * automatically logged to Firebase Analytics natively.
  */
 export const setupInAppMessagingListeners = () => {

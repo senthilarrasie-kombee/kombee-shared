@@ -107,5 +107,5 @@ export const asyncStorage = {
     } catch (error) {
       console.error('AsyncStorage Error (logAllData)', error);
     }
-  }
+  },
 };

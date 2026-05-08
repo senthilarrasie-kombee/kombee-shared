@@ -1,37 +1,35 @@
-import React, { useMemo, useState } from 'react';
-import { View, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, {useMemo, useState} from 'react';
+import {View, ScrollView, TouchableOpacity, StatusBar} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { useTheme } from '@shared/theme';
+import {useRoute, RouteProp, useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useTheme} from '@shared/theme';
 import AppHeader from '@shared/components/AppHeader';
 import AppText from '@shared/components/AppText';
 import ConfirmModal from '@shared/components/ConfirmModal';
-import { MainStack } from '@app/navigation/navigationTypes';
-import { ROUTES } from '@app/routes';
-import { createHabitDetailsStyles } from '../styles/HabitDetailsStyles';
-import { calculateStreak, formatDisplayDate } from '@shared/utils/habitUtils';
-import { useDispatch } from 'react-redux';
-import { deleteHabitAsync } from '@store/reducers/rootSlice';
+import {MainStack} from '@app/navigation/navigationTypes';
+import {ROUTES} from '@app/routes';
+import {createHabitDetailsStyles} from '../styles/HabitDetailsStyles';
+import {calculateStreak, formatDisplayDate} from '@shared/utils/habitUtils';
+import {useDispatch} from 'react-redux';
+import {deleteHabitAsync} from '@store/reducers/rootSlice';
 
 type HabitDetailsRouteProp = RouteProp<MainStack, typeof ROUTES.HABIT_DETAILS>;
 type NavigationProp = StackNavigationProp<MainStack>;
 
-import { CATEGORIES_DATA as categoriesData } from '@shared/constants/categories';
+import {CATEGORIES_DATA as categoriesData} from '@shared/constants/categories';
 
 const HabitDetailsScreen = () => {
-  const { colors, isDark } = useTheme();
+  const {colors, isDark} = useTheme();
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<HabitDetailsRouteProp>();
-  const { habit } = route.params;
+  const {habit} = route.params;
 
   const styles = useMemo(() => createHabitDetailsStyles(colors, isDark), [colors, isDark]);
   const dispatch = useDispatch<any>();
 
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-
-
 
   const handleDelete = () => {
     setIsDeleteModalVisible(true);
@@ -52,78 +50,83 @@ const HabitDetailsScreen = () => {
   const category = categoriesData.find(c => c.id === habit.categoryId) || categoriesData[0];
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+    <SafeAreaView style={[styles.container, {backgroundColor: colors.background}]} edges={['top']}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
-      <AppHeader 
-        title="Habit Details" 
-        showBack 
+      <AppHeader
+        title="Habit Details"
+        showBack
         rightElement={
-          <TouchableOpacity onPress={handleDelete} style={{ padding: 8 }}>
+          <TouchableOpacity onPress={handleDelete} style={{padding: 8}}>
             <Icon name="trash-outline" size={24} color="#EF4444" />
           </TouchableOpacity>
         }
       />
-      
+
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         <View style={styles.headerSection}>
-          <View style={[styles.iconContainer, { backgroundColor: category.color + '15' }]}>
+          <View style={[styles.iconContainer, {backgroundColor: category.color + '15'}]}>
             <Icon name={category.icon} size={40} color={category.color} />
           </View>
           <AppText style={styles.title}>{habit.title}</AppText>
           <View style={styles.badgeContainer}>
-            <View style={[
-              styles.statusBadge, 
-              { backgroundColor: isActive ? '#E1F9F1' : '#FFF3E0' }
-            ]}>
-              <View style={[
-                styles.statusDot, 
-                { backgroundColor: isActive ? '#10B981' : '#F59E0B' }
-              ]} />
-              <AppText style={[
-                styles.statusText, 
-                { color: isActive ? '#065F46' : '#92400E' }
-              ]}>
+            <View style={[styles.statusBadge, {backgroundColor: isActive ? '#E1F9F1' : '#FFF3E0'}]}>
+              <View style={[styles.statusDot, {backgroundColor: isActive ? '#10B981' : '#F59E0B'}]} />
+              <AppText style={[styles.statusText, {color: isActive ? '#065F46' : '#92400E'}]}>
                 {habit.status.charAt(0).toUpperCase() + habit.status.slice(1)}
               </AppText>
             </View>
 
-            <View style={[
-              styles.priorityBadge, 
-              { backgroundColor: habit.priority === 'high' ? '#FFEBEB' : habit.priority === 'medium' ? '#FFF8E1' : '#E3F2FD' }
-            ]}>
-              <AppText style={[
-                styles.priorityText, 
-                { color: habit.priority === 'high' ? '#D32F2F' : habit.priority === 'medium' ? '#F57F17' : '#1976D2' }
+            <View
+              style={[
+                styles.priorityBadge,
+                {
+                  backgroundColor:
+                    habit.priority === 'high' ? '#FFEBEB' : habit.priority === 'medium' ? '#FFF8E1' : '#E3F2FD',
+                },
               ]}>
+              <AppText
+                style={[
+                  styles.priorityText,
+                  {color: habit.priority === 'high' ? '#D32F2F' : habit.priority === 'medium' ? '#F57F17' : '#1976D2'},
+                ]}>
                 {habit.priority.toUpperCase()}
               </AppText>
             </View>
 
             {habit.isOneTime && (
-              <View style={[styles.taskBadge, { backgroundColor: colors.primary + '15' }]}>
-                <AppText style={[styles.taskBadgeText, { color: colors.primary }]}>TASK</AppText>
+              <View style={[styles.taskBadge, {backgroundColor: colors.primary + '15'}]}>
+                <AppText style={[styles.taskBadgeText, {color: colors.primary}]}>TASK</AppText>
               </View>
             )}
 
             {habit.isFavorite && (
-              <View style={[styles.priorityBadge, { backgroundColor: '#FFEBEB', flexDirection: 'row', alignItems: 'center' }]}>
+              <View
+                style={[
+                  styles.priorityBadge,
+                  {backgroundColor: '#FFEBEB', flexDirection: 'row', alignItems: 'center'},
+                ]}>
                 <Icon name="heart" size={10} color="#EF4444" />
-                <AppText style={[styles.priorityText, { color: '#EF4444', marginLeft: 4 }]}>FAVORITE</AppText>
+                <AppText style={[styles.priorityText, {color: '#EF4444', marginLeft: 4}]}>FAVORITE</AppText>
               </View>
             )}
 
-            <View style={[styles.timeBadge, { backgroundColor: isDark ? '#2D2D3A' : '#F1F5F9' }]}>
-              <Icon 
+            <View style={[styles.timeBadge, {backgroundColor: isDark ? '#2D2D3A' : '#F1F5F9'}]}>
+              <Icon
                 name={
-                  habit.timeOfDay === 'morning' ? 'sunny-outline' :
-                  habit.timeOfDay === 'afternoon' ? 'partly-sunny-outline' :
-                  habit.timeOfDay === 'evening' ? 'moon-outline' :
-                  habit.timeOfDay === 'night' ? 'bed-outline' : 'infinite-outline'
-                } 
-                size={12} 
-                color={colors.textSecondary} 
+                  habit.timeOfDay === 'morning'
+                    ? 'sunny-outline'
+                    : habit.timeOfDay === 'afternoon'
+                      ? 'partly-sunny-outline'
+                      : habit.timeOfDay === 'evening'
+                        ? 'moon-outline'
+                        : habit.timeOfDay === 'night'
+                          ? 'bed-outline'
+                          : 'infinite-outline'
+                }
+                size={12}
+                color={colors.textSecondary}
               />
-              <AppText style={[styles.statusText, { color: colors.textSecondary, marginLeft: 4 }]}>
+              <AppText style={[styles.statusText, {color: colors.textSecondary, marginLeft: 4}]}>
                 {habit.timeOfDay.toUpperCase()}
               </AppText>
             </View>
@@ -132,23 +135,21 @@ const HabitDetailsScreen = () => {
 
         <View style={styles.section}>
           <AppText style={styles.sectionTitle}>Description</AppText>
-          <AppText style={[styles.sectionContent, { color: colors.textSecondary }]}>
-            {habit.description}
-          </AppText>
+          <AppText style={[styles.sectionContent, {color: colors.textSecondary}]}>{habit.description}</AppText>
         </View>
 
         <View style={styles.divider} />
 
         <View style={styles.statsRow}>
-          <View style={[styles.statCard, { backgroundColor: isDark ? '#1E1E26' : '#F8FAFC' }]}>
+          <View style={[styles.statCard, {backgroundColor: isDark ? '#1E1E26' : '#F8FAFC'}]}>
             <Icon name="flame" size={24} color="#FF5722" />
             <AppText style={styles.statValue}>{habit.isOneTime ? '-' : calculateStreak(habit)}</AppText>
-            <AppText style={[styles.statLabel, { color: colors.textSecondary }]}>Current Streak</AppText>
+            <AppText style={[styles.statLabel, {color: colors.textSecondary}]}>Current Streak</AppText>
           </View>
-          <View style={[styles.statCard, { backgroundColor: isDark ? '#1E1E26' : '#F8FAFC' }]}>
+          <View style={[styles.statCard, {backgroundColor: isDark ? '#1E1E26' : '#F8FAFC'}]}>
             <Icon name="calendar" size={24} color={colors.primary} />
             <AppText style={styles.statValue}>{habit.completions.length}</AppText>
-            <AppText style={[styles.statLabel, { color: colors.textSecondary }]}>Days Completed</AppText>
+            <AppText style={[styles.statLabel, {color: colors.textSecondary}]}>Days Completed</AppText>
           </View>
         </View>
 
@@ -156,14 +157,12 @@ const HabitDetailsScreen = () => {
 
         <View style={styles.section}>
           <AppText style={styles.sectionTitle}>Goal & Tracking</AppText>
-          <View style={[styles.goalCard, { backgroundColor: isDark ? '#1E1E26' : '#F0F4FF' }]}>
+          <View style={[styles.goalCard, {backgroundColor: isDark ? '#1E1E26' : '#F0F4FF'}]}>
             <Icon name="ribbon-outline" size={24} color={colors.primary} style={styles.goalIcon} />
-            <View style={{ flex: 1 }}>
-              <AppText style={[styles.goalText, { color: colors.textPrimary }]}>
-                {habit.goal}
-              </AppText>
+            <View style={{flex: 1}}>
+              <AppText style={[styles.goalText, {color: colors.textPrimary}]}>{habit.goal}</AppText>
               {habit.durationType !== 'none' && (
-                <AppText style={{ fontSize: 12, color: colors.textSecondary, marginTop: 2 }}>
+                <AppText style={{fontSize: 12, color: colors.textSecondary, marginTop: 2}}>
                   Target: {habit.duration} {habit.durationType}
                 </AppText>
               )}
@@ -175,9 +174,9 @@ const HabitDetailsScreen = () => {
 
         <View style={styles.section}>
           <AppText style={styles.sectionTitle}>Schedule</AppText>
-          <View style={[styles.goalCard, { backgroundColor: isDark ? '#1E1E26' : '#F5F3FF' }]}>
+          <View style={[styles.goalCard, {backgroundColor: isDark ? '#1E1E26' : '#F5F3FF'}]}>
             <Icon name="calendar-outline" size={24} color="#8B5CF6" style={styles.goalIcon} />
-            <AppText style={[styles.goalText, { color: colors.textPrimary }]}>
+            <AppText style={[styles.goalText, {color: colors.textPrimary}]}>
               {habit.scheduleDescription || habit.frequency.toUpperCase()}
             </AppText>
           </View>
@@ -189,28 +188,29 @@ const HabitDetailsScreen = () => {
           <View style={styles.section}>
             <AppText style={styles.sectionTitle}>Selected Days</AppText>
             <View style={styles.daysContainer}>
-              {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => {
+              {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => {
                 const fullDays = {
-                  'Mon': 'Monday', 'Tue': 'Tuesday', 'Wed': 'Wednesday', 
-                  'Thu': 'Thursday', 'Fri': 'Friday', 'Sat': 'Saturday', 'Sun': 'Sunday'
+                  Mon: 'Monday',
+                  Tue: 'Tuesday',
+                  Wed: 'Wednesday',
+                  Thu: 'Thursday',
+                  Fri: 'Friday',
+                  Sat: 'Saturday',
+                  Sun: 'Sunday',
                 };
                 const isTarget = habit.daysTarget.includes(fullDays[day as keyof typeof fullDays]);
-                
+
                 return (
-                  <View 
-                    key={day} 
+                  <View
+                    key={day}
                     style={[
-                      styles.dayCircle, 
-                      { 
-                        backgroundColor: isTarget ? colors.primary : (isDark ? '#2D2D3A' : '#E2E8F0'),
-                        borderColor: isTarget ? colors.primary : 'transparent'
-                      }
-                    ]}
-                  >
-                    <AppText style={[
-                      styles.dayText, 
-                      { color: isTarget ? '#FFFFFF' : (isDark ? '#9E9EB8' : '#64748B') }
+                      styles.dayCircle,
+                      {
+                        backgroundColor: isTarget ? colors.primary : isDark ? '#2D2D3A' : '#E2E8F0',
+                        borderColor: isTarget ? colors.primary : 'transparent',
+                      },
                     ]}>
+                    <AppText style={[styles.dayText, {color: isTarget ? '#FFFFFF' : isDark ? '#9E9EB8' : '#64748B'}]}>
                       {day[0]}
                     </AppText>
                   </View>
@@ -224,28 +224,36 @@ const HabitDetailsScreen = () => {
 
         <View style={styles.section}>
           <AppText style={styles.sectionTitle}>Timeline</AppText>
-          <View style={[styles.timelineContainer, { backgroundColor: isDark ? '#1E1E26' : '#F8FAFC' }]}>
+          <View style={[styles.timelineContainer, {backgroundColor: isDark ? '#1E1E26' : '#F8FAFC'}]}>
             <View style={styles.timelineItem}>
               <Icon name="add-circle-outline" size={18} color={colors.textSecondary} />
-              <AppText style={[styles.timelineLabel, { color: colors.textSecondary }]}>Created on:</AppText>
-              <AppText style={[styles.timelineValue, { color: colors.textPrimary }]}>{formatDisplayDate(habit.createdDate || habit.startDate)}</AppText>
+              <AppText style={[styles.timelineLabel, {color: colors.textSecondary}]}>Created on:</AppText>
+              <AppText style={[styles.timelineValue, {color: colors.textPrimary}]}>
+                {formatDisplayDate(habit.createdDate || habit.startDate)}
+              </AppText>
             </View>
             <View style={styles.timelineItem}>
               <Icon name="play-circle-outline" size={18} color={colors.textSecondary} />
-              <AppText style={[styles.timelineLabel, { color: colors.textSecondary }]}>Started on:</AppText>
-              <AppText style={[styles.timelineValue, { color: colors.textPrimary }]}>{formatDisplayDate(habit.startDate)}</AppText>
+              <AppText style={[styles.timelineLabel, {color: colors.textSecondary}]}>Started on:</AppText>
+              <AppText style={[styles.timelineValue, {color: colors.textPrimary}]}>
+                {formatDisplayDate(habit.startDate)}
+              </AppText>
             </View>
             {habit.endDate && (
               <View style={styles.timelineItem}>
                 <Icon name="stop-circle-outline" size={18} color={colors.textSecondary} />
-                <AppText style={[styles.timelineLabel, { color: colors.textSecondary }]}>Ends on:</AppText>
-                <AppText style={[styles.timelineValue, { color: colors.textPrimary }]}>{formatDisplayDate(habit.endDate)}</AppText>
+                <AppText style={[styles.timelineLabel, {color: colors.textSecondary}]}>Ends on:</AppText>
+                <AppText style={[styles.timelineValue, {color: colors.textPrimary}]}>
+                  {formatDisplayDate(habit.endDate)}
+                </AppText>
               </View>
             )}
-            <View style={[styles.timelineItem, { borderBottomWidth: 0 }]}>
+            <View style={[styles.timelineItem, {borderBottomWidth: 0}]}>
               <Icon name="sync-outline" size={18} color={colors.textSecondary} />
-              <AppText style={[styles.timelineLabel, { color: colors.textSecondary }]}>Last updated:</AppText>
-              <AppText style={[styles.timelineValue, { color: colors.textPrimary }]}>{formatDisplayDate(habit.updatedAt)}</AppText>
+              <AppText style={[styles.timelineLabel, {color: colors.textSecondary}]}>Last updated:</AppText>
+              <AppText style={[styles.timelineValue, {color: colors.textPrimary}]}>
+                {formatDisplayDate(habit.updatedAt)}
+              </AppText>
             </View>
           </View>
         </View>
@@ -262,17 +270,16 @@ const HabitDetailsScreen = () => {
                     const formatted = formatDisplayDate(c.date);
                     const parts = formatted.split(',');
                     return (
-                      <View 
-                        key={`${c.date}-${index}`} 
+                      <View
+                        key={`${c.date}-${index}`}
                         style={[
-                          styles.historyChip, 
-                          { 
+                          styles.historyChip,
+                          {
                             backgroundColor: colors.primary + '10',
-                            borderColor: colors.primary + '30'
-                          }
-                        ]}
-                      >
-                        <AppText style={[styles.historyChipText, { color: colors.primary }]}>
+                            borderColor: colors.primary + '30',
+                          },
+                        ]}>
+                        <AppText style={[styles.historyChipText, {color: colors.primary}]}>
                           {parts[0]} {parts[1]}
                         </AppText>
                       </View>
@@ -287,36 +294,30 @@ const HabitDetailsScreen = () => {
           <>
             <View style={styles.divider} />
             <View style={styles.section}>
-            <AppText style={styles.sectionTitle}>Notes</AppText>
-            {habit.completions
-              .filter(c => c.note)
-              .sort((a, b) => b.date.localeCompare(a.date))
-              .map((c, index) => (
-                <View 
-                  key={`${c.date}-${index}`} 
-                  style={[styles.noteItem, { backgroundColor: isDark ? '#1E1E26' : '#F8FAFC' }]}
-                >
-                  <AppText style={[styles.noteDate, { color: colors.primary }]}>
-                    {formatDisplayDate(c.date)}
-                  </AppText>
-                  <AppText style={[styles.noteText, { color: colors.textPrimary }]}>
-                    {c.note}
-                  </AppText>
-                </View>
-              ))}
-          </View>
-        </>
-      )}
+              <AppText style={styles.sectionTitle}>Notes</AppText>
+              {habit.completions
+                .filter(c => c.note)
+                .sort((a, b) => b.date.localeCompare(a.date))
+                .map((c, index) => (
+                  <View
+                    key={`${c.date}-${index}`}
+                    style={[styles.noteItem, {backgroundColor: isDark ? '#1E1E26' : '#F8FAFC'}]}>
+                    <AppText style={[styles.noteDate, {color: colors.primary}]}>{formatDisplayDate(c.date)}</AppText>
+                    <AppText style={[styles.noteText, {color: colors.textPrimary}]}>{c.note}</AppText>
+                  </View>
+                ))}
+            </View>
+          </>
+        )}
       </ScrollView>
 
       <View style={styles.footer}>
-        <TouchableOpacity 
-          style={[styles.editButton, { borderColor: colors.primary }]}
-          onPress={() => navigation.navigate(ROUTES.HABIT_FORM, { habit })}
-        >
-          <AppText style={[styles.editButtonText, { color: colors.primary }]}>Edit Habit</AppText>
+        <TouchableOpacity
+          style={[styles.editButton, {borderColor: colors.primary}]}
+          onPress={() => navigation.navigate(ROUTES.HABIT_FORM, {habit})}>
+          <AppText style={[styles.editButtonText, {color: colors.primary}]}>Edit Habit</AppText>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.completeButton, { backgroundColor: colors.primary }]}>
+        <TouchableOpacity style={[styles.completeButton, {backgroundColor: colors.primary}]}>
           <AppText style={styles.completeButtonText}>Mark as Done</AppText>
         </TouchableOpacity>
       </View>
@@ -333,4 +334,3 @@ const HabitDetailsScreen = () => {
 };
 
 export default HabitDetailsScreen;
-

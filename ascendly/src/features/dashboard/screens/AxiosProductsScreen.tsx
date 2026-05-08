@@ -1,20 +1,11 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { 
-  View, 
-  Text, 
-  Image,
-  ActivityIndicator, 
-  FlatList,
-  RefreshControl,
-  StyleSheet,
-  Dimensions
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { AppHeader } from '@shared/components';
-import { useTheme, FontFamily } from '@shared/theme';
-import { dummyJsonClient } from '@core/api/apiClient';
+import React, {useState, useEffect, useMemo} from 'react';
+import {View, Text, Image, ActivityIndicator, FlatList, RefreshControl, StyleSheet, Dimensions} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {AppHeader} from '@shared/components';
+import {useTheme, FontFamily} from '@shared/theme';
+import {dummyJsonClient} from '@core/api/apiClient';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 interface Product {
   id: number;
@@ -34,7 +25,7 @@ interface ProductsResponse {
 }
 
 const AxiosProductsScreen: React.FC = () => {
-  const { colors, isDark } = useTheme();
+  const {colors, isDark} = useTheme();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -58,63 +49,69 @@ const AxiosProductsScreen: React.FC = () => {
     fetchProducts();
   }, []);
 
-  const styles = useMemo(() => StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
-    loader: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    listContent: {
-      padding: 16,
-    },
-    productCard: {
-      backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-      borderRadius: 16,
-      marginBottom: 16,
-      overflow: 'hidden',
-      borderWidth: 1,
-      borderColor: colors.border,
-      flexDirection: 'row',
-    },
-    thumbnail: {
-      width: 100,
-      height: 100,
-      backgroundColor: isDark ? '#374151' : '#F3F4F6',
-    },
-    details: {
-      flex: 1,
-      padding: 12,
-      justifyContent: 'center',
-    },
-    title: {
-      fontSize: 16,
-      fontFamily: FontFamily.semiBold,
-      color: colors.textPrimary,
-      marginBottom: 4,
-    },
-    category: {
-      fontSize: 12,
-      color: colors.textSecondary,
-      textTransform: 'uppercase',
-      marginBottom: 4,
-    },
-    price: {
-      fontSize: 18,
-      fontFamily: FontFamily.semiBold,
-      color: colors.primary,
-    }
-  }), [colors, isDark]);
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        container: {
+          flex: 1,
+          backgroundColor: colors.background,
+        },
+        loader: {
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+        listContent: {
+          padding: 16,
+        },
+        productCard: {
+          backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
+          borderRadius: 16,
+          marginBottom: 16,
+          overflow: 'hidden',
+          borderWidth: 1,
+          borderColor: colors.border,
+          flexDirection: 'row',
+        },
+        thumbnail: {
+          width: 100,
+          height: 100,
+          backgroundColor: isDark ? '#374151' : '#F3F4F6',
+        },
+        details: {
+          flex: 1,
+          padding: 12,
+          justifyContent: 'center',
+        },
+        title: {
+          fontSize: 16,
+          fontFamily: FontFamily.semiBold,
+          color: colors.textPrimary,
+          marginBottom: 4,
+        },
+        category: {
+          fontSize: 12,
+          color: colors.textSecondary,
+          textTransform: 'uppercase',
+          marginBottom: 4,
+        },
+        price: {
+          fontSize: 18,
+          fontFamily: FontFamily.semiBold,
+          color: colors.primary,
+        },
+      }),
+    [colors, isDark]
+  );
 
-  const renderProduct = ({ item }: { item: Product }) => (
+  const renderProduct = ({item}: {item: Product}) => (
     <View style={styles.productCard}>
-      <Image source={{ uri: item.thumbnail }} style={styles.thumbnail} />
+      <Image source={{uri: item.thumbnail}} style={styles.thumbnail} />
       <View style={styles.details}>
         <Text style={styles.category}>{item.brand || item.category}</Text>
-        <Text style={styles.title} numberOfLines={1}>{item.title}</Text>
+        <Text style={styles.title} numberOfLines={1}>
+          {item.title}
+        </Text>
         <Text style={styles.price}>${item.price}</Text>
       </View>
     </View>
@@ -123,7 +120,7 @@ const AxiosProductsScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <AppHeader title="Products API Call" showBack />
-      
+
       {loading ? (
         <View style={styles.loader}>
           <ActivityIndicator size="large" color={colors.primary} />
@@ -131,15 +128,11 @@ const AxiosProductsScreen: React.FC = () => {
       ) : (
         <FlatList
           data={products}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={item => item.id.toString()}
           renderItem={renderProduct}
           contentContainerStyle={styles.listContent}
           refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={() => fetchProducts(true)}
-              colors={[colors.primary]}
-            />
+            <RefreshControl refreshing={refreshing} onRefresh={() => fetchProducts(true)} colors={[colors.primary]} />
           }
         />
       )}

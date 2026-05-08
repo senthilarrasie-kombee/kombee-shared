@@ -1,9 +1,20 @@
-import { getApp } from '@react-native-firebase/app';
-import firestore, { getFirestore, collection, doc, getDoc, setDoc, addDoc, getDocs, deleteDoc, serverTimestamp, FieldValue } from '@react-native-firebase/firestore';
+import {getApp} from '@react-native-firebase/app';
+import firestore, {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  setDoc,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  serverTimestamp,
+  FieldValue,
+} from '@react-native-firebase/firestore';
 
-import { getMessaging, getToken } from '@react-native-firebase/messaging';
-import { Appearance } from 'react-native';
-import { FIRESTORE_DB_NAME, COLLECTIONS } from '@shared/constants/firebase';
+import {getMessaging, getToken} from '@react-native-firebase/messaging';
+import {Appearance} from 'react-native';
+import {FIRESTORE_DB_NAME, COLLECTIONS} from '@shared/constants/firebase';
 
 export interface UserProfile {
   uid: string;
@@ -40,7 +51,12 @@ const usersCollection = collection(db, COLLECTIONS.USERS);
 /**
  * Sync user profile data
  */
-export const syncUserProfile = async (uid: string, user: any, provider: string, loginType: 'user' | 'admin' = 'user') => {
+export const syncUserProfile = async (
+  uid: string,
+  user: any,
+  provider: string,
+  loginType: 'user' | 'admin' = 'user'
+) => {
   try {
     const userDocRef = doc(db, COLLECTIONS.USERS, uid);
     const userSnapshot = await getDoc(userDocRef);
@@ -58,7 +74,7 @@ export const syncUserProfile = async (uid: string, user: any, provider: string, 
     const firstName = names[0] || null;
     const lastName = names.slice(1).join(' ') || null;
 
-    const existingData = userSnapshot.exists() ? userSnapshot.data() as UserProfile : null;
+    const existingData = userSnapshot.exists() ? (userSnapshot.data() as UserProfile) : null;
 
     const userData: UserProfile = {
       uid: uid,
@@ -88,7 +104,7 @@ export const syncUserProfile = async (uid: string, user: any, provider: string, 
       createdAt: existingData ? existingData.createdAt : serverTimestamp(),
     };
 
-    await setDoc(userDocRef, userData, { merge: true });
+    await setDoc(userDocRef, userData, {merge: true});
     console.log(`Firestore: Synced ${uid}`);
     return userData;
   } catch (error: any) {
@@ -121,15 +137,15 @@ export const bulkUploadHabits = async (uid: string, habits: any[]) => {
   try {
     console.log(`Firestore: Uploading ${habits.length} habits`);
     const habitsSubCollection = collection(db, COLLECTIONS.HABITS, uid, COLLECTIONS.HABITS);
-    
+
     for (const habit of habits) {
-      const { id, ...habitData } = habit;
+      const {id, ...habitData} = habit;
       await addDoc(habitsSubCollection, {
         ...habitData,
         updatedAt: serverTimestamp(),
       });
     }
-    
+
     console.log(`Firestore: Uploaded ${habits.length} habits`);
     return true;
   } catch (error) {
@@ -146,11 +162,9 @@ export const deleteUserHabits = async (uid: string) => {
     console.log(`Firestore: Deleting habits`);
     const habitsSubCollection = collection(db, COLLECTIONS.HABITS, uid, COLLECTIONS.HABITS);
     const habitsSnapshot = await getDocs(habitsSubCollection);
-    
-    const deletePromises = habitsSnapshot.docs.map(habitDoc => 
-      deleteDoc(habitDoc.ref)
-    );
-    
+
+    const deletePromises = habitsSnapshot.docs.map(habitDoc => deleteDoc(habitDoc.ref));
+
     await Promise.all(deletePromises);
     console.log(`Firestore: Deleted ${habitsSnapshot.size} habits`);
     return true;
@@ -168,12 +182,12 @@ export const getUserHabits = async (uid: string) => {
     console.log(`Firestore: Fetching habits`);
     const habitsSubCollection = collection(db, COLLECTIONS.HABITS, uid, COLLECTIONS.HABITS);
     const habitsSnapshot = await getDocs(habitsSubCollection);
-    
+
     const habits = habitsSnapshot.docs.map(doc => ({
       ...doc.data(),
       id: doc.id,
     }));
-    
+
     console.log(`Firestore: Found ${habits.length} habits`);
     return habits;
   } catch (error) {
@@ -189,15 +203,15 @@ export const addHabit = async (uid: string, habit: any) => {
   try {
     console.log(`Firestore: Adding habit`);
     const habitsSubCollection = collection(db, COLLECTIONS.HABITS, uid, COLLECTIONS.HABITS);
-    
+
     const docRef = await addDoc(habitsSubCollection, {
       ...habit,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
-    
+
     console.log(`Firestore: Added with ID ${docRef.id}`);
-    return { ...habit, id: docRef.id };
+    return {...habit, id: docRef.id};
   } catch (error) {
     console.error('Firestore Add Error:', error);
     throw error;
@@ -210,13 +224,17 @@ export const addHabit = async (uid: string, habit: any) => {
 export const updateHabit = async (uid: string, habit: any) => {
   try {
     const habitRef = doc(db, COLLECTIONS.HABITS, uid, COLLECTIONS.HABITS, habit.id);
-    const { id, ...updateData } = habit;
-    
-    await setDoc(habitRef, {
-      ...updateData,
-      updatedAt: serverTimestamp(),
-    }, { merge: true });
-    
+    const {id, ...updateData} = habit;
+
+    await setDoc(
+      habitRef,
+      {
+        ...updateData,
+        updatedAt: serverTimestamp(),
+      },
+      {merge: true}
+    );
+
     return habit;
   } catch (error) {
     console.error('Firestore Update Error:', error);

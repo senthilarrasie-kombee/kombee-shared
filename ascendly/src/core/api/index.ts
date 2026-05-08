@@ -1,4 +1,4 @@
-import apiClient, { jsonPlaceholderClient } from './apiClient';
+import apiClient, {jsonPlaceholderClient} from './apiClient';
 
-export { apiClient, jsonPlaceholderClient };
+export {apiClient, jsonPlaceholderClient};
 export default apiClient;

@@ -1,20 +1,20 @@
-import messaging, { 
-  getMessaging, 
-  getToken, 
-  registerDeviceForRemoteMessages, 
-  onMessage, 
-  onNotificationOpenedApp, 
+import messaging, {
+  getMessaging,
+  getToken,
+  registerDeviceForRemoteMessages,
+  onMessage,
+  onNotificationOpenedApp,
   getInitialNotification,
   requestPermission as requestFcmPermission,
   isDeviceRegisteredForRemoteMessages,
   AuthorizationStatus,
-  FirebaseMessagingTypes 
+  FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
-import notifee, { AndroidImportance, EventType } from '@notifee/react-native';
-import { Platform, PermissionsAndroid } from 'react-native';
-import { FCM_CONSTANTS } from '../../../shared/constants/firebase';
-import { ROUTES } from '@app/routes';
-import { navigate } from '../../../app/navigation/navigationService';
+import notifee, {AndroidImportance, EventType} from '@notifee/react-native';
+import {Platform, PermissionsAndroid} from 'react-native';
+import {FCM_CONSTANTS} from '../../../shared/constants/firebase';
+import {ROUTES} from '@app/routes';
+import {navigate} from '../../../app/navigation/navigationService';
 
 const messagingInstance = getMessaging();
 
@@ -24,15 +24,11 @@ export const requestPermission = async (): Promise<boolean> => {
 
     if (Platform.OS === 'ios') {
       const authStatus = await requestFcmPermission(messagingInstance);
-      granted =
-        authStatus === AuthorizationStatus.AUTHORIZED ||
-        authStatus === AuthorizationStatus.PROVISIONAL;
+      granted = authStatus === AuthorizationStatus.AUTHORIZED || authStatus === AuthorizationStatus.PROVISIONAL;
 
       await notifee.requestPermission();
     } else if (Platform.OS === 'android' && Platform.Version >= 33) {
-      const result = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
-      );
+      const result = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
       granted = result === PermissionsAndroid.RESULTS.GRANTED;
     } else {
       granted = true;
@@ -70,9 +66,7 @@ export const createNotificationChannel = async (): Promise<string> => {
   return 'ios';
 };
 
-export const displayLocalNotification = async (
-  remoteMessage: FirebaseMessagingTypes.RemoteMessage,
-) => {
+export const displayLocalNotification = async (remoteMessage: FirebaseMessagingTypes.RemoteMessage) => {
   const channelId = await createNotificationChannel();
 
   const title = remoteMessage.notification?.title || remoteMessage.data?.title;
@@ -101,12 +95,10 @@ export const displayLocalNotification = async (
   });
 };
 
-export const handleNotificationTap = (
-  message: FirebaseMessagingTypes.RemoteMessage | any,
-) => {
+export const handleNotificationTap = (message: FirebaseMessagingTypes.RemoteMessage | any) => {
   if (!message) return;
   console.log('[FCM] Notification tapped:', message);
-  
+
   // Navigate to nested screen: Drawer -> Home (Tab) -> Habits Listing
   navigate(ROUTES.DRAWER, {
     screen: ROUTES.HOME,
@@ -116,11 +108,9 @@ export const handleNotificationTap = (
   });
 };
 
-export const firebaseBackgroundHandler = async (
-  remoteMessage: FirebaseMessagingTypes.RemoteMessage,
-) => {
+export const firebaseBackgroundHandler = async (remoteMessage: FirebaseMessagingTypes.RemoteMessage) => {
   console.log('[FCM] Background message received:', remoteMessage);
-  
+
   if (!remoteMessage.notification) {
     await displayLocalNotification(remoteMessage);
   }
@@ -140,14 +130,13 @@ export const setupNotificationListeners = () => {
     handleNotificationTap(remoteMessage);
   });
 
-  getInitialNotification(messagingInstance)
-    .then(remoteMessage => {
-      if (remoteMessage) {
-        handleNotificationTap(remoteMessage);
-      }
-    });
+  getInitialNotification(messagingInstance).then(remoteMessage => {
+    if (remoteMessage) {
+      handleNotificationTap(remoteMessage);
+    }
+  });
 
-  const unsubscribeForeground = notifee.onForegroundEvent(({ type, detail }) => {
+  const unsubscribeForeground = notifee.onForegroundEvent(({type, detail}) => {
     if (type === EventType.PRESS) {
       handleNotificationTap(detail.notification);
     }

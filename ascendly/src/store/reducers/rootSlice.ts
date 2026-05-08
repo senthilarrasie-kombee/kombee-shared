@@ -1,9 +1,16 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Habit } from '@shared/types/habit';
+import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
+import {Habit} from '@shared/types/habit';
 
-import { UserProfile, getUserHabits, addHabit, updateHabit as updateHabitFirestore, deleteHabit as deleteHabitFirestore, getUserProfile } from '@core/firebase/firestore';
-import { storage } from '@core/storage/mmkv';
-import { STORAGE_KEYS } from '@core/storage/keys';
+import {
+  UserProfile,
+  getUserHabits,
+  addHabit,
+  updateHabit as updateHabitFirestore,
+  deleteHabit as deleteHabitFirestore,
+  getUserProfile,
+} from '@core/firebase/firestore';
+import {storage} from '@core/storage/mmkv';
+import {STORAGE_KEYS} from '@core/storage/keys';
 
 interface RootState {
   isLoaderVisible: boolean;
@@ -30,7 +37,7 @@ const initialState: RootState = {
 // Async Thunk for fetching user profile
 export const fetchUserProfile = createAsyncThunk(
   'root/fetchUserProfile',
-  async (forceRefresh: boolean | void = false, { dispatch, getState, rejectWithValue }) => {
+  async (forceRefresh: boolean | void = false, {dispatch, getState, rejectWithValue}) => {
     try {
       const state = getState() as any;
       // Skip if user already exists and no force refresh requested
@@ -60,7 +67,7 @@ export const fetchUserProfile = createAsyncThunk(
 // Async Thunk for fetching habits
 export const fetchHabits = createAsyncThunk(
   'root/fetchHabits',
-  async (isRefresh: boolean | void = false, { dispatch, getState, rejectWithValue }) => {
+  async (isRefresh: boolean | void = false, {dispatch, getState, rejectWithValue}) => {
     try {
       const state = getState() as any;
       // Skip if habits already exist and no refresh requested
@@ -69,14 +76,14 @@ export const fetchHabits = createAsyncThunk(
       }
 
       const uid = storage.getString(STORAGE_KEYS.AUTH.USER_ID);
-      
+
       if (!uid) {
         console.warn('Fetch Habits: No UID found in MMKV');
         return [];
       }
 
       const habits = await getUserHabits(uid);
-      
+
       console.log(`Fetched ${habits.length} habits from Firestore`);
       return habits as unknown as Habit[];
     } catch (error) {
@@ -89,19 +96,19 @@ export const fetchHabits = createAsyncThunk(
 // Async Thunk for adding a habit
 export const addHabitAsync = createAsyncThunk(
   'root/addHabit',
-  async (habit: Omit<Habit, 'id' | 'createdDate'>, { dispatch, getState, rejectWithValue }) => {
+  async (habit: Omit<Habit, 'id' | 'createdDate'>, {dispatch, getState, rejectWithValue}) => {
     try {
       dispatch(setLoaderVisible(true));
-      
+
       const uid = storage.getString(STORAGE_KEYS.AUTH.USER_ID);
-      
+
       if (!uid) throw new Error('No user authenticated');
 
       const result = await addHabit(uid, {
         ...habit,
         createdDate: new Date().toISOString(),
       });
-      
+
       console.log('✅ Habit Saved to Firestore:', result.id);
       return result as Habit;
     } catch (error) {
@@ -116,16 +123,16 @@ export const addHabitAsync = createAsyncThunk(
 // Async Thunk for updating a habit
 export const updateHabitAsync = createAsyncThunk(
   'root/updateHabit',
-  async (habit: Habit, { dispatch, getState, rejectWithValue }) => {
+  async (habit: Habit, {dispatch, getState, rejectWithValue}) => {
     try {
       dispatch(setLoaderVisible(true));
-      
+
       const uid = storage.getString(STORAGE_KEYS.AUTH.USER_ID);
-      
+
       if (!uid) throw new Error('No user authenticated');
 
       const result = await updateHabitFirestore(uid, habit);
-      
+
       console.log('✨ Habit Updated in Firestore:', habit.id);
       return result as Habit;
     } catch (error) {
@@ -140,16 +147,16 @@ export const updateHabitAsync = createAsyncThunk(
 // Async Thunk for deleting a habit
 export const deleteHabitAsync = createAsyncThunk(
   'root/deleteHabit',
-  async (habitId: string | number, { dispatch, getState, rejectWithValue }) => {
+  async (habitId: string | number, {dispatch, getState, rejectWithValue}) => {
     try {
       dispatch(setLoaderVisible(true));
-      
+
       const uid = storage.getString(STORAGE_KEYS.AUTH.USER_ID);
-      
+
       if (!uid) throw new Error('No user authenticated');
 
       await deleteHabitFirestore(uid, habitId.toString());
-      
+
       console.log('🗑️ Habit Deleted from Firestore, ID:', habitId);
       return habitId;
     } catch (error) {
@@ -174,7 +181,7 @@ const rootSlice = createSlice({
     setToast: (state, action: PayloadAction<string | null>) => {
       state.toastMessage = action.payload;
     },
-    toggleDarkMode: (state) => {
+    toggleDarkMode: state => {
       state.isDarkMode = !state.isDarkMode;
     },
     updateHabit: (state, action: PayloadAction<Habit>) => {
@@ -190,14 +197,14 @@ const rootSlice = createSlice({
       state.user = action.payload;
       state.isAuthenticated = !!action.payload;
     },
-    logout: (state) => {
+    logout: state => {
       state.user = null;
       state.isAuthenticated = false;
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchHabits.pending, (state) => {
+      .addCase(fetchHabits.pending, state => {
         state.loading = true;
         state.isLoaderVisible = true;
         state.error = null;
@@ -213,7 +220,7 @@ const rootSlice = createSlice({
         state.isLoaderVisible = false;
         state.error = action.payload as string;
       })
-      .addCase(fetchUserProfile.pending, (state) => {
+      .addCase(fetchUserProfile.pending, state => {
         state.loading = true;
         state.isLoaderVisible = true;
         state.error = null;
@@ -250,5 +257,6 @@ const rootSlice = createSlice({
   },
 });
 
-export const { setLoaderVisible, setHabits, setToast, toggleDarkMode, setDarkMode, updateHabit, setUser, logout } = rootSlice.actions;
+export const {setLoaderVisible, setHabits, setToast, toggleDarkMode, setDarkMode, updateHabit, setUser, logout} =
+  rootSlice.actions;
 export default rootSlice.reducer;

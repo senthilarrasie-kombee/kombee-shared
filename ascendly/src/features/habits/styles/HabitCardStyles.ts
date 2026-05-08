@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { FontFamily, FontSize } from '@shared/theme';
+import {StyleSheet} from 'react-native';
+import {FontFamily, FontSize} from '@shared/theme';
 
 export const styles = StyleSheet.create({
   habitCard: {
@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     padding: 20,
     elevation: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.05,
     shadowRadius: 8,
     marginVertical: 6,

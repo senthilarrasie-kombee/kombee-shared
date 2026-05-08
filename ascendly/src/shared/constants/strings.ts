@@ -13,5 +13,5 @@ export const STRINGS = {
   COMMON: {
     CANCEL: 'Cancel',
     CONFIRM: 'Confirm',
-  }
+  },
 };

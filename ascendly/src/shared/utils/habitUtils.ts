@@ -1,18 +1,25 @@
-import { Habit } from '@shared/types/habit';
+import {Habit} from '@shared/types/habit';
 
 const MONTHS_LONG = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
-const MONTHS_SHORT = [
-  'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
-  'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'
-];
+const MONTHS_SHORT = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
 export function formatDisplayDate(dateStr: any): string {
   if (!dateStr) return 'N/A';
-  
+
   try {
     let datePart = '';
 
@@ -37,7 +44,7 @@ export function formatDisplayDate(dateStr: any): string {
     const year = parseInt(parts[0], 10);
     const month = parseInt(parts[1], 10);
     const day = parseInt(parts[2], 10);
-    
+
     const monthName = MONTHS_SHORT[month - 1] || 'N/A';
     return `${monthName}, ${day}, ${year}`;
   } catch (e) {
@@ -81,7 +88,7 @@ export function getFrequencyDescription(habit: Partial<Habit>): string {
 
     case 'yearly':
       return `${getOrdinal(day)} of ${month} every year`;
-    
+
     case 'custom':
       if (habit.specificDatesTarget && habit.specificDatesTarget.length > 0) {
         return `${habit.specificDatesTarget.length} specific date${habit.specificDatesTarget.length > 1 ? 's' : ''}`;
@@ -106,13 +113,13 @@ export function getOrdinal(n: number): string {
  */
 export function calculateStreak(habit: Habit): number {
   if (!habit.completions || habit.completions.length === 0) return 0;
-  
+
   // Extract unique completion dates in YYYY-MM-DD format
   const completionDates = new Set(habit.completions.map(c => c.date));
-  
+
   const today = new Date();
   const todayStr = today.toISOString().split('T')[0];
-  
+
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   const yesterdayStr = yesterday.toISOString().split('T')[0];
@@ -120,8 +127,8 @@ export function calculateStreak(habit: Habit): number {
   // If frequency is daily
   if (habit.frequency === 'daily') {
     let streak = 0;
-    let checkDate = completionDates.has(todayStr) ? today : yesterday;
-    
+    const checkDate = completionDates.has(todayStr) ? today : yesterday;
+
     // If neither today nor yesterday is done, streak is broken (unless it's today and we just haven't done it)
     if (!completionDates.has(todayStr) && !completionDates.has(yesterdayStr)) {
       return 0;
@@ -141,7 +148,7 @@ export function calculateStreak(habit: Habit): number {
   // Sorted descending
   const sortedDates = [...completionDates].sort().reverse();
   if (sortedDates.length === 0) return 0;
-  
+
   // Basic count of total unique completions for now as a fallback
   return completionDates.size;
 }

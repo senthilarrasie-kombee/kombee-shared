@@ -1,4 +1,3 @@
-
 export const FontFamily = {
   regular: 'GoogleSans-Regular',
   semiBold: 'GoogleSans-SemiBold',

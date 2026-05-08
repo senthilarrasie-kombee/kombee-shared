@@ -1,4 +1,3 @@
-
 export const LightColors = {
   background: '#FFFFFF',
   transparent: 'transparent',

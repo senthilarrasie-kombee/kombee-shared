@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
-import { useTheme, FontFamily } from '@shared/theme';
+import {useNavigation} from '@react-navigation/native';
+import {useTheme, FontFamily} from '@shared/theme';
 import AppText from './AppText';
 
 interface AppHeaderProps {
@@ -17,18 +17,18 @@ interface AppHeaderProps {
   onMenuPress?: () => void;
 }
 
-const AppHeader: React.FC<AppHeaderProps> = ({ 
-  title, 
-  showBack, 
+const AppHeader: React.FC<AppHeaderProps> = ({
+  title,
+  showBack,
   showMenu,
   leftElement,
   rightElement,
   alignLeft = false,
   titleStyle,
   onBackPress,
-  onMenuPress
+  onMenuPress,
 }) => {
-  const { colors } = useTheme();
+  const {colors} = useTheme();
   const navigation = useNavigation();
 
   const handleBack = () => {
@@ -52,50 +52,42 @@ const AppHeader: React.FC<AppHeaderProps> = ({
       {/* Title Layer - Absolutely positioned for perfect centering */}
       {!alignLeft && (
         <View style={styles.centerTitleContainer} pointerEvents="none">
-          <AppText style={[styles.headerTitle, titleStyle, { color: colors.textPrimary }]}>
-            {title}
-          </AppText>
+          <AppText style={[styles.headerTitle, titleStyle, {color: colors.textPrimary}]}>{title}</AppText>
         </View>
       )}
 
       {/* Interactive Layer */}
       <View style={styles.leftContainer}>
         {leftElement ? (
-          <View style={styles.leftSection}>
-            {leftElement}
-          </View>
+          <View style={styles.leftSection}>{leftElement}</View>
         ) : (
           <>
             {showBack && (
-              <TouchableOpacity 
-                style={[styles.backButton, { backgroundColor: colors.primary + '10' }]}
-                onPress={handleBack}
-              >
+              <TouchableOpacity
+                style={[styles.backButton, {backgroundColor: colors.primary + '10'}]}
+                onPress={handleBack}>
                 <Icon name="chevron-back" size={24} color={colors.primary} />
               </TouchableOpacity>
             )}
-            
+
             {showMenu && (
-              <TouchableOpacity 
-                style={[styles.backButton, { backgroundColor: colors.primary + '10' }]}
-                onPress={handleMenu}
-              >
+              <TouchableOpacity
+                style={[styles.backButton, {backgroundColor: colors.primary + '10'}]}
+                onPress={handleMenu}>
                 <Icon name="menu" size={24} color={colors.primary} />
               </TouchableOpacity>
             )}
           </>
         )}
-        
+
         {alignLeft && (
-          <AppText style={[styles.headerTitle, styles.leftTitle, titleStyle, { color: colors.textPrimary }]}>
+          <AppText style={[styles.headerTitle, styles.leftTitle, titleStyle, {color: colors.textPrimary}]}>
             {title}
           </AppText>
         )}
       </View>
-      
-      <View style={styles.rightSection}>
-        {rightElement ? rightElement : <View style={styles.placeholder} />}
-      </View>
+
+      <View style={styles.rightSection}>{rightElement ? rightElement : <View style={styles.placeholder} />}</View>
     </View>
   );
 };

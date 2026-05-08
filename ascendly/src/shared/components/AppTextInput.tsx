@@ -1,13 +1,6 @@
 import React from 'react';
-import { 
-  TextInput, 
-  StyleSheet, 
-  View, 
-  TextInputProps, 
-  ViewStyle, 
-  Platform 
-} from 'react-native';
-import { useTheme, FontFamily, Spacing } from '@shared/theme';
+import {TextInput, StyleSheet, View, TextInputProps, ViewStyle, Platform} from 'react-native';
+import {useTheme, FontFamily, Spacing} from '@shared/theme';
 
 interface AppTextInputProps extends TextInputProps {
   containerStyle?: ViewStyle;
@@ -16,14 +9,8 @@ interface AppTextInputProps extends TextInputProps {
   rightElement?: React.ReactNode;
 }
 
-const AppTextInput: React.FC<AppTextInputProps> = ({ 
-  containerStyle, 
-  inputStyle, 
-  error,
-  rightElement,
-  ...props 
-}) => {
-  const { colors } = useTheme();
+const AppTextInput: React.FC<AppTextInputProps> = ({containerStyle, inputStyle, error, rightElement, ...props}) => {
+  const {colors} = useTheme();
 
   const styles = StyleSheet.create({
     container: {
@@ -59,16 +46,8 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
   return (
     <View style={[styles.container, containerStyle]}>
       <View style={styles.inputContainer}>
-        <TextInput
-          style={[styles.input, inputStyle]}
-          placeholderTextColor={colors.textSecondary}
-          {...props}
-        />
-        {rightElement && (
-          <View style={styles.rightElementContainer}>
-            {rightElement}
-          </View>
-        )}
+        <TextInput style={[styles.input, inputStyle]} placeholderTextColor={colors.textSecondary} {...props} />
+        {rightElement && <View style={styles.rightElementContainer}>{rightElement}</View>}
       </View>
     </View>
   );

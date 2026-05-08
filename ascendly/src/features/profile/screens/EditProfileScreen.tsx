@@ -1,20 +1,13 @@
 import React from 'react';
-import { 
-  View, 
-  StyleSheet, 
-  TouchableOpacity, 
-  ScrollView, 
-  KeyboardAvoidingView,
-  Platform
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {View, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { AppText, AppButton, AppTextInput, AppHeader } from '@shared/components';
-import { useTheme, Spacing, FontFamily } from '@shared/theme';
-import { useNavigation } from '@react-navigation/native';
-import { useFormik } from 'formik';
+import {AppText, AppButton, AppTextInput, AppHeader} from '@shared/components';
+import {useTheme, Spacing, FontFamily} from '@shared/theme';
+import {useNavigation} from '@react-navigation/native';
+import {useFormik} from 'formik';
 import * as Yup from 'yup';
-import { createEditProfileStyles } from './ProfileStyles';
+import {createEditProfileStyles} from './ProfileStyles';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
@@ -24,52 +17,46 @@ const validationSchema = Yup.object().shape({
 });
 
 const EditProfileScreen = () => {
-  const { colors } = useTheme();
+  const {colors} = useTheme();
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const styles = React.useMemo(() => createEditProfileStyles(colors), [colors]);
 
   const formik = useFormik({
-    initialValues: { 
-      name: 'Alvart Ainstain', 
+    initialValues: {
+      name: 'Alvart Ainstain',
       username: 'albart.ainstain',
       email: 'alvart.ainstain@example.com',
-      bio: 'Professional Habit Tracker & Productivity Enthusiast.'
+      bio: 'Professional Habit Tracker & Productivity Enthusiast.',
     },
     validationSchema,
-    onSubmit: (values) => {
+    onSubmit: values => {
       console.log('Update profile:', values);
       navigation.goBack();
     },
   });
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background, paddingTop: insets.top,}]}>
+    <View style={[styles.container, {backgroundColor: colors.background, paddingTop: insets.top}]}>
       {/* Header */}
-      <AppHeader 
-        title="Edit Profile" 
-        showBack 
+      <AppHeader
+        title="Edit Profile"
+        showBack
         rightElement={
           <TouchableOpacity onPress={formik.handleSubmit}>
-            <AppText style={[styles.saveText, { color: colors.primary }]}>Save</AppText>
+            <AppText style={[styles.saveText, {color: colors.primary}]}>Save</AppText>
           </TouchableOpacity>
         }
       />
 
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
-      >
-        <ScrollView 
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{flex: 1}}>
+        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
           <View style={styles.avatarSection}>
-            <View style={[styles.avatarContainer, { backgroundColor: '#7FB5FF' }]}>
+            <View style={[styles.avatarContainer, {backgroundColor: '#7FB5FF'}]}>
               <Icon name="person" size={60} color="white" />
             </View>
             <TouchableOpacity style={styles.changeAvatarButton}>
-              <AppText style={[styles.changeAvatarText, { color: colors.primary }]}>Change Profile Picture</AppText>
+              <AppText style={[styles.changeAvatarText, {color: colors.primary}]}>Change Profile Picture</AppText>
             </TouchableOpacity>
           </View>
 
@@ -125,11 +112,7 @@ const EditProfileScreen = () => {
             />
           </View>
 
-          <AppButton 
-            title="Update Profile" 
-            onPress={formik.handleSubmit}
-            style={styles.updateButton}
-          />
+          <AppButton title="Update Profile" onPress={formik.handleSubmit} style={styles.updateButton} />
         </ScrollView>
       </KeyboardAvoidingView>
     </View>

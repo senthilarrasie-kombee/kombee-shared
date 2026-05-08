@@ -1,23 +1,23 @@
-import React, { useMemo } from 'react';
-import { 
-  View, 
-  KeyboardAvoidingView, 
+import React, {useMemo} from 'react';
+import {
+  View,
+  KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
   ScrollView,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
 import * as Yup from 'yup';
-import { signUpWithEmail } from '@core/firebase/auth';
-import { useDispatch } from 'react-redux';
-import { setUser } from '@store/reducers/rootSlice';
-import { useTheme, Spacing } from '@shared/theme';
-import { AppButton, AppTextInput, AppText } from '@shared/components';
-import { createStyles } from '../screens/LoginStyles';
+import {signUpWithEmail} from '@core/firebase/auth';
+import {useDispatch} from 'react-redux';
+import {setUser} from '@store/reducers/rootSlice';
+import {useTheme, Spacing} from '@shared/theme';
+import {AppButton, AppTextInput, AppText} from '@shared/components';
+import {createStyles} from '../screens/LoginStyles';
 
 interface RegisterProps {
   onToggle: () => void;
@@ -25,23 +25,22 @@ interface RegisterProps {
 }
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string()
-    .required('Name is required'),
+  name: Yup.string().required('Name is required'),
   email: Yup.string()
     .email('Please enter a valid email')
     .required('Email is required')
-    .transform((value) => value.replace(/\s/g, '')),
+    .transform(value => value.replace(/\s/g, '')),
   password: Yup.string()
     .min(6, 'Password must be at least 6 characters')
     .required('Password is required')
-    .transform((value) => value.replace(/\s/g, '')),
+    .transform(value => value.replace(/\s/g, '')),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password')], 'Passwords must match')
     .required('Confirm password is required'),
 });
 
-const Register: React.FC<RegisterProps> = ({ onToggle, onSuccess }) => {
-  const { colors } = useTheme();
+const Register: React.FC<RegisterProps> = ({onToggle, onSuccess}) => {
+  const {colors} = useTheme();
   const dispatch = useDispatch();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const [showPassword, setShowPassword] = React.useState(false);
@@ -49,9 +48,9 @@ const Register: React.FC<RegisterProps> = ({ onToggle, onSuccess }) => {
   const [registerLoading, setRegisterLoading] = React.useState(false);
 
   const formik = useFormik({
-    initialValues: { name: '', email: '', password: '', confirmPassword: '' },
+    initialValues: {name: '', email: '', password: '', confirmPassword: ''},
     validationSchema,
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       try {
         setRegisterLoading(true);
         const userCredential = await signUpWithEmail(values.email, values.password, values.name);
@@ -87,7 +86,7 @@ const Register: React.FC<RegisterProps> = ({ onToggle, onSuccess }) => {
       <AppTextInput
         placeholder="Email"
         value={formik.values.email}
-        onChangeText={(text) => formik.setFieldValue('email', text.replace(/\s/g, ''))}
+        onChangeText={text => formik.setFieldValue('email', text.replace(/\s/g, ''))}
         onBlur={formik.handleBlur('email')}
         autoCapitalize="none"
         keyboardType="email-address"
@@ -100,18 +99,14 @@ const Register: React.FC<RegisterProps> = ({ onToggle, onSuccess }) => {
       <AppTextInput
         placeholder="Password"
         value={formik.values.password}
-        onChangeText={(text) => formik.setFieldValue('password', text.replace(/\s/g, ''))}
+        onChangeText={text => formik.setFieldValue('password', text.replace(/\s/g, ''))}
         onBlur={formik.handleBlur('password')}
         autoCapitalize="none"
         secureTextEntry={!showPassword}
         error={formik.touched.password && formik.errors.password}
         rightElement={
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-            <Ionicons 
-              name={showPassword ? "eye-off-outline" : "eye-outline"} 
-              size={20} 
-              color={colors.textSecondary} 
-            />
+            <Ionicons name={showPassword ? 'eye-off-outline' : 'eye-outline'} size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         }
       />
@@ -122,17 +117,17 @@ const Register: React.FC<RegisterProps> = ({ onToggle, onSuccess }) => {
       <AppTextInput
         placeholder="Confirm Password"
         value={formik.values.confirmPassword}
-        onChangeText={(text) => formik.setFieldValue('confirmPassword', text.replace(/\s/g, ''))}
+        onChangeText={text => formik.setFieldValue('confirmPassword', text.replace(/\s/g, ''))}
         onBlur={formik.handleBlur('confirmPassword')}
         autoCapitalize="none"
         secureTextEntry={!showConfirmPassword}
         error={formik.touched.confirmPassword && formik.errors.confirmPassword}
         rightElement={
           <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
-            <Ionicons 
-              name={showConfirmPassword ? "eye-off-outline" : "eye-outline"} 
-              size={20} 
-              color={colors.textSecondary} 
+            <Ionicons
+              name={showConfirmPassword ? 'eye-off-outline' : 'eye-outline'}
+              size={20}
+              color={colors.textSecondary}
             />
           </TouchableOpacity>
         }
@@ -141,11 +136,11 @@ const Register: React.FC<RegisterProps> = ({ onToggle, onSuccess }) => {
         <AppText style={styles.errorText}>{formik.errors.confirmPassword}</AppText>
       ) : null}
 
-      <AppButton 
+      <AppButton
         disabled={!formik.isValid || !formik.dirty || registerLoading}
-        title={registerLoading ? "Creating Account..." : "Create Account"}
+        title={registerLoading ? 'Creating Account...' : 'Create Account'}
         onPress={formik.handleSubmit}
-        style={{ marginTop: Spacing.s2 }}
+        style={{marginTop: Spacing.s2}}
       />
 
       <TouchableOpacity onPress={onToggle} style={localStyles.toggleContainer}>

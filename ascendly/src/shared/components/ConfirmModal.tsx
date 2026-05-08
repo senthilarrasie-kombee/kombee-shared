@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, Modal, TouchableOpacity, Animated } from 'react-native';
+import {View, StyleSheet, Modal, TouchableOpacity, Animated} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useTheme, FontFamily, FontSize } from '@shared/theme';
+import {useTheme, FontFamily, FontSize} from '@shared/theme';
 import AppText from './AppText';
 
 interface ConfirmModalProps {
@@ -25,67 +25,66 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   onConfirm,
   onCancel,
   type = 'danger',
-  showCancel = true
+  showCancel = true,
 }) => {
-  const { colors, isDark } = useTheme();
+  const {colors, isDark} = useTheme();
   const isDanger = type === 'danger';
   const isLogout = type === 'logout';
   const isSuccess = type === 'success';
 
   return (
-    <Modal
-      transparent
-      visible={isVisible}
-      animationType="fade"
-      onRequestClose={onCancel}
-    >
+    <Modal transparent visible={isVisible} animationType="fade" onRequestClose={onCancel}>
       <View style={styles.overlay}>
-        <View style={[
-          styles.modalContainer, 
-          { backgroundColor: isDark ? '#1E1E26' : '#FFFFFF' }
-        ]}>
-          <View style={[
-            styles.iconContainer, 
-            { backgroundColor: isDanger ? '#EF444415' : isLogout ? colors.primary + '15' : isSuccess ? '#10B98115' : colors.primary + '15' }
-          ]}>
-            <Icon 
-              name={isDanger ? "trash-outline" : isLogout ? "log-out-outline" : isSuccess ? "checkmark-circle-outline" : "information-circle-outline"} 
-              size={32} 
-              color={isDanger ? "#EF4444" : isLogout ? colors.primary : isSuccess ? "#10B981" : colors.primary} 
+        <View style={[styles.modalContainer, {backgroundColor: isDark ? '#1E1E26' : '#FFFFFF'}]}>
+          <View
+            style={[
+              styles.iconContainer,
+              {
+                backgroundColor: isDanger
+                  ? '#EF444415'
+                  : isLogout
+                    ? colors.primary + '15'
+                    : isSuccess
+                      ? '#10B98115'
+                      : colors.primary + '15',
+              },
+            ]}>
+            <Icon
+              name={
+                isDanger
+                  ? 'trash-outline'
+                  : isLogout
+                    ? 'log-out-outline'
+                    : isSuccess
+                      ? 'checkmark-circle-outline'
+                      : 'information-circle-outline'
+              }
+              size={32}
+              color={isDanger ? '#EF4444' : isLogout ? colors.primary : isSuccess ? '#10B981' : colors.primary}
             />
           </View>
 
-          <AppText style={[styles.title, { color: colors.textPrimary }]}>
-            {title}
-          </AppText>
-          
-          <AppText style={[styles.message, { color: colors.textSecondary }]}>
-            {message}
-          </AppText>
+          <AppText style={[styles.title, {color: colors.textPrimary}]}>{title}</AppText>
+
+          <AppText style={[styles.message, {color: colors.textSecondary}]}>{message}</AppText>
 
           <View style={styles.buttonContainer}>
             {showCancel && (
-              <TouchableOpacity 
-                style={[styles.button, styles.cancelButton, { borderColor: isDark ? '#3F3F46' : '#E2E8F0' }]} 
-                onPress={onCancel}
-              >
-                <AppText style={[styles.buttonText, { color: colors.textSecondary }]}>
-                  {cancelText}
-                </AppText>
+              <TouchableOpacity
+                style={[styles.button, styles.cancelButton, {borderColor: isDark ? '#3F3F46' : '#E2E8F0'}]}
+                onPress={onCancel}>
+                <AppText style={[styles.buttonText, {color: colors.textSecondary}]}>{cancelText}</AppText>
               </TouchableOpacity>
             )}
-            
-            <TouchableOpacity 
+
+            <TouchableOpacity
               style={[
-                styles.button, 
-                styles.confirmButton, 
-                { backgroundColor: isDanger ? '#EF4444' : isSuccess ? '#10B981' : colors.primary }
-              ]} 
-              onPress={onConfirm}
-            >
-              <AppText style={[styles.buttonText, { color: '#FFFFFF' }]}>
-                {confirmText}
-              </AppText>
+                styles.button,
+                styles.confirmButton,
+                {backgroundColor: isDanger ? '#EF4444' : isSuccess ? '#10B981' : colors.primary},
+              ]}
+              onPress={onConfirm}>
+              <AppText style={[styles.buttonText, {color: '#FFFFFF'}]}>{confirmText}</AppText>
             </TouchableOpacity>
           </View>
         </View>
@@ -109,7 +108,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 5,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
+    shadowOffset: {width: 0, height: 10},
     shadowOpacity: 0.1,
     shadowRadius: 20,
   },
@@ -154,7 +153,7 @@ const styles = StyleSheet.create({
   confirmButton: {
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.2,
     shadowRadius: 8,
   },

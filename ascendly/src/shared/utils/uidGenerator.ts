@@ -5,7 +5,7 @@
 export const generateNumericId = (input: string): string => {
   let hash = 0;
   for (let i = 0; i < input.length; i++) {
-    hash = (input.charCodeAt(i) + (hash << 5)) - hash;
+    hash = input.charCodeAt(i) + (hash << 5) - hash;
   }
   let res = Math.abs(hash).toString();
   while (res.length < 21) {

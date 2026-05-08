@@ -1,10 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import {configureStore} from '@reduxjs/toolkit';
+import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import rootReducer from './rootReducer';
 
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false, // Keeping it simple for now
     }),

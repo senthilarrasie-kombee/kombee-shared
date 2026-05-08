@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 import {
   requestPermission,
   getFcmToken,
@@ -6,7 +6,7 @@ import {
   setupNotificationListeners,
   createNotificationChannel,
 } from './messaging';
-import { setInAppMessagesEnabled, setupInAppMessagingListeners } from './inAppMessaging';
+import {setInAppMessagesEnabled, setupInAppMessagingListeners} from './inAppMessaging';
 
 export const usePushNotifications = () => {
   useEffect(() => {
@@ -19,8 +19,8 @@ export const usePushNotifications = () => {
         if (token) {
           console.log('[FCM] Token:', token);
           // Persist token to MMKV
-          const { storage } = require('../../storage');
-          const { STORAGE_KEYS } = require('../../storage/keys');
+          const {storage} = require('../../storage');
+          const {STORAGE_KEYS} = require('../../storage/keys');
           storage.set(STORAGE_KEYS.FCM.TOKEN, token);
         }
       }
