@@ -15,6 +15,7 @@ import firestore, {
 import {getMessaging, getToken} from '@react-native-firebase/messaging';
 import {Appearance} from 'react-native';
 import {FIRESTORE_DB_NAME, COLLECTIONS} from '@shared/constants/firebase';
+import {getDeviceInfo} from '../nativeModules/DeviceInfo';
 
 export interface UserProfile {
   uid: string;
@@ -36,7 +37,7 @@ export interface UserProfile {
     brand: string;
     product: string;
     manufacturer: string;
-    version: string;
+    sdk: number;
   };
   createdAt?: any;
   updatedAt?: any;
@@ -60,6 +61,9 @@ export const syncUserProfile = async (
   try {
     const userDocRef = doc(db, COLLECTIONS.USERS, uid);
     const userSnapshot = await getDoc(userDocRef);
+
+    // Fetch Device Info from Native Module
+    const deviceInfo = await getDeviceInfo();
 
     // Fetch FCM token
     let fcmToken = null;
@@ -90,19 +94,23 @@ export const syncUserProfile = async (
       fcmToken: fcmToken,
       theme: Appearance.getColorScheme() || 'light',
       isPremium: false,
-      deviceDetails: {
-        model: '',
-        device: '',
-        brand: '',
-        product: '',
-        manufacturer: '',
-        version: '',
-      },
+      deviceDetails: deviceInfo
+        ? {
+            model: deviceInfo.model,
+            device: deviceInfo.device,
+            brand: deviceInfo.brand,
+            product: deviceInfo.product,
+            manufacturer: deviceInfo.manufacturer,
+            sdk: deviceInfo.sdk,
+          }
+        : undefined,
       updatedAt: serverTimestamp(),
       provider: provider,
       loginType: existingData?.loginType || loginType,
       createdAt: existingData ? existingData.createdAt : serverTimestamp(),
     };
+
+    console.log('Firestore: Syncing user profile with data:', JSON.stringify(userData, null, 2));
 
     await setDoc(userDocRef, userData, {merge: true});
     console.log(`Firestore: Synced ${uid}`);
@@ -110,6 +118,48 @@ export const syncUserProfile = async (
   } catch (error: any) {
     console.error('Firestore Sync Error:', error);
     return null;
+  }
+};
+
+/**
+ * Specifically sync only device and FCM details to Firestore
+ */
+export const syncDeviceDetails = async (uid: string) => {
+  try {
+    const userDocRef = doc(db, COLLECTIONS.USERS, uid);
+    
+    // Fetch Device Info
+    const deviceInfo = await getDeviceInfo();
+    
+    // Fetch FCM token
+    let fcmToken = null;
+    try {
+      fcmToken = await getToken(getMessaging());
+    } catch (e) {
+      console.warn('FCM collection failed in syncDeviceDetails:', e);
+    }
+
+    const deviceUpdate = {
+      fcmToken: fcmToken,
+      deviceDetails: deviceInfo ? {
+        model: deviceInfo.model,
+        device: deviceInfo.device,
+        brand: deviceInfo.brand,
+        product: deviceInfo.product,
+        manufacturer: deviceInfo.manufacturer,
+        sdk: deviceInfo.sdk,
+      } : undefined,
+      updatedAt: serverTimestamp(),
+    };
+
+    console.log('Firestore: Updating device details with:', JSON.stringify(deviceUpdate, null, 2));
+
+    await setDoc(userDocRef, deviceUpdate, {merge: true});
+    console.log(`Firestore: Updated device details for ${uid}`);
+    return true;
+  } catch (error) {
+    console.error('Firestore Device Sync Error:', error);
+    return false;
   }
 };
 

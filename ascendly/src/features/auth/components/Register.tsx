@@ -12,7 +12,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
-import {signUpWithEmail} from '@core/firebase/auth';
+import {signUpWithEmail} from '@core';
 import {useDispatch} from 'react-redux';
 import {setUser} from '@store/reducers/rootSlice';
 import {useTheme, Spacing} from '@shared/theme';

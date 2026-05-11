@@ -3,7 +3,7 @@ import {View, TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-nativ
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
-import {signInWithGoogle, signInWithEmail} from '@core/firebase/auth';
+import {signInWithGoogle, signInWithEmail} from '@core';
 import {useDispatch} from 'react-redux';
 import {setUser} from '@store/reducers/rootSlice';
 import {useTheme, Spacing} from '@shared/theme';

@@ -11,6 +11,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "noEmit": true,
+    "moduleResolution": "bundler",
     "paths": {
       "@app/*": ["src/app/*"],
       "@app": ["src/app"],

@@ -1,0 +1,832 @@
+
+> ascendly@0.0.1 android:staging
+> cross-env ENVFILE=.env.staging npx react-native run-android --mode=stagingDebug --appIdSuffix=staging
+
+info A dev server is already running for this project on port 8081.
+info Installing the app...
+> Task :gradle-plugin:settings-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :gradle-plugin:shared:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :gradle-plugin:shared:compileKotlin UP-TO-DATE
+> Task :gradle-plugin:shared:compileJava NO-SOURCE
+> Task :gradle-plugin:shared:processResources NO-SOURCE
+> Task :gradle-plugin:shared:classes UP-TO-DATE
+> Task :gradle-plugin:shared:jar UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:compileKotlin UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:compileJava NO-SOURCE
+> Task :gradle-plugin:settings-plugin:pluginDescriptors UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:processResources UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:classes UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:jar UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :gradle-plugin:react-native-gradle-plugin:compileKotlin UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:compileJava NO-SOURCE
+> Task :gradle-plugin:react-native-gradle-plugin:pluginDescriptors UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:processResources UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:classes UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:jar UP-TO-DATE
+
+> Configure project :app
+Reading env from: .env.staging
+
+> Configure project :notifee_react-native
+:notifee_react-native @notifee/react-native found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@notifee/react-native
+:notifee_react-native package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@notifee/react-native/package.json
+:notifee_react-native:version set from package.json: 9.1.8 (9,1,8 - 9001008)
+:notifee_react-native:android.compileSdk using custom value: 36
+:notifee_react-native:android.targetSdk using custom value: 36
+:notifee_react-native:android.minSdk using custom value: 24
+:notifee_react-native:reactNativeAndroidDir /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native
+
+> Configure project :react-native-firebase_analytics
+:react-native-firebase_analytics package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/analytics/package.json
+:react-native-firebase_app package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/app/package.json
+:react-native-firebase_analytics:firebase.bom using default value: 34.10.0
+:react-native-firebase_analytics package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/analytics/package.json
+:react-native-firebase_analytics:version set from package.json: 24.0.0 (24,0,0 - 24000000)
+:react-native-firebase_analytics:android.compileSdk using custom value: 36
+:react-native-firebase_analytics:android.targetSdk using custom value: 36
+:react-native-firebase_analytics:android.minSdk using custom value: 24
+:react-native-firebase_analytics:reactNativeAndroidDir /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native
+
+> Configure project :react-native-firebase_app
+:react-native-firebase_app package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/app/package.json
+:react-native-firebase_app:firebase.bom using default value: 34.10.0
+:react-native-firebase_app:play.play-services-auth using default value: 21.5.0
+:react-native-firebase_app package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/app/package.json
+:react-native-firebase_app:version set from package.json: 24.0.0 (24,0,0 - 24000000)
+:react-native-firebase_app:android.compileSdk using custom value: 36
+:react-native-firebase_app:android.targetSdk using custom value: 36
+:react-native-firebase_app:android.minSdk using custom value: 24
+:react-native-firebase_app:reactNativeAndroidDir /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native
+
+> Configure project :react-native-firebase_auth
+:react-native-firebase_auth package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/auth/package.json
+:react-native-firebase_app package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/app/package.json
+:react-native-firebase_auth:firebase.bom using default value: 34.10.0
+:react-native-firebase_auth package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/auth/package.json
+:react-native-firebase_auth:version set from package.json: 24.0.0 (24,0,0 - 24000000)
+:react-native-firebase_auth:android.compileSdk using custom value: 36
+:react-native-firebase_auth:android.targetSdk using custom value: 36
+:react-native-firebase_auth:android.minSdk using custom value: 24
+:react-native-firebase_auth:reactNativeAndroidDir /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native
+
+> Configure project :react-native-firebase_crashlytics
+:react-native-firebase_crashlytics package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/crashlytics/package.json
+:react-native-firebase_app package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/app/package.json
+:react-native-firebase_crashlytics:firebase.bom using default value: 34.10.0
+:react-native-firebase_crashlytics package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/crashlytics/package.json
+:react-native-firebase_crashlytics:version set from package.json: 24.0.0 (24,0,0 - 24000000)
+:react-native-firebase_crashlytics:android.compileSdk using custom value: 36
+:react-native-firebase_crashlytics:android.targetSdk using custom value: 36
+:react-native-firebase_crashlytics:android.minSdk using custom value: 24
+:react-native-firebase_crashlytics:reactNativeAndroidDir /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native
+
+> Configure project :react-native-firebase_firestore
+:react-native-firebase_firestore package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/firestore/package.json
+:react-native-firebase_app package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/app/package.json
+:react-native-firebase_firestore:firebase.bom using default value: 34.10.0
+:react-native-firebase_firestore package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/firestore/package.json
+:react-native-firebase_firestore:version set from package.json: 24.0.0 (24,0,0 - 24000000)
+:react-native-firebase_firestore:android.compileSdk using custom value: 36
+:react-native-firebase_firestore:android.targetSdk using custom value: 36
+:react-native-firebase_firestore:android.minSdk using custom value: 24
+:react-native-firebase_firestore:reactNativeAndroidDir /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native
+
+> Configure project :react-native-firebase_in-app-messaging
+:react-native-firebase_in-app-messaging package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/in-app-messaging/package.json
+:react-native-firebase_app package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/app/package.json
+:react-native-firebase_in-app-messaging:firebase.bom using default value: 34.10.0
+:react-native-firebase_in-app-messaging package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/in-app-messaging/package.json
+:react-native-firebase_in-app-messaging:version set from package.json: 24.0.0 (24,0,0 - 24000000)
+:react-native-firebase_in-app-messaging:android.compileSdk using custom value: 36
+:react-native-firebase_in-app-messaging:android.targetSdk using custom value: 36
+:react-native-firebase_in-app-messaging:android.minSdk using custom value: 24
+:react-native-firebase_in-app-messaging:reactNativeAndroidDir /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native
+
+> Configure project :react-native-firebase_messaging
+:react-native-firebase_messaging package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/messaging/package.json
+:react-native-firebase_app package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/app/package.json
+:react-native-firebase_messaging:firebase.bom using default value: 34.10.0
+:react-native-firebase_messaging package.json found at /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-firebase/messaging/package.json
+:react-native-firebase_messaging:version set from package.json: 24.0.0 (24,0,0 - 24000000)
+:react-native-firebase_messaging:android.compileSdk using custom value: 36
+:react-native-firebase_messaging:android.targetSdk using custom value: 36
+:react-native-firebase_messaging:android.minSdk using custom value: 24
+:react-native-firebase_messaging:reactNativeAndroidDir /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native
+
+> Configure project :react-native-mmkv
+[NitroModules] 🔥 NitroMmkv is boosted by nitro!
+
+> Configure project :react-native-nitro-modules
+[NitroModules] 🔥 Your app is boosted by nitro modules!
+
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateAutolinkingNewArchitectureFiles UP-TO-DATE
+> Task :app:generateAutolinkingPackageList UP-TO-DATE
+> Task :app:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :app:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :app:generateReactNativeEntryPoint UP-TO-DATE
+> Task :notifee_react-native:preBuild UP-TO-DATE
+> Task :react-native-async-storage_async-storage:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-async-storage_async-storage:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-async-storage_async-storage:preBuild UP-TO-DATE
+> Task :react-native-community_datetimepicker:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-community_datetimepicker:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-community_datetimepicker:preBuild UP-TO-DATE
+> Task :react-native-config:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-config:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-config:preBuild UP-TO-DATE
+> Task :react-native-firebase_analytics:preBuild UP-TO-DATE
+> Task :react-native-firebase_app:preBuild UP-TO-DATE
+> Task :react-native-firebase_auth:preBuild UP-TO-DATE
+> Task :react-native-firebase_crashlytics:preBuild UP-TO-DATE
+> Task :react-native-firebase_firestore:preBuild UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:preBuild UP-TO-DATE
+> Task :react-native-firebase_messaging:preBuild UP-TO-DATE
+> Task :react-native-gesture-handler:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-gesture-handler:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-gesture-handler:preBuild UP-TO-DATE
+> Task :react-native-google-signin_google-signin:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-google-signin_google-signin:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-google-signin_google-signin:preBuild UP-TO-DATE
+> Task :react-native-keychain:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-keychain:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-keychain:preBuild UP-TO-DATE
+> Task :react-native-mmkv:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-mmkv:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-mmkv:preBuild UP-TO-DATE
+> Task :react-native-nitro-modules:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-nitro-modules:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-nitro-modules:prepareHeaders UP-TO-DATE
+> Task :react-native-nitro-modules:preBuild UP-TO-DATE
+> Task :react-native-reanimated:assertMinimalReactNativeVersionTask
+> Task :react-native-reanimated:assertNewArchitectureEnabledTask SKIPPED
+> Task :react-native-reanimated:assertWorkletsVersionTask
+> Task :react-native-reanimated:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-reanimated:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-reanimated:prepareReanimatedHeadersForPrefabs UP-TO-DATE
+> Task :react-native-reanimated:preBuild
+> Task :react-native-safe-area-context:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-safe-area-context:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-safe-area-context:preBuild UP-TO-DATE
+> Task :react-native-screens:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-screens:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-screens:preBuild UP-TO-DATE
+> Task :react-native-svg:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-svg:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-svg:preBuild UP-TO-DATE
+> Task :react-native-vector-icons:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-vector-icons:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-vector-icons:preBuild UP-TO-DATE
+> Task :react-native-worklets:assertMinimalReactNativeVersionTask
+> Task :react-native-worklets:assertNewArchitectureEnabledTask SKIPPED
+> Task :react-native-worklets:generateCodegenSchemaFromJavaScript UP-TO-DATE
+> Task :react-native-worklets:generateCodegenArtifactsFromSchema UP-TO-DATE
+> Task :react-native-worklets:prepareWorkletsHeadersForPrefabs UP-TO-DATE
+> Task :react-native-worklets:preBuild
+> Task :app:preBuild
+> Task :app:preStagingDebugBuild
+> Task :app:generateStagingDebugBuildConfig UP-TO-DATE
+> Task :notifee_react-native:preDebugBuild UP-TO-DATE
+> Task :notifee_react-native:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-async-storage_async-storage:preDebugBuild UP-TO-DATE
+> Task :react-native-async-storage_async-storage:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-community_datetimepicker:preDebugBuild UP-TO-DATE
+> Task :react-native-community_datetimepicker:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-config:preDebugBuild UP-TO-DATE
+> Task :react-native-config:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-firebase_analytics:preDebugBuild UP-TO-DATE
+> Task :react-native-firebase_analytics:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-firebase_app:preDebugBuild UP-TO-DATE
+> Task :react-native-firebase_app:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-firebase_auth:preDebugBuild UP-TO-DATE
+> Task :react-native-firebase_auth:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-firebase_crashlytics:preDebugBuild UP-TO-DATE
+> Task :react-native-firebase_crashlytics:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-firebase_firestore:preDebugBuild UP-TO-DATE
+> Task :react-native-firebase_firestore:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:preDebugBuild UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-firebase_messaging:preDebugBuild UP-TO-DATE
+> Task :react-native-firebase_messaging:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-gesture-handler:preDebugBuild UP-TO-DATE
+> Task :react-native-gesture-handler:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-google-signin_google-signin:preDebugBuild UP-TO-DATE
+> Task :react-native-google-signin_google-signin:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-keychain:preDebugBuild UP-TO-DATE
+> Task :react-native-keychain:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-mmkv:preDebugBuild UP-TO-DATE
+> Task :react-native-mmkv:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-nitro-modules:preDebugBuild UP-TO-DATE
+> Task :react-native-nitro-modules:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-reanimated:preDebugBuild
+> Task :react-native-reanimated:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-safe-area-context:preDebugBuild UP-TO-DATE
+> Task :react-native-safe-area-context:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-screens:preDebugBuild UP-TO-DATE
+> Task :react-native-screens:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-svg:preDebugBuild UP-TO-DATE
+> Task :react-native-svg:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-vector-icons:preDebugBuild UP-TO-DATE
+> Task :react-native-vector-icons:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-worklets:preDebugBuild
+> Task :react-native-worklets:writeDebugAarMetadata UP-TO-DATE
+> Task :app:checkStagingDebugAarMetadata UP-TO-DATE
+> Task :app:generateStagingDebugResValues UP-TO-DATE
+> Task :app:injectCrashlyticsMappingFileIdStagingDebug UP-TO-DATE
+> Task :app:processStagingDebugGoogleServices UP-TO-DATE
+> Task :notifee_react-native:generateDebugResValues UP-TO-DATE
+> Task :notifee_react-native:generateDebugResources UP-TO-DATE
+> Task :notifee_react-native:packageDebugResources UP-TO-DATE
+> Task :react-native-async-storage_async-storage:generateDebugResValues UP-TO-DATE
+> Task :react-native-async-storage_async-storage:generateDebugResources UP-TO-DATE
+> Task :react-native-async-storage_async-storage:packageDebugResources UP-TO-DATE
+> Task :react-native-community_datetimepicker:generateDebugResValues UP-TO-DATE
+> Task :react-native-community_datetimepicker:generateDebugResources UP-TO-DATE
+> Task :react-native-community_datetimepicker:packageDebugResources UP-TO-DATE
+> Task :react-native-config:generateDebugResValues UP-TO-DATE
+> Task :react-native-config:generateDebugResources UP-TO-DATE
+> Task :react-native-config:packageDebugResources UP-TO-DATE
+> Task :react-native-firebase_analytics:generateDebugResValues UP-TO-DATE
+> Task :react-native-firebase_analytics:generateDebugResources UP-TO-DATE
+> Task :react-native-firebase_analytics:packageDebugResources UP-TO-DATE
+> Task :react-native-firebase_app:generateDebugResValues UP-TO-DATE
+> Task :react-native-firebase_app:generateDebugResources UP-TO-DATE
+> Task :react-native-firebase_app:packageDebugResources UP-TO-DATE
+> Task :react-native-firebase_auth:generateDebugResValues UP-TO-DATE
+> Task :react-native-firebase_auth:generateDebugResources UP-TO-DATE
+> Task :react-native-firebase_auth:packageDebugResources UP-TO-DATE
+> Task :react-native-firebase_crashlytics:generateDebugResValues UP-TO-DATE
+> Task :react-native-firebase_crashlytics:generateDebugResources UP-TO-DATE
+> Task :react-native-firebase_crashlytics:packageDebugResources UP-TO-DATE
+> Task :react-native-firebase_firestore:generateDebugResValues UP-TO-DATE
+> Task :react-native-firebase_firestore:generateDebugResources UP-TO-DATE
+> Task :react-native-firebase_firestore:packageDebugResources UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:generateDebugResValues UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:generateDebugResources UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:packageDebugResources UP-TO-DATE
+> Task :react-native-firebase_messaging:generateDebugResValues UP-TO-DATE
+> Task :react-native-firebase_messaging:generateDebugResources UP-TO-DATE
+> Task :react-native-firebase_messaging:packageDebugResources UP-TO-DATE
+> Task :react-native-gesture-handler:generateDebugResValues UP-TO-DATE
+> Task :react-native-gesture-handler:generateDebugResources UP-TO-DATE
+> Task :react-native-gesture-handler:packageDebugResources UP-TO-DATE
+> Task :react-native-google-signin_google-signin:generateDebugResValues UP-TO-DATE
+> Task :react-native-google-signin_google-signin:generateDebugResources UP-TO-DATE
+> Task :react-native-google-signin_google-signin:packageDebugResources UP-TO-DATE
+> Task :react-native-keychain:generateDebugResValues UP-TO-DATE
+> Task :react-native-keychain:generateDebugResources UP-TO-DATE
+> Task :react-native-keychain:packageDebugResources UP-TO-DATE
+> Task :react-native-mmkv:generateDebugResValues UP-TO-DATE
+> Task :react-native-mmkv:generateDebugResources UP-TO-DATE
+> Task :react-native-mmkv:packageDebugResources UP-TO-DATE
+> Task :react-native-nitro-modules:generateDebugResValues UP-TO-DATE
+> Task :react-native-nitro-modules:generateDebugResources UP-TO-DATE
+> Task :react-native-nitro-modules:packageDebugResources UP-TO-DATE
+> Task :react-native-reanimated:generateDebugResValues UP-TO-DATE
+> Task :react-native-reanimated:generateDebugResources UP-TO-DATE
+> Task :react-native-reanimated:packageDebugResources UP-TO-DATE
+> Task :react-native-safe-area-context:generateDebugResValues UP-TO-DATE
+> Task :react-native-safe-area-context:generateDebugResources UP-TO-DATE
+> Task :react-native-safe-area-context:packageDebugResources UP-TO-DATE
+> Task :react-native-screens:generateDebugResValues UP-TO-DATE
+> Task :react-native-screens:generateDebugResources UP-TO-DATE
+> Task :react-native-screens:packageDebugResources UP-TO-DATE
+> Task :react-native-svg:generateDebugResValues UP-TO-DATE
+> Task :react-native-svg:generateDebugResources UP-TO-DATE
+> Task :react-native-svg:packageDebugResources UP-TO-DATE
+> Task :react-native-vector-icons:generateDebugResValues UP-TO-DATE
+> Task :react-native-vector-icons:generateDebugResources UP-TO-DATE
+> Task :react-native-vector-icons:packageDebugResources UP-TO-DATE
+> Task :react-native-worklets:generateDebugResValues UP-TO-DATE
+> Task :react-native-worklets:generateDebugResources UP-TO-DATE
+> Task :react-native-worklets:packageDebugResources UP-TO-DATE
+> Task :app:mapStagingDebugSourceSetPaths UP-TO-DATE
+> Task :app:generateStagingDebugResources UP-TO-DATE
+> Task :app:mergeStagingDebugResources UP-TO-DATE
+> Task :app:packageStagingDebugResources UP-TO-DATE
+> Task :app:parseStagingDebugLocalResources UP-TO-DATE
+> Task :app:createStagingDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksStagingDebug UP-TO-DATE
+> Task :notifee_react-native:extractDeepLinksDebug UP-TO-DATE
+> Task :notifee_react-native:processDebugManifest UP-TO-DATE
+> Task :react-native-async-storage_async-storage:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:processDebugManifest UP-TO-DATE
+> Task :react-native-community_datetimepicker:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-community_datetimepicker:processDebugManifest UP-TO-DATE
+> Task :react-native-config:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-config:processDebugManifest UP-TO-DATE
+> Task :react-native-firebase_analytics:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-firebase_analytics:processDebugManifest UP-TO-DATE
+> Task :react-native-firebase_app:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-firebase_app:processDebugManifest UP-TO-DATE
+> Task :react-native-firebase_auth:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-firebase_auth:processDebugManifest UP-TO-DATE
+> Task :react-native-firebase_crashlytics:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-firebase_crashlytics:processDebugManifest UP-TO-DATE
+> Task :react-native-firebase_firestore:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-firebase_firestore:processDebugManifest UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:processDebugManifest UP-TO-DATE
+> Task :react-native-firebase_messaging:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-firebase_messaging:processDebugManifest UP-TO-DATE
+> Task :react-native-gesture-handler:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-gesture-handler:processDebugManifest UP-TO-DATE
+> Task :react-native-google-signin_google-signin:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-google-signin_google-signin:processDebugManifest UP-TO-DATE
+> Task :react-native-keychain:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-keychain:processDebugManifest UP-TO-DATE
+> Task :react-native-mmkv:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-mmkv:processDebugManifest UP-TO-DATE
+> Task :react-native-nitro-modules:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-nitro-modules:processDebugManifest UP-TO-DATE
+> Task :react-native-reanimated:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-reanimated:processDebugManifest UP-TO-DATE
+> Task :react-native-safe-area-context:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-safe-area-context:processDebugManifest UP-TO-DATE
+> Task :react-native-screens:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-screens:processDebugManifest UP-TO-DATE
+> Task :react-native-svg:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-svg:processDebugManifest UP-TO-DATE
+> Task :react-native-vector-icons:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-vector-icons:processDebugManifest UP-TO-DATE
+> Task :react-native-worklets:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-worklets:processDebugManifest UP-TO-DATE
+> Task :app:processStagingDebugMainManifest UP-TO-DATE
+> Task :app:processStagingDebugManifest UP-TO-DATE
+> Task :app:processStagingDebugManifestForPackage UP-TO-DATE
+> Task :notifee_react-native:compileDebugLibraryResources UP-TO-DATE
+> Task :notifee_react-native:parseDebugLocalResources UP-TO-DATE
+> Task :notifee_react-native:generateDebugRFile UP-TO-DATE
+> Task :react-native-async-storage_async-storage:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-async-storage_async-storage:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-async-storage_async-storage:generateDebugRFile UP-TO-DATE
+> Task :react-native-community_datetimepicker:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-community_datetimepicker:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-community_datetimepicker:generateDebugRFile UP-TO-DATE
+> Task :react-native-config:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-config:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-config:generateDebugRFile UP-TO-DATE
+> Task :react-native-firebase_analytics:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-firebase_analytics:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-firebase_analytics:generateDebugRFile UP-TO-DATE
+> Task :react-native-firebase_app:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-firebase_app:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-firebase_app:generateDebugRFile UP-TO-DATE
+> Task :react-native-firebase_auth:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-firebase_auth:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-firebase_auth:generateDebugRFile UP-TO-DATE
+> Task :react-native-firebase_crashlytics:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-firebase_crashlytics:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-firebase_crashlytics:generateDebugRFile UP-TO-DATE
+> Task :react-native-firebase_firestore:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-firebase_firestore:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-firebase_firestore:generateDebugRFile UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:generateDebugRFile UP-TO-DATE
+> Task :react-native-firebase_messaging:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-firebase_messaging:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-firebase_messaging:generateDebugRFile UP-TO-DATE
+> Task :react-native-gesture-handler:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-gesture-handler:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-gesture-handler:generateDebugRFile UP-TO-DATE
+> Task :react-native-google-signin_google-signin:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-google-signin_google-signin:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-google-signin_google-signin:generateDebugRFile UP-TO-DATE
+> Task :react-native-keychain:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-keychain:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-keychain:generateDebugRFile UP-TO-DATE
+> Task :react-native-mmkv:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-mmkv:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-mmkv:generateDebugRFile UP-TO-DATE
+> Task :react-native-nitro-modules:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-nitro-modules:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-nitro-modules:generateDebugRFile UP-TO-DATE
+> Task :react-native-reanimated:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-reanimated:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-reanimated:generateDebugRFile UP-TO-DATE
+> Task :react-native-safe-area-context:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-safe-area-context:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-safe-area-context:generateDebugRFile UP-TO-DATE
+> Task :react-native-screens:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-screens:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-screens:generateDebugRFile UP-TO-DATE
+> Task :react-native-svg:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-svg:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-svg:generateDebugRFile UP-TO-DATE
+> Task :react-native-vector-icons:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-vector-icons:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-vector-icons:generateDebugRFile UP-TO-DATE
+> Task :react-native-worklets:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-worklets:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-worklets:generateDebugRFile UP-TO-DATE
+> Task :app:processStagingDebugResources UP-TO-DATE
+> Task :notifee_react-native:generateDebugBuildConfig UP-TO-DATE
+> Task :notifee_react-native:javaPreCompileDebug UP-TO-DATE
+> Task :notifee_react-native:compileDebugJavaWithJavac UP-TO-DATE
+> Task :notifee_react-native:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-async-storage_async-storage:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-async-storage_async-storage:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-community_datetimepicker:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :react-native-community_datetimepicker:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-community_datetimepicker:compileDebugKotlin UP-TO-DATE
+> Task :react-native-community_datetimepicker:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-community_datetimepicker:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-community_datetimepicker:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-config:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-config:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-config:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-config:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-firebase_analytics:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-firebase_analytics:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-firebase_app:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-firebase_app:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-firebase_app:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-firebase_app:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-firebase_analytics:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-firebase_analytics:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-firebase_auth:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-firebase_auth:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-firebase_auth:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-firebase_auth:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-firebase_crashlytics:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-firebase_crashlytics:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-firebase_crashlytics:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-firebase_crashlytics:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-firebase_firestore:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-firebase_firestore:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-firebase_firestore:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-firebase_firestore:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-firebase_messaging:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-firebase_messaging:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-firebase_messaging:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-firebase_messaging:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-gesture-handler:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :react-native-gesture-handler:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-reanimated:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-reanimated:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-worklets:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :react-native-worklets:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-worklets:compileDebugKotlin NO-SOURCE
+> Task :react-native-worklets:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-worklets:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-worklets:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-reanimated:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-reanimated:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-svg:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-svg:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-svg:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-svg:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-gesture-handler:compileDebugKotlin UP-TO-DATE
+> Task :react-native-gesture-handler:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-gesture-handler:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-gesture-handler:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-google-signin_google-signin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :react-native-google-signin_google-signin:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-google-signin_google-signin:compileDebugKotlin UP-TO-DATE
+> Task :react-native-google-signin_google-signin:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-google-signin_google-signin:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-google-signin_google-signin:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-keychain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :react-native-keychain:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-keychain:compileDebugKotlin UP-TO-DATE
+> Task :react-native-keychain:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-keychain:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-keychain:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-mmkv:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :react-native-mmkv:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-nitro-modules:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :react-native-nitro-modules:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-nitro-modules:compileDebugKotlin UP-TO-DATE
+> Task :react-native-nitro-modules:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-nitro-modules:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-nitro-modules:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-mmkv:compileDebugKotlin UP-TO-DATE
+> Task :react-native-mmkv:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-mmkv:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-mmkv:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-safe-area-context:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :react-native-safe-area-context:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-safe-area-context:compileDebugKotlin UP-TO-DATE
+> Task :react-native-safe-area-context:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-safe-area-context:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-safe-area-context:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-screens:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :react-native-screens:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-screens:compileDebugKotlin UP-TO-DATE
+> Task :react-native-screens:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-screens:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-screens:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-vector-icons:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-vector-icons:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-vector-icons:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-vector-icons:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :app:compileStagingDebugKotlin UP-TO-DATE
+> Task :app:javaPreCompileStagingDebug UP-TO-DATE
+> Task :app:compileStagingDebugJavaWithJavac UP-TO-DATE
+> Task :app:mergeStagingDebugShaders UP-TO-DATE
+> Task :app:compileStagingDebugShaders NO-SOURCE
+> Task :app:copyReactNativeVectorIconFonts UP-TO-DATE
+> Task :app:generateStagingDebugAssets UP-TO-DATE
+> Task :notifee_react-native:mergeDebugShaders UP-TO-DATE
+> Task :notifee_react-native:compileDebugShaders NO-SOURCE
+> Task :notifee_react-native:generateDebugAssets UP-TO-DATE
+> Task :notifee_react-native:mergeDebugAssets UP-TO-DATE
+> Task :react-native-async-storage_async-storage:mergeDebugShaders UP-TO-DATE
+> Task :react-native-async-storage_async-storage:compileDebugShaders NO-SOURCE
+> Task :react-native-async-storage_async-storage:generateDebugAssets UP-TO-DATE
+> Task :react-native-async-storage_async-storage:mergeDebugAssets UP-TO-DATE
+> Task :react-native-community_datetimepicker:mergeDebugShaders UP-TO-DATE
+> Task :react-native-community_datetimepicker:compileDebugShaders NO-SOURCE
+> Task :react-native-community_datetimepicker:generateDebugAssets UP-TO-DATE
+> Task :react-native-community_datetimepicker:mergeDebugAssets UP-TO-DATE
+> Task :react-native-config:mergeDebugShaders UP-TO-DATE
+> Task :react-native-config:compileDebugShaders NO-SOURCE
+> Task :react-native-config:generateDebugAssets UP-TO-DATE
+> Task :react-native-config:mergeDebugAssets UP-TO-DATE
+> Task :react-native-firebase_analytics:mergeDebugShaders UP-TO-DATE
+> Task :react-native-firebase_analytics:compileDebugShaders NO-SOURCE
+> Task :react-native-firebase_analytics:generateDebugAssets UP-TO-DATE
+> Task :react-native-firebase_analytics:mergeDebugAssets UP-TO-DATE
+> Task :react-native-firebase_app:mergeDebugShaders UP-TO-DATE
+> Task :react-native-firebase_app:compileDebugShaders NO-SOURCE
+> Task :react-native-firebase_app:generateDebugAssets UP-TO-DATE
+> Task :react-native-firebase_app:mergeDebugAssets UP-TO-DATE
+> Task :react-native-firebase_auth:mergeDebugShaders UP-TO-DATE
+> Task :react-native-firebase_auth:compileDebugShaders NO-SOURCE
+> Task :react-native-firebase_auth:generateDebugAssets UP-TO-DATE
+> Task :react-native-firebase_auth:mergeDebugAssets UP-TO-DATE
+> Task :react-native-firebase_crashlytics:mergeDebugShaders UP-TO-DATE
+> Task :react-native-firebase_crashlytics:compileDebugShaders NO-SOURCE
+> Task :react-native-firebase_crashlytics:generateDebugAssets UP-TO-DATE
+> Task :react-native-firebase_crashlytics:mergeDebugAssets UP-TO-DATE
+> Task :react-native-firebase_firestore:mergeDebugShaders UP-TO-DATE
+> Task :react-native-firebase_firestore:compileDebugShaders NO-SOURCE
+> Task :react-native-firebase_firestore:generateDebugAssets UP-TO-DATE
+> Task :react-native-firebase_firestore:mergeDebugAssets UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:mergeDebugShaders UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:compileDebugShaders NO-SOURCE
+> Task :react-native-firebase_in-app-messaging:generateDebugAssets UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:mergeDebugAssets UP-TO-DATE
+> Task :react-native-firebase_messaging:mergeDebugShaders UP-TO-DATE
+> Task :react-native-firebase_messaging:compileDebugShaders NO-SOURCE
+> Task :react-native-firebase_messaging:generateDebugAssets UP-TO-DATE
+> Task :react-native-firebase_messaging:mergeDebugAssets UP-TO-DATE
+> Task :react-native-gesture-handler:mergeDebugShaders UP-TO-DATE
+> Task :react-native-gesture-handler:compileDebugShaders NO-SOURCE
+> Task :react-native-gesture-handler:generateDebugAssets UP-TO-DATE
+> Task :react-native-gesture-handler:mergeDebugAssets UP-TO-DATE
+> Task :react-native-google-signin_google-signin:mergeDebugShaders UP-TO-DATE
+> Task :react-native-google-signin_google-signin:compileDebugShaders NO-SOURCE
+> Task :react-native-google-signin_google-signin:generateDebugAssets UP-TO-DATE
+> Task :react-native-google-signin_google-signin:mergeDebugAssets UP-TO-DATE
+> Task :react-native-keychain:mergeDebugShaders UP-TO-DATE
+> Task :react-native-keychain:compileDebugShaders NO-SOURCE
+> Task :react-native-keychain:generateDebugAssets UP-TO-DATE
+> Task :react-native-keychain:mergeDebugAssets UP-TO-DATE
+> Task :react-native-mmkv:mergeDebugShaders UP-TO-DATE
+> Task :react-native-mmkv:compileDebugShaders NO-SOURCE
+> Task :react-native-mmkv:generateDebugAssets UP-TO-DATE
+> Task :react-native-mmkv:mergeDebugAssets UP-TO-DATE
+> Task :react-native-nitro-modules:mergeDebugShaders UP-TO-DATE
+> Task :react-native-nitro-modules:compileDebugShaders NO-SOURCE
+> Task :react-native-nitro-modules:generateDebugAssets UP-TO-DATE
+> Task :react-native-nitro-modules:mergeDebugAssets UP-TO-DATE
+> Task :react-native-reanimated:mergeDebugShaders UP-TO-DATE
+> Task :react-native-reanimated:compileDebugShaders NO-SOURCE
+> Task :react-native-reanimated:generateDebugAssets UP-TO-DATE
+> Task :react-native-reanimated:mergeDebugAssets UP-TO-DATE
+> Task :react-native-safe-area-context:mergeDebugShaders UP-TO-DATE
+> Task :react-native-safe-area-context:compileDebugShaders NO-SOURCE
+> Task :react-native-safe-area-context:generateDebugAssets UP-TO-DATE
+> Task :react-native-safe-area-context:mergeDebugAssets UP-TO-DATE
+> Task :react-native-screens:mergeDebugShaders UP-TO-DATE
+> Task :react-native-screens:compileDebugShaders NO-SOURCE
+> Task :react-native-screens:generateDebugAssets UP-TO-DATE
+> Task :react-native-screens:mergeDebugAssets UP-TO-DATE
+> Task :react-native-svg:mergeDebugShaders UP-TO-DATE
+> Task :react-native-svg:compileDebugShaders NO-SOURCE
+> Task :react-native-svg:generateDebugAssets UP-TO-DATE
+> Task :react-native-svg:mergeDebugAssets UP-TO-DATE
+> Task :react-native-vector-icons:mergeDebugShaders UP-TO-DATE
+> Task :react-native-vector-icons:compileDebugShaders NO-SOURCE
+> Task :react-native-vector-icons:generateDebugAssets UP-TO-DATE
+> Task :react-native-vector-icons:mergeDebugAssets UP-TO-DATE
+> Task :react-native-worklets:mergeDebugShaders UP-TO-DATE
+> Task :react-native-worklets:compileDebugShaders NO-SOURCE
+> Task :react-native-worklets:generateDebugAssets UP-TO-DATE
+> Task :react-native-worklets:mergeDebugAssets UP-TO-DATE
+> Task :app:mergeStagingDebugAssets UP-TO-DATE
+> Task :app:compressStagingDebugAssets UP-TO-DATE
+> Task :app:checkStagingDebugDuplicateClasses UP-TO-DATE
+> Task :app:desugarStagingDebugFileDependencies UP-TO-DATE
+> Task :app:mergeExtDexStagingDebug UP-TO-DATE
+> Task :react-native-community_datetimepicker:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-google-signin_google-signin:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-gesture-handler:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-keychain:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-mmkv:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-nitro-modules:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-safe-area-context:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-screens:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-reanimated:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-worklets:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :notifee_react-native:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-firebase_analytics:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-firebase_auth:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-firebase_crashlytics:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-firebase_firestore:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-firebase_messaging:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-firebase_app:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-config:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-svg:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-vector-icons:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :app:dexBuilderStagingDebug UP-TO-DATE
+> Task :app:mergeProjectDexStagingDebug UP-TO-DATE
+> Task :react-native-community_datetimepicker:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-google-signin_google-signin:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-gesture-handler:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-keychain:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-mmkv:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-nitro-modules:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-safe-area-context:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-screens:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-reanimated:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-worklets:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :notifee_react-native:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-firebase_analytics:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-firebase_auth:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-firebase_crashlytics:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-firebase_firestore:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-firebase_in-app-messaging:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-firebase_messaging:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-firebase_app:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-config:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-svg:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-vector-icons:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :app:processStagingDebugJavaRes UP-TO-DATE
+> Task :notifee_react-native:processDebugJavaRes NO-SOURCE
+> Task :react-native-async-storage_async-storage:processDebugJavaRes NO-SOURCE
+> Task :react-native-community_datetimepicker:processDebugJavaRes UP-TO-DATE
+> Task :app:mergeLibDexStagingDebug UP-TO-DATE
+> Task :app:mergeStagingDebugGlobalSynthetics UP-TO-DATE
+> Task :react-native-config:processDebugJavaRes NO-SOURCE
+> Task :react-native-firebase_analytics:processDebugJavaRes NO-SOURCE
+> Task :react-native-firebase_app:processDebugJavaRes NO-SOURCE
+> Task :react-native-firebase_auth:processDebugJavaRes NO-SOURCE
+> Task :react-native-firebase_crashlytics:processDebugJavaRes NO-SOURCE
+> Task :react-native-firebase_firestore:processDebugJavaRes NO-SOURCE
+> Task :react-native-firebase_in-app-messaging:processDebugJavaRes NO-SOURCE
+> Task :react-native-firebase_messaging:processDebugJavaRes NO-SOURCE
+> Task :react-native-gesture-handler:processDebugJavaRes UP-TO-DATE
+> Task :react-native-google-signin_google-signin:processDebugJavaRes UP-TO-DATE
+> Task :react-native-keychain:processDebugJavaRes UP-TO-DATE
+> Task :react-native-mmkv:processDebugJavaRes UP-TO-DATE
+> Task :react-native-nitro-modules:processDebugJavaRes UP-TO-DATE
+> Task :react-native-reanimated:processDebugJavaRes NO-SOURCE
+> Task :react-native-safe-area-context:processDebugJavaRes UP-TO-DATE
+> Task :react-native-screens:processDebugJavaRes UP-TO-DATE
+> Task :react-native-svg:processDebugJavaRes NO-SOURCE
+> Task :react-native-vector-icons:processDebugJavaRes NO-SOURCE
+> Task :react-native-worklets:processDebugJavaRes NO-SOURCE
+> Task :app:mergeStagingDebugJavaResource UP-TO-DATE
+> Task :react-native-nitro-modules:configureCMakeDebug[arm64-v8a]
+> Task :react-native-nitro-modules:buildCMakeDebug[arm64-v8a]
+> Task :react-native-nitro-modules:configureCMakeDebug[armeabi-v7a]
+> Task :react-native-nitro-modules:buildCMakeDebug[armeabi-v7a]
+> Task :react-native-nitro-modules:configureCMakeDebug[x86]
+> Task :react-native-nitro-modules:buildCMakeDebug[x86]
+> Task :react-native-nitro-modules:configureCMakeDebug[x86_64]
+> Task :react-native-nitro-modules:buildCMakeDebug[x86_64]
+> Task :react-native-nitro-modules:externalNativeBuildDebug
+> Task :react-native-nitro-modules:generateJsonModelDebug
+> Task :react-native-nitro-modules:prefabDebugConfigurePackage
+> Task :react-native-worklets:configureCMakeDebug[arm64-v8a]
+> Task :react-native-worklets:buildCMakeDebug[arm64-v8a][worklets]
+> Task :react-native-worklets:configureCMakeDebug[armeabi-v7a]
+> Task :react-native-worklets:buildCMakeDebug[armeabi-v7a][worklets]
+> Task :react-native-worklets:configureCMakeDebug[x86]
+> Task :react-native-worklets:buildCMakeDebug[x86][worklets]
+> Task :react-native-worklets:configureCMakeDebug[x86_64]
+> Task :react-native-worklets:buildCMakeDebug[x86_64][worklets]
+> Task :react-native-worklets:externalNativeBuildDebug
+> Task :react-native-worklets:generateJsonModelDebug
+> Task :react-native-worklets:prefabDebugConfigurePackage
+> Task :react-native-reanimated:configureCMakeDebug[arm64-v8a]
+> Task :react-native-reanimated:configureCMakeDebug[armeabi-v7a]
+> Task :react-native-reanimated:configureCMakeDebug[x86]
+> Task :react-native-reanimated:configureCMakeDebug[x86_64]
+> Task :react-native-reanimated:generateJsonModelDebug
+> Task :react-native-reanimated:prefabDebugConfigurePackage UP-TO-DATE
+> Task :app:configureCMakeDebug[arm64-v8a]
+> Task :react-native-nitro-modules:prefabDebugPackage UP-TO-DATE
+> Task :react-native-worklets:prefabDebugPackage UP-TO-DATE
+> Task :react-native-reanimated:buildCMakeDebug[arm64-v8a][reanimated]
+> Task :react-native-reanimated:buildCMakeDebug[armeabi-v7a][reanimated]
+> Task :react-native-reanimated:buildCMakeDebug[x86][reanimated]
+> Task :react-native-reanimated:buildCMakeDebug[x86_64][reanimated]
+> Task :react-native-worklets:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-worklets:mergeDebugNativeLibs UP-TO-DATE
+> Task :react-native-worklets:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-reanimated:externalNativeBuildDebug
+> Task :react-native-reanimated:prefabDebugPackage UP-TO-DATE
+
+> Task :app:buildCMakeDebug[arm64-v8a]
+C/C++: ninja: Entering directory `/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app/.cxx/Debug/v1o2c4x1/arm64-v8a'
+C/C++: /Users/kombee/Library/Android/sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=aarch64-none-linux-android24 --sysroot=/Users/kombee/Library/Android/sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -DRN_SERIALIZABLE_STATE -Dappmodules_EXPORTS -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app/build/generated/autolinking/src/main/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-safe-area-context/android/src/main/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-screens/android/src/main/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/react/renderer/components/rnasyncstorage -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/react/renderer/components/RNDateTimePickerCGen -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-google-signin/google-signin/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-google-signin/google-signin/android/build/generated/source/codegen/jni/react/renderer/components/RNGoogleSignInCGen -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-config/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-config/android/build/generated/source/codegen/jni/react/renderer/components/RNCConfigSpec -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/react/renderer/components/rngesturehandler_codegen -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-keychain/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-keychain/android/build/generated/source/codegen/jni/react/renderer/components/RNKeychainSpec -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/react/renderer/components/NitroModulesSpec -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/react/renderer/components/rnreanimated -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-safe-area-context/android/src/main/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-safe-area-context/android/src/main/jni/../../../../common/cpp -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-safe-area-context/android/src/main/jni/../../../build/generated/source/codegen/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-safe-area-context/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/safeareacontext -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-screens/android/src/main/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-screens/android/src/main/jni/../../../build/generated/source/codegen/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-screens/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnscreens -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-svg/android/src/main/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-svg/android/src/main/jni/../../../../common/cpp -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-svg/android/src/main/jni/../../../build/generated/source/codegen/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-svg/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnsvg -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-svg/android/src/main/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-vector-icons/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-vector-icons/android/build/generated/source/codegen/jni/react/renderer/components/RNVectorIconsSpec -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-worklets/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-worklets/android/build/generated/source/codegen/jni/react/renderer/components/rnworklets -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app/build/generated/source/codegen/jni/react/renderer/components/AppSpecs -isystem /Users/kombee/.gradle/caches/9.3.1/transforms/86ea8ee599a773536ed69cf2b9898d80/transformed/fbjni-0.7.0/prefab/modules/fbjni/include -isystem /Users/kombee/.gradle/caches/9.3.1/transforms/88a725b6be23f394cd6b578b818ada17/transformed/react-android-0.85.2-debug/prefab/modules/jsi/include -isystem /Users/kombee/.gradle/caches/9.3.1/transforms/88a725b6be23f394cd6b578b818ada17/transformed/react-android-0.85.2-debug/prefab/modules/reactnative/include -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D__BIONIC_NO_PAGE_SIZE_MACRO -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -fno-limit-debug-info  -fPIC -Wall -Werror -fexceptions -frtti -std=c++20 -DFOLLY_NO_CONFIG=1 -DLOG_TAG=\"ReactNative\" -DREACT_NATIVE_APP_CODEGEN_HEADER=\"AppSpecs.h\" -DREACT_NATIVE_APP_COMPONENT_DESCRIPTORS_HEADER=\"react/renderer/components/AppSpecs/ComponentDescriptors.h\" -DREACT_NATIVE_APP_COMPONENT_REGISTRATION=AppSpecs_registerComponentDescriptorsFromCodegen -DREACT_NATIVE_APP_MODULE_PROVIDER=AppSpecs_ModuleProvider -DFOLLY_HAVE_CLOCK_GETTIME=1 -DFOLLY_USE_LIBCPP=1 -DFOLLY_CFG_NO_COROUTINES=1 -DFOLLY_MOBILE=1 -DFOLLY_HAVE_RECVMMSG=1 -DFOLLY_HAVE_PTHREAD=1 -DFOLLY_HAVE_XSI_STRERROR_R=1 -MD -MT CMakeFiles/appmodules.dir/OnLoad.cpp.o -MF CMakeFiles/appmodules.dir/OnLoad.cpp.o.d -o CMakeFiles/appmodules.dir/OnLoad.cpp.o -c /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/OnLoad.cpp
+C/C++: In file included from /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/OnLoad.cpp:38:
+C/C++: /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app/build/generated/source/codegen/jni/./AppSpecs.h:22:18: error: redefinition of 'NativeDeviceInfoSpecJSI'
+C/C++:    22 | class JSI_EXPORT NativeDeviceInfoSpecJSI : public JavaTurboModule {
+C/C++:       |                  ^
+C/C++: /Users/kombee/.gradle/caches/9.3.1/transforms/88a725b6be23f394cd6b578b818ada17/transformed/react-android-0.85.2-debug/prefab/modules/reactnative/include/FBReactNativeSpec.h:134:18: note: previous definition is here
+C/C++:   134 | class JSI_EXPORT NativeDeviceInfoSpecJSI : public JavaTurboModule {
+C/C++:       |                  ^
+C/C++: 1 error generated.
+
+> Task :app:buildCMakeDebug[arm64-v8a] FAILED
+
+[Incubating] Problems report is available at: file:///Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+509 actionable tasks: 34 executed, 475 up-to-date
+
+info 💡 Tip: Make sure that you have set up your development environment correctly, by running npx react-native doctor. To read more about doctor command visit: https://github.com/react-native-community/cli/blob/main/packages/cli-doctor/README.md#doctor 
+
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:buildCMakeDebug[arm64-v8a]'.
+> com.android.ide.common.process.ProcessException: ninja: Entering directory `/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app/.cxx/Debug/v1o2c4x1/arm64-v8a'
+  [0/2] Re-checking globbed directories...
+  [1/91] Building CXX object RNCConfigSpec_autolinked_build/CMakeFiles/react_codegen_RNCConfigSpec.dir/react/renderer/components/RNCConfigSpec/EventEmitters.cpp.o
+  [2/91] Building CXX object rngesturehandler_codegen_autolinked_build/CMakeFiles/react_codegen_rngesturehandler_codegen.dir/react/renderer/components/rngesturehandler_codegen/States.cpp.o
+  [3/91] Building CXX object RNCConfigSpec_autolinked_build/CMakeFiles/react_codegen_RNCConfigSpec.dir/react/renderer/components/RNCConfigSpec/States.cpp.o
+  [4/91] Building CXX object rngesturehandler_codegen_autolinked_build/CMakeFiles/react_codegen_rngesturehandler_codegen.dir/react/renderer/components/rngesturehandler_codegen/EventEmitters.cpp.o
+  [5/91] Building CXX object rngesturehandler_codegen_autolinked_build/CMakeFiles/react_codegen_rngesturehandler_codegen.dir/rngesturehandler_codegen-generated.cpp.o
+  [6/91] Building CXX object RNCConfigSpec_autolinked_build/CMakeFiles/react_codegen_RNCConfigSpec.dir/react/renderer/components/RNCConfigSpec/ShadowNodes.cpp.o
+  [7/91] Building CXX object rngesturehandler_codegen_autolinked_build/CMakeFiles/react_codegen_rngesturehandler_codegen.dir/react/renderer/components/rngesturehandler_codegen/ShadowNodes.cpp.o
+  [8/91] Building CXX object RNCConfigSpec_autolinked_build/CMakeFiles/react_codegen_RNCConfigSpec.dir/react/renderer/components/RNCConfigSpec/ComponentDescriptors.cpp.o
+  [9/91] Building CXX object RNCConfigSpec_autolinked_build/CMakeFiles/react_codegen_RNCConfigSpec.dir/react/renderer/components/RNCConfigSpec/Props.cpp.o
+  [10/91] Building CXX object CMakeFiles/appmodules.dir/OnLoad.cpp.o
+  FAILED: CMakeFiles/appmodules.dir/OnLoad.cpp.o 
+  /Users/kombee/Library/Android/sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=aarch64-none-linux-android24 --sysroot=/Users/kombee/Library/Android/sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -DRN_SERIALIZABLE_STATE -Dappmodules_EXPORTS -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app/build/generated/autolinking/src/main/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-safe-area-context/android/src/main/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-screens/android/src/main/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/react/renderer/components/rnasyncstorage -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/react/renderer/components/RNDateTimePickerCGen -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-google-signin/google-signin/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-google-signin/google-signin/android/build/generated/source/codegen/jni/react/renderer/components/RNGoogleSignInCGen -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-config/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-config/android/build/generated/source/codegen/jni/react/renderer/components/RNCConfigSpec -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/react/renderer/components/rngesturehandler_codegen -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-keychain/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-keychain/android/build/generated/source/codegen/jni/react/renderer/components/RNKeychainSpec -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/react/renderer/components/NitroModulesSpec -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/react/renderer/components/rnreanimated -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-safe-area-context/android/src/main/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-safe-area-context/android/src/main/jni/../../../../common/cpp -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-safe-area-context/android/src/main/jni/../../../build/generated/source/codegen/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-safe-area-context/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/safeareacontext -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-screens/android/src/main/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-screens/android/src/main/jni/../../../build/generated/source/codegen/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-screens/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnscreens -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-svg/android/src/main/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-svg/android/src/main/jni/../../../../common/cpp -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-svg/android/src/main/jni/../../../build/generated/source/codegen/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-svg/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnsvg -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-svg/android/src/main/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-vector-icons/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-vector-icons/android/build/generated/source/codegen/jni/react/renderer/components/RNVectorIconsSpec -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-worklets/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-worklets/android/build/generated/source/codegen/jni/react/renderer/components/rnworklets -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app/build/generated/source/codegen/jni/react/renderer/components/AppSpecs -isystem /Users/kombee/.gradle/caches/9.3.1/transforms/86ea8ee599a773536ed69cf2b9898d80/transformed/fbjni-0.7.0/prefab/modules/fbjni/include -isystem /Users/kombee/.gradle/caches/9.3.1/transforms/88a725b6be23f394cd6b578b818ada17/transformed/react-android-0.85.2-debug/prefab/modules/jsi/include -isystem /Users/kombee/.gradle/caches/9.3.1/transforms/88a725b6be23f394cd6b578b818ada17/transformed/react-android-0.85.2-debug/prefab/modules/reactnative/include -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D__BIONIC_NO_PAGE_SIZE_MACRO -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -fno-limit-debug-info  -fPIC -Wall -Werror -fexceptions -frtti -std=c++20 -DFOLLY_NO_CONFIG=1 -DLOG_TAG=\"ReactNative\" -DREACT_NATIVE_APP_CODEGEN_HEADER=\"AppSpecs.h\" -DREACT_NATIVE_APP_COMPONENT_DESCRIPTORS_HEADER=\"react/renderer/components/AppSpecs/ComponentDescriptors.h\" -DREACT_NATIVE_APP_COMPONENT_REGISTRATION=AppSpecs_registerComponentDescriptorsFromCodegen -DREACT_NATIVE_APP_MODULE_PROVIDER=AppSpecs_ModuleProvider -DFOLLY_HAVE_CLOCK_GETTIME=1 -DFOLLY_USE_LIBCPP=1 -DFOLLY_CFG_NO_COROUTINES=1 -DFOLLY_MOBILE=1 -DFOLLY_HAVE_RECVMMSG=1 -DFOLLY_HAVE_PTHREAD=1 -DFOLLY_HAVE_XSI_STRERROR_R=1 -MD -MT CMakeFiles/appmodules.dir/OnLoad.cpp.o -MF CMakeFiles/appmodules.dir/OnLoad.cpp.o.d -o CMakeFiles/appmodules.dir/OnLoad.cpp.o -c /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/OnLoad.cpp
+  In file included from /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/OnLoad.cpp:38:
+  /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app/build/generated/source/codegen/jni/./AppSpecs.h:22:18: error: redefinition of 'NativeDeviceInfoSpecJSI'
+     22 | class JSI_EXPORT NativeDeviceInfoSpecJSI : public JavaTurboModule {
+        |                  ^
+  /Users/kombee/.gradle/caches/9.3.1/transforms/88a725b6be23f394cd6b578b818ada17/transformed/react-android-0.85.2-debug/prefab/modules/reactnative/include/FBReactNativeSpec.h:134:18: note: previous definition is here
+    134 | class JSI_EXPORT NativeDeviceInfoSpecJSI : public JavaTurboModule {
+        |                  ^
+  1 error generated.
+  [11/91] Building CXX object rngesturehandler_codegen_autolinked_build/CMakeFiles/react_codegen_rngesturehandler_codegen.dir/react/renderer/components/rngesturehandler_codegen/ComponentDescriptors.cpp.o
+  [12/91] Building CXX object RNKeychainSpec_autolinked_build/CMakeFiles/react_codegen_RNKeychainSpec.dir/react/renderer/components/RNKeychainSpec/EventEmitters.cpp.o
+  [13/91] Building CXX object RNKeychainSpec_autolinked_build/CMakeFiles/react_codegen_RNKeychainSpec.dir/RNKeychainSpec-generated.cpp.o
+  [14/91] Building CXX object RNKeychainSpec_autolinked_build/CMakeFiles/react_codegen_RNKeychainSpec.dir/react/renderer/components/RNKeychainSpec/States.cpp.o
+  [15/91] Building CXX object RNKeychainSpec_autolinked_build/CMakeFiles/react_codegen_RNKeychainSpec.dir/react/renderer/components/RNKeychainSpec/Props.cpp.o
+  [16/91] Building CXX object RNKeychainSpec_autolinked_build/CMakeFiles/react_codegen_RNKeychainSpec.dir/react/renderer/components/RNKeychainSpec/ComponentDescriptors.cpp.o
+  [17/91] Building CXX object NitroModulesSpec_autolinked_build/CMakeFiles/react_codegen_NitroModulesSpec.dir/react/renderer/components/NitroModulesSpec/EventEmitters.cpp.o
+  [18/91] Building CXX object NitroModulesSpec_autolinked_build/CMakeFiles/react_codegen_NitroModulesSpec.dir/NitroModulesSpec-generated.cpp.o
+  [19/91] Building CXX object RNKeychainSpec_autolinked_build/CMakeFiles/react_codegen_RNKeychainSpec.dir/react/renderer/components/RNKeychainSpec/ShadowNodes.cpp.o
+  [20/91] Building CXX object rngesturehandler_codegen_autolinked_build/CMakeFiles/react_codegen_rngesturehandler_codegen.dir/react/renderer/components/rngesturehandler_codegen/Props.cpp.o
+  [21/91] Building CXX object NitroModulesSpec_autolinked_build/CMakeFiles/react_codegen_NitroModulesSpec.dir/react/renderer/components/NitroModulesSpec/ComponentDescriptors.cpp.o
+  ninja: build stopped: subcommand failed.
+  
+  C++ build system [build] failed while executing:
+      /Users/kombee/Library/Android/sdk/cmake/3.22.1/bin/ninja \
+        -C \
+        /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app/.cxx/Debug/v1o2c4x1/arm64-v8a \
+        appmodules \
+        react_codegen_rnscreens \
+        react_codegen_rnsvg \
+        react_codegen_safeareacontext
+    from /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 10s
+error Failed to install the app. Command failed with exit code 1: ./gradlew app:installStagingDebug -PreactNativeDevServerPort=8081 FAILURE: Build failed with an exception. * What went wrong:
+Execution failed for task ':app:buildCMakeDebug[arm64-v8a]'.
+> com.android.ide.common.process.ProcessException: ninja: Entering directory `/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app/.cxx/Debug/v1o2c4x1/arm64-v8a' [0/2] Re-checking globbed directories... [1/91] Building CXX object RNCConfigSpec_autolinked_build/CMakeFiles/react_codegen_RNCConfigSpec.dir/react/renderer/components/RNCConfigSpec/EventEmitters.cpp.o [2/91] Building CXX object rngesturehandler_codegen_autolinked_build/CMakeFiles/react_codegen_rngesturehandler_codegen.dir/react/renderer/components/rngesturehandler_codegen/States.cpp.o [3/91] Building CXX object RNCConfigSpec_autolinked_build/CMakeFiles/react_codegen_RNCConfigSpec.dir/react/renderer/components/RNCConfigSpec/States.cpp.o [4/91] Building CXX object rngesturehandler_codegen_autolinked_build/CMakeFiles/react_codegen_rngesturehandler_codegen.dir/react/renderer/components/rngesturehandler_codegen/EventEmitters.cpp.o [5/91] Building CXX object rngesturehandler_codegen_autolinked_build/CMakeFiles/react_codegen_rngesturehandler_codegen.dir/rngesturehandler_codegen-generated.cpp.o [6/91] Building CXX object RNCConfigSpec_autolinked_build/CMakeFiles/react_codegen_RNCConfigSpec.dir/react/renderer/components/RNCConfigSpec/ShadowNodes.cpp.o [7/91] Building CXX object rngesturehandler_codegen_autolinked_build/CMakeFiles/react_codegen_rngesturehandler_codegen.dir/react/renderer/components/rngesturehandler_codegen/ShadowNodes.cpp.o [8/91] Building CXX object RNCConfigSpec_autolinked_build/CMakeFiles/react_codegen_RNCConfigSpec.dir/react/renderer/components/RNCConfigSpec/ComponentDescriptors.cpp.o [9/91] Building CXX object RNCConfigSpec_autolinked_build/CMakeFiles/react_codegen_RNCConfigSpec.dir/react/renderer/components/RNCConfigSpec/Props.cpp.o [10/91] Building CXX object CMakeFiles/appmodules.dir/OnLoad.cpp.o FAILED: CMakeFiles/appmodules.dir/OnLoad.cpp.o /Users/kombee/Library/Android/sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=aarch64-none-linux-android24 --sysroot=/Users/kombee/Library/Android/sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -DRN_SERIALIZABLE_STATE -Dappmodules_EXPORTS -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app/build/generated/autolinking/src/main/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-safe-area-context/android/src/main/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-screens/android/src/main/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/react/renderer/components/rnasyncstorage -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/react/renderer/components/RNDateTimePickerCGen -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-google-signin/google-signin/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/@react-native-google-signin/google-signin/android/build/generated/source/codegen/jni/react/renderer/components/RNGoogleSignInCGen -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-config/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-config/android/build/generated/source/codegen/jni/react/renderer/components/RNCConfigSpec -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/react/renderer/components/rngesturehandler_codegen -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-keychain/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-keychain/android/build/generated/source/codegen/jni/react/renderer/components/RNKeychainSpec -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/react/renderer/components/NitroModulesSpec -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/react/renderer/components/rnreanimated -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-safe-area-context/android/src/main/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-safe-area-context/android/src/main/jni/../../../../common/cpp -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-safe-area-context/android/src/main/jni/../../../build/generated/source/codegen/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-safe-area-context/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/safeareacontext -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-screens/android/src/main/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-screens/android/src/main/jni/../../../build/generated/source/codegen/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-screens/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnscreens -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-svg/android/src/main/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-svg/android/src/main/jni/../../../../common/cpp -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-svg/android/src/main/jni/../../../build/generated/source/codegen/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-svg/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnsvg -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-svg/android/src/main/jni -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-vector-icons/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-vector-icons/android/build/generated/source/codegen/jni/react/renderer/components/RNVectorIconsSpec -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-worklets/android/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native-worklets/android/build/generated/source/codegen/jni/react/renderer/components/rnworklets -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app/build/generated/source/codegen/jni/. -I/Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app/build/generated/source/codegen/jni/react/renderer/components/AppSpecs -isystem /Users/kombee/.gradle/caches/9.3.1/transforms/86ea8ee599a773536ed69cf2b9898d80/transformed/fbjni-0.7.0/prefab/modules/fbjni/include -isystem /Users/kombee/.gradle/caches/9.3.1/transforms/88a725b6be23f394cd6b578b818ada17/transformed/react-android-0.85.2-debug/prefab/modules/jsi/include -isystem /Users/kombee/.gradle/caches/9.3.1/transforms/88a725b6be23f394cd6b578b818ada17/transformed/react-android-0.85.2-debug/prefab/modules/reactnative/include -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D__BIONIC_NO_PAGE_SIZE_MACRO -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fno-limit-debug-info -fPIC -Wall -Werror -fexceptions -frtti -std=c++20 -DFOLLY_NO_CONFIG=1 -DLOG_TAG=\"ReactNative\" -DREACT_NATIVE_APP_CODEGEN_HEADER=\"AppSpecs.h\" -DREACT_NATIVE_APP_COMPONENT_DESCRIPTORS_HEADER=\"react/renderer/components/AppSpecs/ComponentDescriptors.h\" -DREACT_NATIVE_APP_COMPONENT_REGISTRATION=AppSpecs_registerComponentDescriptorsFromCodegen -DREACT_NATIVE_APP_MODULE_PROVIDER=AppSpecs_ModuleProvider -DFOLLY_HAVE_CLOCK_GETTIME=1 -DFOLLY_USE_LIBCPP=1 -DFOLLY_CFG_NO_COROUTINES=1 -DFOLLY_MOBILE=1 -DFOLLY_HAVE_RECVMMSG=1 -DFOLLY_HAVE_PTHREAD=1 -DFOLLY_HAVE_XSI_STRERROR_R=1 -MD -MT CMakeFiles/appmodules.dir/OnLoad.cpp.o -MF CMakeFiles/appmodules.dir/OnLoad.cpp.o.d -o CMakeFiles/appmodules.dir/OnLoad.cpp.o -c /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/OnLoad.cpp In file included from /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/OnLoad.cpp:38: /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app/build/generated/source/codegen/jni/./AppSpecs.h:22:18: error: redefinition of 'NativeDeviceInfoSpecJSI' 22 | class JSI_EXPORT NativeDeviceInfoSpecJSI : public JavaTurboModule { | ^ /Users/kombee/.gradle/caches/9.3.1/transforms/88a725b6be23f394cd6b578b818ada17/transformed/react-android-0.85.2-debug/prefab/modules/reactnative/include/FBReactNativeSpec.h:134:18: note: previous definition is here 134 | class JSI_EXPORT NativeDeviceInfoSpecJSI : public JavaTurboModule { | ^ 1 error generated. [11/91] Building CXX object rngesturehandler_codegen_autolinked_build/CMakeFiles/react_codegen_rngesturehandler_codegen.dir/react/renderer/components/rngesturehandler_codegen/ComponentDescriptors.cpp.o [12/91] Building CXX object RNKeychainSpec_autolinked_build/CMakeFiles/react_codegen_RNKeychainSpec.dir/react/renderer/components/RNKeychainSpec/EventEmitters.cpp.o [13/91] Building CXX object RNKeychainSpec_autolinked_build/CMakeFiles/react_codegen_RNKeychainSpec.dir/RNKeychainSpec-generated.cpp.o [14/91] Building CXX object RNKeychainSpec_autolinked_build/CMakeFiles/react_codegen_RNKeychainSpec.dir/react/renderer/components/RNKeychainSpec/States.cpp.o [15/91] Building CXX object RNKeychainSpec_autolinked_build/CMakeFiles/react_codegen_RNKeychainSpec.dir/react/renderer/components/RNKeychainSpec/Props.cpp.o [16/91] Building CXX object RNKeychainSpec_autolinked_build/CMakeFiles/react_codegen_RNKeychainSpec.dir/react/renderer/components/RNKeychainSpec/ComponentDescriptors.cpp.o [17/91] Building CXX object NitroModulesSpec_autolinked_build/CMakeFiles/react_codegen_NitroModulesSpec.dir/react/renderer/components/NitroModulesSpec/EventEmitters.cpp.o [18/91] Building CXX object NitroModulesSpec_autolinked_build/CMakeFiles/react_codegen_NitroModulesSpec.dir/NitroModulesSpec-generated.cpp.o [19/91] Building CXX object RNKeychainSpec_autolinked_build/CMakeFiles/react_codegen_RNKeychainSpec.dir/react/renderer/components/RNKeychainSpec/ShadowNodes.cpp.o [20/91] Building CXX object rngesturehandler_codegen_autolinked_build/CMakeFiles/react_codegen_rngesturehandler_codegen.dir/react/renderer/components/rngesturehandler_codegen/Props.cpp.o [21/91] Building CXX object NitroModulesSpec_autolinked_build/CMakeFiles/react_codegen_NitroModulesSpec.dir/react/renderer/components/NitroModulesSpec/ComponentDescriptors.cpp.o ninja: build stopped: subcommand failed. C++ build system [build] failed while executing: /Users/kombee/Library/Android/sdk/cmake/3.22.1/bin/ninja \ -C \ /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app/.cxx/Debug/v1o2c4x1/arm64-v8a \ appmodules \ react_codegen_rnscreens \ react_codegen_rnsvg \ react_codegen_safeareacontext from /Users/kombee/KombeeGithub/kombee_sara_github/kombee-shared/ascendly/android/app * Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org. BUILD FAILED in 10s.

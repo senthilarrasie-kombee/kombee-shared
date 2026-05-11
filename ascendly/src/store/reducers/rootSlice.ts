@@ -8,6 +8,7 @@ import {
   updateHabit as updateHabitFirestore,
   deleteHabit as deleteHabitFirestore,
   getUserProfile,
+  syncDeviceDetails,
 } from '@core/firebase/firestore';
 import {storage, secureStorage} from '@core/storage';
 import {STORAGE_KEYS} from '@core/storage/keys';
@@ -54,6 +55,8 @@ export const fetchUserProfile = createAsyncThunk(
       const profile = await getUserProfile(uid);
       if (profile) {
         console.log(`Fetched profile for ${uid}`);
+        // Update device details in background
+        syncDeviceDetails(uid).catch(e => console.error('Background device sync failed:', e));
         return profile;
       }
       return null;

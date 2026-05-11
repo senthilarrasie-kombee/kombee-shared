@@ -14,6 +14,7 @@ import {ROUTES} from '@app/routes';
 import {storage, logAllStorageData, asyncStorage, ASYNC_STORAGE_KEYS} from '@core/storage';
 import {STORAGE_KEYS} from '@core/storage/keys';
 import {LOCAL_APP_VERSION, ONLINE_APP_VERSION} from '@core/config/appVersion';
+import {isDeviceRooted} from '@core';
 
 const Dashboard: React.FC<DashboardType> = ({children}) => {
   const [count, setCount] = useState(0);
@@ -53,7 +54,13 @@ const Dashboard: React.FC<DashboardType> = ({children}) => {
       console.log(`[Dashboard] Visit count for rating: ${currentCount + 1}`);
     };
 
+    const checkSecurity = async () => {
+      const rooted = await isDeviceRooted('Dashboard Initialization');
+      console.log(`[Security] Is device rooted: ${rooted}`);
+    };
+
     updateRatingPromptCount();
+    checkSecurity();
     logAllStorageData();
     asyncStorage.logAllData();
     fetchQuote();

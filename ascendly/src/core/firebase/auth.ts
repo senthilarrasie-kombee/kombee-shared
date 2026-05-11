@@ -34,6 +34,13 @@ export const signInWithGoogle = async (loginType: 'user' | 'admin' = 'user') => 
     // Check if your device supports Google Play
     await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
 
+    // Ensure we are signed out from the Google SDK to force the account picker
+    try {
+      await GoogleSignin.signOut();
+    } catch (e) {
+      // Ignore if not signed in
+    }
+
     // Get the users ID token
     const signInResult = await GoogleSignin.signIn();
 

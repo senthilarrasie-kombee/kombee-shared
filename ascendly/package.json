@@ -11,6 +11,7 @@
     "android:sl": "npm run android:staging && npm run logs",
     "android:p": "npm run android:prod",
     "android:pl": "npm run android:prod && npm run logs",
+    "android:id": "react-native run-android --deviceId",
     "logs": "react-native log-android",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -107,5 +108,13 @@
     "*.{json,md}": [
       "prettier --write"
     ]
+  },
+  "codegenConfig": {
+    "name": "AppSpecs",
+    "type": "all",
+    "jsSrcsDir": "src/core/nativeModules",
+    "android": {
+      "javaPackageName": "com.ascendly"
+    }
   }
 }
