@@ -149,6 +149,12 @@ const Dashboard: React.FC<DashboardType> = ({children}) => {
         <AppButton
           title="Axios API Call Example 4"
           onPress={() => navigation.navigate(ROUTES.AXIOS_WEATHER)}
+          style={{paddingHorizontal: 30, marginBottom: 16}}
+        />
+
+        <AppButton
+          title="Structured API"
+          onPress={() => navigation.navigate(ROUTES.STRUCTURED_API)}
           style={{paddingHorizontal: 30}}
         />
       </ScrollView>

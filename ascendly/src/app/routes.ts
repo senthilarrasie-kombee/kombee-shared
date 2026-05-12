@@ -18,4 +18,5 @@ export const ROUTES = {
   AXIOS_POKEMON: 'axiosPokemon',
   AXIOS_PRODUCTS: 'axiosProducts',
   AXIOS_WEATHER: 'axiosWeather',
+  STRUCTURED_API: 'structuredApi',
 } as const;

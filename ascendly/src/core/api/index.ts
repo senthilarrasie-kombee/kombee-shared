@@ -1,4 +1,9 @@
-import apiClient, {jsonPlaceholderClient} from './apiClient';
+import apiClient, {
+  jsonPlaceholderClient,
+  pokemonClient,
+  dummyJsonClient,
+  weatherClient,
+} from './apiClient';
 
-export {apiClient, jsonPlaceholderClient};
+export {apiClient, jsonPlaceholderClient, pokemonClient, dummyJsonClient, weatherClient};
 export default apiClient;
