@@ -5,7 +5,8 @@ import {Habit} from '@shared/types/habit';
 import {useTheme} from '@shared/theme';
 import AppText from '@shared/components/AppText';
 import {styles} from '../styles/HabitCardStyles';
-import {calculateStreak} from '@shared/utils/habitUtils';
+import {calculateStreak, getFrequencyDescription} from '@shared/utils/habitUtils';
+import {STRINGS} from '@shared/constants/strings';
 
 import {CATEGORIES_DATA as categoriesData} from '@shared/constants/categories';
 
@@ -39,7 +40,9 @@ const HabitCard: React.FC<HabitCardProps> = ({item, onPress, onActionPress, sele
       onPress={() => onPress(item)}>
       {item.priority === 'high' && (
         <View style={[styles.highPriorityTag, {backgroundColor: colors.primary}]}>
-          <AppText style={[styles.highPriorityText, {color: '#FFFFFF'}]}>IMPORTANT</AppText>
+          <AppText style={[styles.highPriorityText, {color: '#FFFFFF'}]}>
+            {STRINGS.HABITS.ALL_HABITS.PRIORITY.toUpperCase()}
+          </AppText>
         </View>
       )}
       <View style={styles.mainContainer}>
@@ -91,13 +94,15 @@ const HabitCard: React.FC<HabitCardProps> = ({item, onPress, onActionPress, sele
                   styles.priorityText,
                   {color: item.priority === 'high' ? '#D32F2F' : item.priority === 'medium' ? '#F57F17' : '#1976D2'},
                 ]}>
-                {item.priority.toUpperCase()}
+                {STRINGS.HABITS.LABELS[item.priority.toUpperCase() as keyof typeof STRINGS.HABITS.LABELS]}
               </AppText>
             </View>
 
             {item.isOneTime && (
               <View style={[styles.oneTimeBadge, {backgroundColor: colors.primary + '15'}]}>
-                <AppText style={[styles.oneTimeText, {color: colors.primary}]}>TASK</AppText>
+                <AppText style={[styles.oneTimeText, {color: colors.primary}]}>
+                  {STRINGS.HABITS.ALL_HABITS.ONE_TIME_TASK.toUpperCase()}
+                </AppText>
               </View>
             )}
           </View>
@@ -111,33 +116,14 @@ const HabitCard: React.FC<HabitCardProps> = ({item, onPress, onActionPress, sele
           <View style={styles.targetDaysContainer}>
             <Icon name="calendar-outline" size={14} color={colors.textSecondary} />
             <AppText style={[styles.targetDaysText, {color: colors.textSecondary}]}>
-              {item.scheduleDescription ||
-                (() => {
-                  if (item.frequency === 'daily') return 'Daily';
-                  if (item.frequency === 'weekly') {
-                    if (item.daysTarget && item.daysTarget.length > 0) {
-                      return item.daysTarget.map(d => d.substring(0, 3)).join(', ');
-                    }
-                    return `${item.targetPerWeek} times per week`;
-                  }
-                  if (item.frequency === 'monthly') {
-                    if (item.datesTarget && item.datesTarget.length > 0) {
-                      return `Every ${item.datesTarget.join(', ')}${item.datesTarget.length === 1 ? 'th' : ''} of the month`;
-                    }
-                    return `${item.targetPerMonth} times per month`;
-                  }
-                  if (item.frequency === 'quarterly') return 'Every Quarter';
-                  if (item.frequency === 'half-yearly') return 'Every 6 Months';
-                  if (item.frequency === 'yearly') return 'Once a Year';
-                  return item.daysTarget?.join(', ') || 'Custom';
-                })()}
+              {item.scheduleDescription || getFrequencyDescription(item)}
             </AppText>
           </View>
 
           <View style={[styles.targetDaysContainer, {marginTop: 4}]}>
             <Icon name="time-outline" size={14} color={colors.textSecondary} />
             <AppText style={[styles.targetDaysText, {color: colors.textSecondary}]}>
-              Created: {item.createdDate?.split('T')[0] || item.startDate?.split('T')[0]}
+              {STRINGS.HABITS.LABELS.CREATED_ON} {item.createdDate?.split('T')[0] || item.startDate?.split('T')[0]}
             </AppText>
           </View>
 
@@ -145,7 +131,7 @@ const HabitCard: React.FC<HabitCardProps> = ({item, onPress, onActionPress, sele
             <View style={[styles.statusBadge, {backgroundColor: isActive ? '#E8F5E9' : '#FFF3E0'}]}>
               <View style={[styles.statusDot, {backgroundColor: isActive ? '#4CAF50' : '#FF9800'}]} />
               <AppText style={[styles.statusText, {color: isActive ? '#2E7D32' : '#E65100'}]}>
-                {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                {STRINGS.HABITS.LABELS[item.status.toUpperCase() as keyof typeof STRINGS.HABITS.LABELS]}
               </AppText>
             </View>
 
@@ -185,7 +171,7 @@ const HabitCard: React.FC<HabitCardProps> = ({item, onPress, onActionPress, sele
                               : '#616161',
                   },
                 ]}>
-                {item.frequency.toUpperCase()}
+                {STRINGS.HABITS.FORM.LABELS.FREQUENCY[item.frequency.toUpperCase().replace('-', '_') as keyof typeof STRINGS.HABITS.FORM.LABELS.FREQUENCY] || item.frequency}
               </AppText>
             </View>
 
@@ -240,7 +226,7 @@ const HabitCard: React.FC<HabitCardProps> = ({item, onPress, onActionPress, sele
                     marginTop: 0,
                   },
                 ]}>
-                {item.timeOfDay.toUpperCase()}
+                {STRINGS.HABITS.FORM.LABELS.TIME_OF_DAY[item.timeOfDay.toUpperCase() as keyof typeof STRINGS.HABITS.FORM.LABELS.TIME_OF_DAY]}
               </AppText>
             </View>
           </View>

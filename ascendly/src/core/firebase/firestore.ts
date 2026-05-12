@@ -41,6 +41,8 @@ export interface UserProfile {
   };
   createdAt?: any;
   updatedAt?: any;
+  lastReflectionAt?: any;
+  totalReflections?: number;
   provider: string;
   loginType?: 'user' | 'admin';
 }
@@ -164,6 +166,57 @@ export const syncDeviceDetails = async (uid: string) => {
 };
 
 /**
+ * Helper to convert ISO strings to Dates for Firestore
+ */
+const formatForFirestore = (data: any) => {
+  const result = {...data};
+  const dateFields = ['createdDate', 'startDate', 'endDate', 'lastSyncedAt'];
+
+  dateFields.forEach(field => {
+    if (result[field] && typeof result[field] === 'string') {
+      result[field] = new Date(result[field]);
+    }
+  });
+
+  // Handle nested completions dates
+  if (result.completions && Array.isArray(result.completions)) {
+    result.completions = result.completions.map((c: any) => ({
+      ...c,
+      date: c.date ? new Date(c.date) : new Date(),
+    }));
+  }
+
+  return result;
+};
+
+/**
+ * Helper to convert Timestamps from Firestore to ISO strings
+ */
+const parseFromFirestore = (data: any) => {
+  if (!data) return data;
+  const result = {...data};
+  const dateFields = ['createdDate', 'startDate', 'endDate', 'lastSyncedAt', 'updatedAt', 'createdAt', 'lastReflectionAt'];
+
+  dateFields.forEach(field => {
+    if (result[field] && typeof result[field].toDate === 'function') {
+      result[field] = result[field].toDate().toISOString();
+    }
+  });
+
+  // Handle nested completions dates
+  if (result.completions && Array.isArray(result.completions)) {
+    result.completions = result.completions.map((c: any) => ({
+      ...c,
+      date: (c.date && typeof c.date.toDate === 'function') 
+        ? c.date.toDate().toISOString().split('T')[0] 
+        : c.date,
+    }));
+  }
+
+  return result;
+};
+
+/**
  * Fetch a single user profile
  */
 export const getUserProfile = async (uid: string) => {
@@ -171,11 +224,25 @@ export const getUserProfile = async (uid: string) => {
     const userDocRef = doc(db, COLLECTIONS.USERS, uid);
     const userSnapshot = await getDoc(userDocRef);
     if (userSnapshot.exists()) {
-      return userSnapshot.data() as UserProfile;
+      return parseFromFirestore(userSnapshot.data()) as UserProfile;
     }
     return null;
   } catch (error) {
     console.error('Firestore Fetch Profile Error:', error);
+    throw error;
+  }
+};
+
+/**
+ * Update user profile
+ */
+export const updateUserProfile = async (uid: string, data: Partial<UserProfile>) => {
+  try {
+    const userDocRef = doc(db, COLLECTIONS.USERS, uid);
+    await setDoc(userDocRef, {...data, updatedAt: serverTimestamp()}, {merge: true});
+    return true;
+  } catch (error) {
+    console.error('Firestore Update Profile Error:', error);
     throw error;
   }
 };
@@ -191,7 +258,7 @@ export const bulkUploadHabits = async (uid: string, habits: any[]) => {
     for (const habit of habits) {
       const {id, ...habitData} = habit;
       await addDoc(habitsSubCollection, {
-        ...habitData,
+        ...formatForFirestore(habitData),
         updatedAt: serverTimestamp(),
       });
     }
@@ -234,7 +301,7 @@ export const getUserHabits = async (uid: string) => {
     const habitsSnapshot = await getDocs(habitsSubCollection);
 
     const habits = habitsSnapshot.docs.map(doc => ({
-      ...doc.data(),
+      ...parseFromFirestore(doc.data()),
       id: doc.id,
     }));
 
@@ -255,7 +322,7 @@ export const addHabit = async (uid: string, habit: any) => {
     const habitsSubCollection = collection(db, COLLECTIONS.HABITS, uid, COLLECTIONS.HABITS);
 
     const docRef = await addDoc(habitsSubCollection, {
-      ...habit,
+      ...formatForFirestore(habit),
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
@@ -279,7 +346,7 @@ export const updateHabit = async (uid: string, habit: any) => {
     await setDoc(
       habitRef,
       {
-        ...updateData,
+        ...formatForFirestore(updateData),
         updatedAt: serverTimestamp(),
       },
       {merge: true}

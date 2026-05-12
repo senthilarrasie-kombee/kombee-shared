@@ -1,5 +1,5 @@
 import {StyleSheet, Dimensions, Platform} from 'react-native';
-import {LightColors, FontFamily, Spacing} from '@shared/theme';
+import {LightColors, FontFamily, Spacing, FontSize} from '@shared/theme';
 
 const {width, height} = Dimensions.get('window');
 
@@ -96,10 +96,9 @@ export const createStyles = (colors: typeof LightColors) =>
     },
     errorText: {
       color: colors.error,
-      fontSize: 12,
-      marginTop: -Spacing.s3,
-      marginBottom: Spacing.s3,
-      marginLeft: Spacing.s1,
+      fontSize: FontSize.xs,
+      marginTop: 4,
+      marginLeft: 4,
       fontFamily: FontFamily.regular,
     },
   });

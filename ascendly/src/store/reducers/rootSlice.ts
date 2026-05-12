@@ -9,16 +9,25 @@ import {
   deleteHabit as deleteHabitFirestore,
   getUserProfile,
   syncDeviceDetails,
+  updateUserProfile,
+  syncUserProfile,
 } from '@core/firebase/firestore';
 import {storage, secureStorage} from '@core/storage';
 import {STORAGE_KEYS} from '@core/storage/keys';
+import {signInWithGoogle, signInWithEmail, signUpWithEmail} from '@core';
+import auth from '@react-native-firebase/auth';
+import {AuthService} from '@core/auth/AuthService';
+import {STRINGS} from '@shared/constants/strings';
 
 interface RootState {
   isLoaderVisible: boolean;
   habits: Habit[];
   loading: boolean;
   error: string | null;
-  toastMessage: string | null;
+  toast: {
+    message: string | null;
+    type: 'success' | 'error' | 'info';
+  };
   isDarkMode: boolean;
   user: UserProfile | null;
   isAuthenticated: boolean;
@@ -29,7 +38,10 @@ const initialState: RootState = {
   habits: [],
   loading: false,
   error: null,
-  toastMessage: null,
+  toast: {
+    message: null,
+    type: 'info',
+  },
   isDarkMode: false,
   user: null,
   isAuthenticated: false,
@@ -170,6 +182,144 @@ export const deleteHabitAsync = createAsyncThunk(
   }
 );
 
+// Async Thunk for updating user profile
+export const updateUserProfileAsync = createAsyncThunk(
+  'root/updateUserProfile',
+  async (data: Partial<UserProfile>, {dispatch, getState, rejectWithValue}) => {
+    try {
+      const uid = await secureStorage.getItem(STORAGE_KEYS.AUTH.USER_ID);
+      if (!uid) throw new Error('No user authenticated');
+
+      await updateUserProfile(uid, data);
+      return data;
+    } catch (error) {
+      console.error('Update Profile Error:', error);
+      return rejectWithValue('Failed to update profile');
+    }
+  }
+);
+
+// Async Thunk for Sign In with Email
+export const signInWithEmailAction = createAsyncThunk(
+  'root/signInWithEmail',
+  async ({email, password}: any, {dispatch, rejectWithValue}) => {
+    try {
+      dispatch(setLoaderVisible(true));
+      const userCredential = await signInWithEmail(email, password);
+
+      if (userCredential) {
+        // Persist session
+        await secureStorage.setItem(STORAGE_KEYS.AUTH.USER_ID, userCredential.user.uid);
+        storage.set(STORAGE_KEYS.AUTH.IS_LOGGED_IN, true);
+        if (userCredential.user.displayName) {
+          storage.set(STORAGE_KEYS.AUTH.DISPLAY_NAME, userCredential.user.displayName);
+        }
+
+        // Simulate Token Flow
+        const idToken = await auth().currentUser?.getIdToken();
+        await AuthService.simulateLogin(idToken || undefined);
+
+        const profile = await syncUserProfile(
+          userCredential.user.uid,
+          userCredential.user,
+          'email'
+        );
+        return profile;
+      }
+      return null;
+    } catch (error: any) {
+      let errorMessage = STRINGS.AUTH.ERRORS.INVALID_CREDENTIALS;
+      if (error.code === 'auth/invalid-credential') {
+        errorMessage = STRINGS.AUTH.ERRORS.INVALID_CREDENTIALS;
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = 'Too many attempts. Try again later.';
+      }
+      return rejectWithValue(errorMessage);
+    } finally {
+      dispatch(setLoaderVisible(false));
+    }
+  }
+);
+
+// Async Thunk for Sign In with Google
+export const signInWithGoogleAction = createAsyncThunk(
+  'root/signInWithGoogle',
+  async (_, {dispatch, rejectWithValue}) => {
+    try {
+      dispatch(setLoaderVisible(true));
+      const userCredential = await signInWithGoogle();
+
+      if (userCredential) {
+        await secureStorage.setItem(STORAGE_KEYS.AUTH.USER_ID, userCredential.user.uid);
+        storage.set(STORAGE_KEYS.AUTH.IS_LOGGED_IN, true);
+        if (userCredential.user.displayName) {
+          storage.set(STORAGE_KEYS.AUTH.DISPLAY_NAME, userCredential.user.displayName);
+        }
+
+        const idToken = await auth().currentUser?.getIdToken();
+        await AuthService.simulateLogin(idToken || undefined);
+
+        const profile = await syncUserProfile(
+          userCredential.user.uid,
+          userCredential.user,
+          'google.com'
+        );
+        return profile;
+      }
+      return null;
+    } catch (error: any) {
+      return rejectWithValue(error.message || 'Google Sign-In failed.');
+    } finally {
+      dispatch(setLoaderVisible(false));
+    }
+  }
+);
+
+// Async Thunk for Sign Up with Email
+export const signUpWithEmailAction = createAsyncThunk(
+  'root/signUpWithEmail',
+  async ({email, password, name}: any, {dispatch, rejectWithValue}) => {
+    try {
+      dispatch(setLoaderVisible(true));
+      const userCredential = await signUpWithEmail(email, password, name);
+
+      if (userCredential) {
+        // Persist session
+        await secureStorage.setItem(STORAGE_KEYS.AUTH.USER_ID, userCredential.user.uid);
+        storage.set(STORAGE_KEYS.AUTH.IS_LOGGED_IN, true);
+        if (userCredential.user.displayName) {
+          storage.set(STORAGE_KEYS.AUTH.DISPLAY_NAME, userCredential.user.displayName);
+        }
+
+        // Simulate Token Flow
+        const idToken = await auth().currentUser?.getIdToken();
+        await AuthService.simulateLogin(idToken || undefined);
+
+        const profile = await syncUserProfile(
+          userCredential.user.uid,
+          userCredential.user,
+          'email'
+        );
+        return profile;
+      }
+      return null;
+    } catch (error: any) {
+      console.log('[Auth Thunk] Registration Error (Silenced):', error.code);
+      let errorMessage = STRINGS.AUTH.ERRORS.GENERIC;
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage = STRINGS.AUTH.ERRORS.EMAIL_EXISTS;
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = STRINGS.AUTH.ERRORS.INVALID_EMAIL;
+      } else if (error.code === 'auth/weak-password') {
+        errorMessage = STRINGS.AUTH.ERRORS.WEAK_PASSWORD;
+      }
+      return rejectWithValue(errorMessage);
+    } finally {
+      dispatch(setLoaderVisible(false));
+    }
+  }
+);
+
 const rootSlice = createSlice({
   name: 'root',
   initialState,
@@ -180,8 +330,14 @@ const rootSlice = createSlice({
     setHabits: (state, action: PayloadAction<Habit[]>) => {
       state.habits = action.payload;
     },
-    setToast: (state, action: PayloadAction<string | null>) => {
-      state.toastMessage = action.payload;
+    setToast: (state, action: PayloadAction<string | {message: string; type: 'success' | 'error' | 'info'} | null>) => {
+      if (typeof action.payload === 'string') {
+        state.toast = {message: action.payload, type: 'info'};
+      } else if (action.payload === null) {
+        state.toast = {message: null, type: 'info'};
+      } else {
+        state.toast = action.payload;
+      }
     },
     toggleDarkMode: state => {
       state.isDarkMode = !state.isDarkMode;
@@ -215,12 +371,13 @@ const rootSlice = createSlice({
         state.loading = false;
         state.isLoaderVisible = false;
         state.habits = action.payload;
-        state.toastMessage = 'Habits updated successfully! ✅';
+        state.toast = {message: 'Habits updated successfully! ✅', type: 'success'};
       })
       .addCase(fetchHabits.rejected, (state, action) => {
         state.loading = false;
         state.isLoaderVisible = false;
         state.error = action.payload as string;
+        state.toast = {message: action.payload as string, type: 'error'};
       })
       .addCase(fetchUserProfile.pending, state => {
         state.loading = true;
@@ -239,26 +396,62 @@ const rootSlice = createSlice({
         state.loading = false;
         state.isLoaderVisible = false;
         state.error = action.payload as string;
-        state.toastMessage = action.payload as string; // Trigger toast
+        state.toast = {message: action.payload as string, type: 'error'};
       })
       .addCase(addHabitAsync.fulfilled, (state, action: PayloadAction<Habit>) => {
         state.habits.push(action.payload);
-        state.toastMessage = 'Habit created successfully! 🎯';
+        state.toast = {message: 'Habit created successfully! 🎯', type: 'success'};
       })
       .addCase(updateHabitAsync.fulfilled, (state, action: PayloadAction<Habit>) => {
         const index = state.habits.findIndex(h => h.id === action.payload.id);
         if (index !== -1) {
           state.habits[index] = action.payload;
         }
-        state.toastMessage = 'Habit updated successfully! ✨';
+        state.toast = {message: 'Habit updated successfully! ✨', type: 'success'};
       })
       .addCase(deleteHabitAsync.fulfilled, (state, action: PayloadAction<string | number>) => {
         state.habits = state.habits.filter(h => h.id !== action.payload);
-        state.toastMessage = 'Habit deleted successfully! 🗑️';
+        state.toast = {message: 'Habit deleted successfully! 🗑️', type: 'info'};
+      })
+      .addCase(signInWithEmailAction.fulfilled, (state, action: PayloadAction<UserProfile | null>) => {
+        if (action.payload) {
+          state.user = action.payload;
+          state.isAuthenticated = true;
+          state.toast = {message: STRINGS.AUTH.LOGIN_SUCCESS, type: 'success'};
+        }
+      })
+      .addCase(signInWithEmailAction.rejected, (state, action) => {
+        state.toast = {message: action.payload as string, type: 'error'};
+      })
+      .addCase(signInWithGoogleAction.fulfilled, (state, action: PayloadAction<UserProfile | null>) => {
+        if (action.payload) {
+          state.user = action.payload;
+          state.isAuthenticated = true;
+          state.toast = {message: STRINGS.AUTH.LOGIN_SUCCESS, type: 'success'};
+        }
+      })
+      .addCase(signInWithGoogleAction.rejected, (state, action) => {
+        state.toast = {message: action.payload as string, type: 'error'};
+      })
+      .addCase(signUpWithEmailAction.fulfilled, (state, action: PayloadAction<UserProfile | null>) => {
+        if (action.payload) {
+          state.user = action.payload;
+          state.isAuthenticated = true;
+          state.toast = {message: STRINGS.AUTH.REGISTER_SUCCESS, type: 'success'};
+        }
+      })
+      .addCase(signUpWithEmailAction.rejected, (state, action) => {
+        state.toast = {message: action.payload as string, type: 'error'};
+      })
+      .addCase(updateUserProfileAsync.fulfilled, (state, action) => {
+        if (state.user) {
+          state.user = {...state.user, ...action.payload};
+        }
       });
   },
 });
 
 export const {setLoaderVisible, setHabits, setToast, toggleDarkMode, setDarkMode, updateHabit, setUser, logout} =
   rootSlice.actions;
+
 export default rootSlice.reducer;

@@ -1,45 +1,105 @@
-import axios from 'axios';
+import axios, {AxiosInstance} from 'axios';
 import {Alert} from 'react-native';
+import {AuthTokenManager} from '../auth/AuthTokenManager';
+import {AuthService} from '../auth/AuthService';
+
+/**
+ * Shared function to apply Authentication and Logging interceptors to any axios instance.
+ */
+const applyAuthInterceptors = (instance: AxiosInstance, serviceName: string) => {
+  // Request Interceptor: Attach Token & Log Request
+  instance.interceptors.request.use(
+    async config => {
+      const token = await AuthTokenManager.getAccessToken();
+      const firebaseToken = await AuthTokenManager.getFirebaseToken();
+
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+
+      if (firebaseToken) {
+        config.headers['X-Firebase-Token'] = firebaseToken;
+      }
+
+      console.log(`[${serviceName}] REQUEST:`, {
+        method: config.method?.toUpperCase(),
+        url: config.url,
+        headers: config.headers,
+        data: config.data,
+      });
+      return config;
+    },
+    error => Promise.reject(error)
+  );
+
+  // Response Interceptor: Handle Refresh & Log Response
+  instance.interceptors.response.use(
+    response => {
+      console.log(`[${serviceName}] ✅ RESPONSE:`, {
+        status: response.status,
+        url: response.config.url,
+        headers: response.headers,
+        data: response.data,
+      });
+      return response;
+    },
+    async error => {
+      const originalRequest = error.config;
+
+      // Handle 401 Unauthorized errors for token refresh
+      if (error.response?.status === 401 && !originalRequest._retry) {
+        console.log(`[${serviceName} Auth] 401 Detected, attempting token refresh...`);
+        originalRequest._retry = true;
+
+        try {
+          const newAccessToken = await AuthService.simulateRefresh();
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          console.log(`[${serviceName} Auth] Refresh successful, retrying original request...`);
+          return instance(originalRequest); // Retry with the SAME instance
+        } catch (refreshError) {
+          console.error(`[${serviceName} Auth] Refresh failed, logging out...`, refreshError);
+          await AuthService.logout();
+          Alert.alert('Session Expired', 'Please login again.');
+          return Promise.reject(refreshError);
+        }
+      }
+
+      let message = 'An unexpected error occurred.';
+      if (!error.response) {
+        message = 'Network error. Please check your internet connection.';
+      } else {
+        switch (error.response.status) {
+          case 404:
+            message = 'The requested resource was not found.';
+            break;
+          case 500:
+            message = 'Server is down. Please try again later.';
+            break;
+          case 429:
+            message = 'Too many requests. Slow down!';
+            break;
+          default:
+            message = error.message || 'Something went wrong';
+        }
+      }
+      
+      // Only show alert if it's not a 401 (which we handled above)
+      if (error.response?.status !== 401) {
+        Alert.alert(`${serviceName} Error`, message);
+      }
+      
+      return Promise.reject(error);
+    }
+  );
+};
+
+// --- CLIENT INSTANCES ---
 
 export const apiClient = axios.create({
   baseURL: 'https://quotes-db.vercel.app',
   timeout: 8000,
 });
-
-apiClient.interceptors.request.use(
-  config => {
-    console.log(`Axios interceptor: Request sent to: ${config.url}`);
-    return config;
-  },
-  error => Promise.reject(error)
-);
-
-apiClient.interceptors.response.use(
-  response => {
-    console.log('Axios interceptor: ✅ Response received');
-    return response;
-  },
-  error => {
-    let message = 'An unexpected error occurred.';
-    if (!error.response) {
-      message = 'Network error. Please check your internet connection.';
-    } else {
-      switch (error.response.status) {
-        case 404:
-          message = 'The requested resource was not found.';
-          break;
-        case 500:
-          message = 'Server is down. Please try again later.';
-          break;
-        case 429:
-          message = 'Too many requests. Slow down!';
-          break;
-      }
-    }
-    Alert.alert('API Error', message);
-    return Promise.reject(error);
-  }
-);
+applyAuthInterceptors(apiClient, 'QuotesAPI');
 
 export const jsonPlaceholderClient = axios.create({
   baseURL: 'https://jsonplaceholder.typicode.com',
@@ -48,96 +108,24 @@ export const jsonPlaceholderClient = axios.create({
     'Content-type': 'application/json; charset=UTF-8',
   },
 });
-
-jsonPlaceholderClient.interceptors.request.use(
-  config => {
-    console.log(`[JSONPlaceholder] ${config.method?.toUpperCase()} to: ${config.url}`);
-    return config;
-  },
-  error => Promise.reject(error)
-);
-
-jsonPlaceholderClient.interceptors.response.use(
-  response => {
-    console.log(`[JSONPlaceholder] Received response from: ${response.config.url}`);
-    return response;
-  },
-  error => {
-    Alert.alert('API Error', error.message || 'Something went wrong');
-    return Promise.reject(error);
-  }
-);
+applyAuthInterceptors(jsonPlaceholderClient, 'JSONPlaceholder');
 
 export const pokemonClient = axios.create({
   baseURL: 'https://pokeapi.co/api/v2',
   timeout: 10000,
 });
-
-pokemonClient.interceptors.request.use(
-  config => {
-    console.log(`[PokeAPI] Request to: ${config.url}`);
-    return config;
-  },
-  error => Promise.reject(error)
-);
-
-pokemonClient.interceptors.response.use(
-  response => {
-    console.log(`[PokeAPI] Response from: ${response.config.url}`);
-    return response;
-  },
-  error => {
-    Alert.alert('API Error', 'Failed to fetch Pokemon data');
-    return Promise.reject(error);
-  }
-);
+applyAuthInterceptors(pokemonClient, 'PokeAPI');
 
 export const dummyJsonClient = axios.create({
   baseURL: 'https://dummyjson.com',
   timeout: 10000,
 });
-
-dummyJsonClient.interceptors.request.use(
-  config => {
-    console.log(`[DummyJSON] Request to: ${config.url}`);
-    return config;
-  },
-  error => Promise.reject(error)
-);
-
-dummyJsonClient.interceptors.response.use(
-  response => {
-    console.log(`[DummyJSON] Response from: ${response.config.url}`);
-    return response;
-  },
-  error => {
-    Alert.alert('API Error', 'Failed to fetch products');
-    return Promise.reject(error);
-  }
-);
+applyAuthInterceptors(dummyJsonClient, 'DummyJSON');
 
 export const weatherClient = axios.create({
   baseURL: 'https://api.open-meteo.com/v1',
   timeout: 10000,
 });
-
-weatherClient.interceptors.request.use(
-  config => {
-    console.log(`[WeatherAPI] Request to: ${config.url}`);
-    return config;
-  },
-  error => Promise.reject(error)
-);
-
-weatherClient.interceptors.response.use(
-  response => {
-    console.log(`[WeatherAPI] Response from: ${response.config.url}`);
-    return response;
-  },
-  error => {
-    Alert.alert('API Error', 'Failed to fetch weather data');
-    return Promise.reject(error);
-  }
-);
+applyAuthInterceptors(weatherClient, 'WeatherAPI');
 
 export default apiClient;

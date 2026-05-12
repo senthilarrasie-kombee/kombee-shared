@@ -6,7 +6,12 @@ import AppHeader from '@shared/components/AppHeader';
 import AppText from '@shared/components/AppText';
 import AppButton from '@shared/components/AppButton';
 import {useAppSelector, useAppDispatch} from '@store';
-import {fetchHabits, updateHabitAsync} from '@store/reducers/rootSlice';
+import {
+  fetchHabits,
+  updateHabitAsync,
+  setToast,
+  updateUserProfileAsync,
+} from '@store/reducers/rootSlice';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {ROUTES} from '@app/routes';
@@ -16,6 +21,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {CATEGORIES_DATA as categoriesData} from '@shared/constants/categories';
 import {createAllHabitsStyles} from '../styles/AllHabitsStyles';
 import {asyncStorage, ASYNC_STORAGE_KEYS} from '@core/storage';
+import {STRINGS} from '@shared/constants/strings';
 
 type NavigationProp = StackNavigationProp<MainStack>;
 
@@ -38,6 +44,7 @@ const AllHabitsScreen = () => {
   const styles = useMemo(() => createAllHabitsStyles(colors, isDark), [colors, isDark]);
   const allHabits = useAppSelector(state => state.root.habits);
   const isRefreshing = useAppSelector(state => state.root.loading);
+  const user = useAppSelector(state => state.root.user);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
@@ -107,6 +114,15 @@ const AllHabitsScreen = () => {
     };
 
     dispatch(updateHabitAsync(updatedHabit));
+
+    // Update User Reflection Stats
+    dispatch(
+      updateUserProfileAsync({
+        lastReflectionAt: new Date().toISOString(),
+        totalReflections: (user?.totalReflections || 0) + 1,
+      })
+    );
+
     setIsBottomSheetVisible(false);
     setSelectedHabitForNote(null);
     setReflectionNote('');
@@ -198,7 +214,7 @@ const AllHabitsScreen = () => {
     <SafeAreaView style={[styles.container, {backgroundColor: isDark ? '#121212' : '#F2F2F7'}]} edges={['top']}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       <AppHeader
-        title="Habits"
+        title={STRINGS.HABITS.ALL_TITLE}
         showBack={false}
         leftElement={
           <TouchableOpacity
@@ -232,7 +248,7 @@ const AllHabitsScreen = () => {
             style={[styles.searchBar, {backgroundColor: isDark ? '#1C1C27' : '#FFFFFF', borderColor: colors.border}]}>
             <Icon name="search-outline" size={20} color={colors.textSecondary} style={{marginRight: 10}} />
             <TextInput
-              placeholder="Search habits..."
+              placeholder={STRINGS.HABITS.ALL_HABITS.SEARCH_PLACEHOLDER}
               placeholderTextColor={colors.textSecondary + '80'}
               style={[styles.searchInput, {color: colors.textPrimary}]}
               value={searchQuery}
@@ -247,12 +263,12 @@ const AllHabitsScreen = () => {
           </View>
           <View style={styles.resultsHeader}>
             <AppText style={[styles.resultsCount, {color: colors.textSecondary}]}>
-              Found {filteredHabits.length} {filteredHabits.length === 1 ? 'habit' : 'habits'}
+              {STRINGS.HABITS.ALL_HABITS.RESULTS_COUNT(filteredHabits.length)}
             </AppText>
             {activeFilterCount > 0 && (
               <TouchableOpacity onPress={resetFilters}>
                 <AppText style={{color: colors.primary, fontFamily: FontFamily.semiBold, fontSize: 12}}>
-                  Clear Filters
+                  {STRINGS.HABITS.ALL_HABITS.CLEAR_FILTERS}
                 </AppText>
               </TouchableOpacity>
             )}
@@ -279,13 +295,13 @@ const AllHabitsScreen = () => {
               <Icon name="search-outline" size={60} color={colors.textSecondary} />
               <AppText style={[styles.emptyText, {color: colors.textSecondary}]}>
                 {allHabits.length === 0
-                  ? 'No habits created yet. Pull down to refresh or create one!'
-                  : 'No habits match your filters.'}
+                  ? STRINGS.HABITS.ALL_HABITS.EMPTY_ALL
+                  : STRINGS.HABITS.ALL_HABITS.EMPTY_SEARCH}
               </AppText>
               {allHabits.length === 0 ? (
                 <View style={{marginTop: 24, width: '100%'}}>
                   <AppButton
-                    title="Create New Habit"
+                    title={STRINGS.HABITS.ALL_HABITS.CREATE_NEW}
                     onPress={() => navigation.navigate(ROUTES.HABIT_FORM, {habit: undefined})}
                   />
                 </View>
@@ -293,7 +309,7 @@ const AllHabitsScreen = () => {
                 activeFilterCount > 0 && (
                   <TouchableOpacity onPress={resetFilters} style={{marginTop: 12}}>
                     <AppText style={{color: colors.primary, fontFamily: FontFamily.semiBold}}>
-                      Clear all filters
+                      {STRINGS.HABITS.ALL_HABITS.CLEAR_FILTERS.toLowerCase()}
                     </AppText>
                   </TouchableOpacity>
                 )
@@ -319,9 +335,9 @@ const AllHabitsScreen = () => {
             <View style={styles.modalHeader}>
               <View style={styles.modalHandle} />
               <View style={styles.modalTitleRow}>
-                <AppText style={[styles.modalTitle, {color: colors.textPrimary}]}>Filters</AppText>
+                <AppText style={[styles.modalTitle, {color: colors.textPrimary}]}>{STRINGS.HABITS.ALL_HABITS.FILTER_TITLE}</AppText>
                 <TouchableOpacity onPress={resetFilters}>
-                  <AppText style={{color: colors.primary, fontFamily: FontFamily.semiBold}}>Reset</AppText>
+                  <AppText style={{color: colors.primary, fontFamily: FontFamily.semiBold}}>{STRINGS.HABITS.ALL_HABITS.RESET}</AppText>
                 </TouchableOpacity>
               </View>
             </View>
@@ -329,7 +345,7 @@ const AllHabitsScreen = () => {
             <ScrollView showsVerticalScrollIndicator={false} style={styles.modalBody}>
               {/* Category Filter */}
               <View style={styles.filterSection}>
-                <AppText style={[styles.filterLabel, {color: colors.textPrimary}]}>Category</AppText>
+                <AppText style={[styles.filterLabel, {color: colors.textPrimary}]}>{STRINGS.HABITS.ALL_HABITS.CATEGORY}</AppText>
                 <View style={styles.chipContainer}>
                   {categoriesData.map(cat => (
                     <FilterChip
@@ -346,12 +362,12 @@ const AllHabitsScreen = () => {
 
               {/* Priority Filter */}
               <View style={styles.filterSection}>
-                <AppText style={[styles.filterLabel, {color: colors.textPrimary}]}>Priority</AppText>
+                <AppText style={[styles.filterLabel, {color: colors.textPrimary}]}>{STRINGS.HABITS.ALL_HABITS.PRIORITY}</AppText>
                 <View style={styles.chipContainer}>
                   {['low', 'medium', 'high'].map(p => (
                     <FilterChip
                       key={p}
-                      label={p.charAt(0).toUpperCase() + p.slice(1)}
+                      label={STRINGS.HABITS.LABELS[p.toUpperCase() as keyof typeof STRINGS.HABITS.LABELS]}
                       isSelected={filters.priority === p}
                       onPress={() =>
                         setFilters(prev => ({...prev, priority: prev.priority === p ? null : (p as HabitPriority)}))
@@ -363,12 +379,12 @@ const AllHabitsScreen = () => {
 
               {/* Status Filter */}
               <View style={styles.filterSection}>
-                <AppText style={[styles.filterLabel, {color: colors.textPrimary}]}>Status</AppText>
+                <AppText style={[styles.filterLabel, {color: colors.textPrimary}]}>{STRINGS.HABITS.LABELS.STATUS}</AppText>
                 <View style={styles.chipContainer}>
                   {['active', 'paused', 'completed'].map(s => (
                     <FilterChip
                       key={s}
-                      label={s.charAt(0).toUpperCase() + s.slice(1)}
+                      label={STRINGS.HABITS.LABELS[s.toUpperCase() as keyof typeof STRINGS.HABITS.LABELS]}
                       isSelected={filters.status === s}
                       onPress={() =>
                         setFilters(prev => ({...prev, status: prev.status === s ? null : (s as HabitStatus)}))
@@ -380,15 +396,12 @@ const AllHabitsScreen = () => {
 
               {/* Frequency Filter */}
               <View style={styles.filterSection}>
-                <AppText style={[styles.filterLabel, {color: colors.textPrimary}]}>Frequency</AppText>
+                <AppText style={[styles.filterLabel, {color: colors.textPrimary}]}>{STRINGS.HABITS.ALL_HABITS.FREQUENCY}</AppText>
                 <View style={styles.chipContainer}>
                   {['daily', 'weekly', 'monthly', 'quarterly', 'half-yearly', 'yearly', 'custom'].map(f => (
                     <FilterChip
                       key={f}
-                      label={f
-                        .split('-')
-                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                        .join(' ')}
+                      label={STRINGS.HABITS.FORM.LABELS.FREQUENCY[f.toUpperCase().replace('-', '_') as keyof typeof STRINGS.HABITS.FORM.LABELS.FREQUENCY] || f}
                       isSelected={filters.frequency === f}
                       onPress={() =>
                         setFilters(prev => ({...prev, frequency: prev.frequency === f ? null : (f as HabitFrequency)}))
@@ -400,12 +413,12 @@ const AllHabitsScreen = () => {
 
               {/* Time of Day Filter */}
               <View style={styles.filterSection}>
-                <AppText style={[styles.filterLabel, {color: colors.textPrimary}]}>Time of Day</AppText>
+                <AppText style={[styles.filterLabel, {color: colors.textPrimary}]}>{STRINGS.HABITS.ALL_HABITS.TIME_OF_DAY}</AppText>
                 <View style={styles.chipContainer}>
                   {['morning', 'afternoon', 'evening', 'night', 'anytime'].map(t => (
                     <FilterChip
                       key={t}
-                      label={t.charAt(0).toUpperCase() + t.slice(1)}
+                      label={STRINGS.HABITS.FORM.LABELS.TIME_OF_DAY[t.toUpperCase() as keyof typeof STRINGS.HABITS.FORM.LABELS.TIME_OF_DAY]}
                       isSelected={filters.timeOfDay === t}
                       onPress={() =>
                         setFilters(prev => ({...prev, timeOfDay: prev.timeOfDay === t ? null : (t as HabitTimeOfDay)}))
@@ -416,23 +429,23 @@ const AllHabitsScreen = () => {
               </View>
 
               <View style={styles.filterSection}>
-                <AppText style={[styles.filterLabel, {color: colors.textPrimary}]}>Type & Preferences</AppText>
+                <AppText style={[styles.filterLabel, {color: colors.textPrimary}]}>{STRINGS.HABITS.ALL_HABITS.PREFERENCES}</AppText>
                 <View style={{paddingBottom: 40}}>
                   <View style={styles.chipContainer}>
                     <FilterChip
-                      label="One-time Task"
+                      label={STRINGS.HABITS.ALL_HABITS.ONE_TIME_TASK}
                       isSelected={filters.isOneTime === true}
                       onPress={() => setFilters(prev => ({...prev, isOneTime: prev.isOneTime === true ? null : true}))}
                     />
                     <FilterChip
-                      label="Recurring Habit"
+                      label={STRINGS.HABITS.ALL_HABITS.RECURRING_HABIT}
                       isSelected={filters.isOneTime === false}
                       onPress={() =>
                         setFilters(prev => ({...prev, isOneTime: prev.isOneTime === false ? null : false}))
                       }
                     />
                     <FilterChip
-                      label="Favorites ❤️"
+                      label={STRINGS.HABITS.ALL_HABITS.FAVORITES}
                       isSelected={filters.isFavorite === true}
                       onPress={() =>
                         setFilters(prev => ({...prev, isFavorite: prev.isFavorite === true ? null : true}))
@@ -445,7 +458,7 @@ const AllHabitsScreen = () => {
 
             <View style={[styles.modalFooter, {borderTopColor: colors.border}]}>
               <AppButton
-                title={`Show ${filteredHabits.length} results`}
+                title={STRINGS.HABITS.ALL_HABITS.SHOW_RESULTS(filteredHabits.length)}
                 onPress={() => setIsFilterModalVisible(false)}
               />
             </View>
@@ -463,7 +476,7 @@ const AllHabitsScreen = () => {
           <View style={styles.bottomSheet}>
             <View style={styles.sheetHeader}>
               <View style={styles.sheetHandle} />
-              <AppText style={[styles.sheetTitle, {color: colors.textPrimary}]}>Today's Reflection</AppText>
+              <AppText style={[styles.sheetTitle, {color: colors.textPrimary}]}>{STRINGS.HABITS.LIST.REFLECTION_TITLE}</AppText>
               <AppText style={[styles.sheetSubtitle, {color: colors.textSecondary}]}>
                 {selectedHabitForNote?.title}
               </AppText>
@@ -475,7 +488,7 @@ const AllHabitsScreen = () => {
                   styles.sheetInput,
                   {color: colors.textPrimary, backgroundColor: isDark ? '#2D2D3A' : '#F1F5F9'},
                 ]}
-                placeholder="How did it go today? (Optional)"
+                placeholder={STRINGS.HABITS.LIST.REFLECTION_PLACEHOLDER}
                 placeholderTextColor={colors.textSecondary}
                 value={reflectionNote}
                 onChangeText={setReflectionNote}
@@ -487,7 +500,7 @@ const AllHabitsScreen = () => {
               <TouchableOpacity
                 style={[styles.saveButton, {backgroundColor: colors.primary}]}
                 onPress={handleSaveReflection}>
-                <AppText style={styles.saveButtonText}>Save Reflection</AppText>
+                <AppText style={styles.saveButtonText}>{STRINGS.HABITS.LIST.SAVE_REFLECTION}</AppText>
               </TouchableOpacity>
             </View>
           </View>

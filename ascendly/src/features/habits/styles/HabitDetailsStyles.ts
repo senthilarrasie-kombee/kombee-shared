@@ -215,10 +215,14 @@ export const createHabitDetailsStyles = (colors: typeof LightColors, isDark: boo
       borderRadius: 16,
       marginBottom: 12,
     },
+    noteHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 6,
+    },
     noteDate: {
       fontSize: 12,
       fontFamily: FontFamily.semiBold,
-      marginBottom: 4,
     },
     noteText: {
       fontSize: FontSize.sm,
@@ -250,5 +254,40 @@ export const createHabitDetailsStyles = (colors: typeof LightColors, isDark: boo
       borderRadius: 12,
       marginHorizontal: 4,
       marginBottom: 4,
+    },
+    historyMonthCard: {
+      width: '100%',
+      padding: 16,
+      borderRadius: 16,
+      marginBottom: 16,
+      borderWidth: 1,
+    },
+    historyMonthHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 12,
+      opacity: 0.8,
+    },
+    historyMonthTitle: {
+      fontSize: FontSize.sm,
+      fontFamily: FontFamily.semiBold,
+      marginLeft: 8,
+    },
+    historyDaysGrid: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 8,
+    },
+    historyDayBadge: {
+      width: 32,
+      height: 32,
+      borderRadius: 16,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderWidth: 1,
+    },
+    historyDayText: {
+      fontSize: 12,
+      fontFamily: FontFamily.semiBold,
     },
   });

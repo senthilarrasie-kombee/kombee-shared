@@ -23,6 +23,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {useTheme, FontFamily} from '@shared/theme';
 import AppHeader from '@shared/components/AppHeader';
 import AppText from '@shared/components/AppText';
+import {STRINGS} from '@shared/constants/strings';
 import ConfirmModal from '@shared/components/ConfirmModal';
 import {MainStack} from '@app/navigation/navigationTypes';
 import {ROUTES} from '@app/routes';
@@ -46,32 +47,32 @@ type HabitFormRouteProp = RouteProp<MainStack, typeof ROUTES.HABIT_FORM>;
 type NavigationProp = StackNavigationProp<MainStack>;
 
 const HabitSchema = Yup.object().shape({
-  title: Yup.string().min(2, 'Too Short!').required('Title is required'),
-  description: Yup.string().required('Description is required'),
+  title: Yup.string().min(2, STRINGS.HABITS.VALIDATION.TOO_SHORT).required(STRINGS.HABITS.VALIDATION.TITLE_REQUIRED),
+  description: Yup.string().required(STRINGS.HABITS.VALIDATION.DESCRIPTION_REQUIRED),
   goal: Yup.string().optional(),
-  priority: Yup.string().required('Priority is required'),
-  timeOfDay: Yup.string().required('Time of day is required'),
-  frequency: Yup.string().required('Frequency is required'),
-  durationType: Yup.string().required('Goal type is required'),
-  targetPerWeek: Yup.number().max(7, 'Cannot exceed 7 days per week'),
-  targetPerMonth: Yup.number().max(31, 'Cannot exceed 31 days per month'),
+  priority: Yup.string().required(STRINGS.HABITS.VALIDATION.PRIORITY_REQUIRED),
+  timeOfDay: Yup.string().required(STRINGS.HABITS.VALIDATION.TIME_REQUIRED),
+  frequency: Yup.string().required(STRINGS.HABITS.VALIDATION.FREQUENCY_REQUIRED),
+  durationType: Yup.string().required(STRINGS.HABITS.VALIDATION.GOAL_TYPE_REQUIRED),
+  targetPerWeek: Yup.number().max(7, STRINGS.HABITS.VALIDATION.WEEK_LIMIT),
+  targetPerMonth: Yup.number().max(31, STRINGS.HABITS.VALIDATION.MONTH_LIMIT),
   daysTarget: Yup.array().when('frequency', {
     is: (val: string) => val === 'weekly' || val === 'daily',
-    then: schema => schema.min(1, 'Select at least one day'),
+    then: schema => schema.min(1, STRINGS.HABITS.VALIDATION.SELECT_DAY),
     otherwise: schema => schema.optional(),
   }),
   specificDatesTarget: Yup.array().when('frequency', {
     is: 'custom',
-    then: schema => schema.min(1, 'Select at least one specific date'),
+    then: schema => schema.min(1, STRINGS.HABITS.VALIDATION.SELECT_DATE),
     otherwise: schema => schema.optional(),
   }),
   duration: Yup.string().when('durationType', {
     is: (val: string) => val && val !== 'none',
     then: schema =>
       schema
-        .required('Target value is required')
-        .test('not-zero', 'Target must be greater than 0', val => val !== '0' && val !== '')
-        .test('max-hours', 'Hours cannot exceed 24', function (val) {
+        .required(STRINGS.HABITS.VALIDATION.TARGET_REQUIRED)
+        .test('not-zero', STRINGS.HABITS.VALIDATION.TARGET_NON_ZERO, val => val !== '0' && val !== '')
+        .test('max-hours', STRINGS.HABITS.VALIDATION.HOUR_LIMIT, function (val) {
           return this.parent.durationType !== 'hours' || parseInt(val || '0') <= 24;
         }),
     otherwise: schema => schema.optional(),
@@ -194,7 +195,7 @@ const HabitFormScreen = () => {
   return (
     <SafeAreaView style={[styles.container, {backgroundColor: colors.background}]} edges={['top']}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
-      <AppHeader title={isEdit ? 'Edit Habit' : 'Create Habit'} showBack />
+      <AppHeader title={isEdit ? STRINGS.HABITS.EDIT_TITLE : STRINGS.HABITS.CREATE_TITLE} showBack />
 
       <Formik
         initialValues={draftValues || initialValues}
@@ -259,11 +260,11 @@ const HabitFormScreen = () => {
 
                 {/* Title & Description */}
                 <View style={styles.section}>
-                  <AppText style={styles.sectionTitle}>Habit Details</AppText>
+                  <AppText style={styles.sectionTitle}>{STRINGS.HABITS.FORM.LABELS.SECTION_DETAILS}</AppText>
                   <View style={[styles.inputContainer, focusedField === 'title' && styles.inputContainerFocused]}>
                     <TextInput
                       style={[styles.input, touched.title && errors.title ? styles.inputError : null]}
-                      placeholder="Habit Title (e.g. Read 20 mins)"
+                      placeholder={STRINGS.HABITS.FORM.PLACEHOLDERS.TITLE}
                       placeholderTextColor={colors.textSecondary + '80'}
                       onChangeText={handleChange('title')}
                       onBlur={e => {
@@ -290,7 +291,7 @@ const HabitFormScreen = () => {
                         styles.textArea,
                         touched.description && errors.description ? styles.inputError : null,
                       ]}
-                      placeholder="What will you do? Why is this important?"
+                      placeholder={STRINGS.HABITS.FORM.PLACEHOLDERS.DESCRIPTION}
                       placeholderTextColor={colors.textSecondary + '80'}
                       multiline
                       numberOfLines={3}
@@ -312,7 +313,7 @@ const HabitFormScreen = () => {
 
                 {/* Priority Selection */}
                 <View style={styles.section}>
-                  <AppText style={styles.sectionTitle}>Priority</AppText>
+                  <AppText style={styles.sectionTitle}>{STRINGS.HABITS.FORM.LABELS.SECTION_PRIORITY}</AppText>
                   <View style={styles.priorityRow}>
                     {(['low', 'medium', 'high'] as HabitPriority[]).map(p => {
                       const isSelected = values.priority === p;
@@ -338,7 +339,7 @@ const HabitFormScreen = () => {
 
                 {/* Time of Day Selection */}
                 <View style={styles.section}>
-                  <AppText style={styles.sectionTitle}>Time of Day</AppText>
+                  <AppText style={styles.sectionTitle}>{STRINGS.HABITS.FORM.LABELS.SECTION_TIME}</AppText>
                   <View style={styles.frequencyRow}>
                     {(['morning', 'afternoon', 'evening', 'night', 'anytime'] as HabitTimeOfDay[]).map(t => {
                       const isSelected = values.timeOfDay === t;
@@ -385,7 +386,7 @@ const HabitFormScreen = () => {
                                 fontFamily: isSelected ? FontFamily.semiBold : FontFamily.regular,
                               },
                             ]}>
-                            {t.toUpperCase()}
+                            {STRINGS.HABITS.FORM.LABELS.TIME_OF_DAY[t.toUpperCase() as keyof typeof STRINGS.HABITS.FORM.LABELS.TIME_OF_DAY]}
                           </AppText>
                         </TouchableOpacity>
                       );
@@ -415,7 +416,7 @@ const HabitFormScreen = () => {
                                 }
                               }}
                               multiline
-                              placeholder="Add a note..."
+                              placeholder={STRINGS.HABITS.FORM.PLACEHOLDERS.NOTE}
                               placeholderTextColor={colors.textSecondary}
                             />
                           </View>
@@ -466,7 +467,7 @@ const HabitFormScreen = () => {
                 {/* Frequency Selection */}
                 {!values.isOneTime && (
                   <View style={styles.section}>
-                    <AppText style={styles.sectionTitle}>Frequency</AppText>
+                    <AppText style={styles.sectionTitle}>{STRINGS.HABITS.FORM.LABELS.SECTION_FREQUENCY}</AppText>
                     <View style={styles.frequencyRow}>
                       {(
                         [
@@ -560,7 +561,7 @@ const HabitFormScreen = () => {
                                   fontFamily: isSelected ? FontFamily.semiBold : FontFamily.regular,
                                 },
                               ]}>
-                              {f.toUpperCase().replace('-', ' ')}
+                              {STRINGS.HABITS.FORM.LABELS.FREQUENCY[f.toUpperCase().replace('-', '_') as keyof typeof STRINGS.HABITS.FORM.LABELS.FREQUENCY] || f}
                             </AppText>
                           </TouchableOpacity>
                         );
@@ -703,8 +704,8 @@ const HabitFormScreen = () => {
                     </View>
 
                     <View style={styles.section}>
-                      <AppText style={styles.sectionTitle}>Flexible Target (Optional)</AppText>
-                      <AppText style={[styles.switchSublabel, {marginBottom: 8}]}>How many times per month?</AppText>
+                      <AppText style={styles.sectionTitle}>{STRINGS.HABITS.FORM.LABELS.SECTION_FLEXIBLE_TARGET}</AppText>
+                      <AppText style={[styles.switchSublabel, {marginBottom: 8}]}>{STRINGS.HABITS.FORM.LABELS.TIMES_PER_MONTH}</AppText>
                       <View
                         style={[
                           styles.inputContainer,
@@ -713,7 +714,7 @@ const HabitFormScreen = () => {
                         ]}>
                         <TextInput
                           style={[styles.input, {fontFamily: FontFamily.semiBold, fontSize: 18}]}
-                          placeholder="e.g. 10"
+                          placeholder={STRINGS.HABITS.FORM.PLACEHOLDERS.TARGET_MONTH}
                           placeholderTextColor={colors.textSecondary + '80'}
                           keyboardType="numeric"
                           onChangeText={val => {
@@ -785,7 +786,7 @@ const HabitFormScreen = () => {
                       </View>
                     ) : (
                       <AppText style={[styles.switchSublabel, {marginLeft: 0}]}>
-                        No dates selected. Add dates where you want to perform this habit.
+                        {STRINGS.HABITS.FORM.LABELS.NO_DATES_HINT}
                       </AppText>
                     )}
 
@@ -802,9 +803,9 @@ const HabitFormScreen = () => {
 
                 {/* Goal & Duration */}
                 <View style={styles.section}>
-                  <AppText style={styles.sectionTitle}>Goal & Duration Type</AppText>
+                  <AppText style={styles.sectionTitle}>{STRINGS.HABITS.FORM.LABELS.SECTION_GOAL}</AppText>
                   <AppText style={[styles.switchSublabel, {marginLeft: 0, marginTop: 10, marginBottom: 6}]}>
-                    Goal Description
+                    {STRINGS.HABITS.FORM.LABELS.GOAL_DESCRIPTION}
                   </AppText>
                   <View style={[styles.inputContainer, focusedField === 'goal' && styles.inputContainerFocused]}>
                     <TextInput
@@ -829,7 +830,7 @@ const HabitFormScreen = () => {
                   )}
 
                   <AppText style={[styles.switchSublabel, {marginLeft: 0, marginTop: 16, marginBottom: 6}]}>
-                    Duration Type
+                    {STRINGS.HABITS.FORM.LABELS.DURATION_TYPE}
                   </AppText>
 
                   <View style={[styles.frequencyRow, {marginTop: 0}]}>
@@ -885,7 +886,7 @@ const HabitFormScreen = () => {
                                 marginLeft: 8,
                               },
                             ]}>
-                            {t.toUpperCase()}
+                            {STRINGS.HABITS.FORM.LABELS.DURATION[t.toUpperCase() as keyof typeof STRINGS.HABITS.FORM.LABELS.DURATION]}
                           </AppText>
                         </TouchableOpacity>
                       );
@@ -895,11 +896,7 @@ const HabitFormScreen = () => {
                   {values.durationType !== 'none' && (
                     <>
                       <AppText style={[styles.switchSublabel, {marginLeft: 0, marginTop: 16, marginBottom: 6}]}>
-                        {values.durationType === 'hours'
-                          ? 'Target Hours'
-                          : values.durationType === 'minutes'
-                            ? 'Target Minutes'
-                            : 'Target Count'}
+                        {STRINGS.HABITS.FORM.LABELS.DURATION_LABELS[values.durationType.toUpperCase() as keyof typeof STRINGS.HABITS.FORM.LABELS.DURATION_LABELS]}
                       </AppText>
                       <View
                         style={[
@@ -910,13 +907,7 @@ const HabitFormScreen = () => {
                         ]}>
                         <TextInput
                           style={styles.input}
-                          placeholder={
-                            values.durationType === 'hours'
-                              ? 'Number of hours'
-                              : values.durationType === 'minutes'
-                                ? 'Number of minutes'
-                                : 'Target count'
-                          }
+                          placeholder={STRINGS.HABITS.FORM.PLACEHOLDERS[values.durationType.toUpperCase() as keyof typeof STRINGS.HABITS.FORM.PLACEHOLDERS]}
                           placeholderTextColor={colors.textSecondary + '80'}
                           keyboardType="numeric"
                           onChangeText={val => {
@@ -947,7 +938,7 @@ const HabitFormScreen = () => {
                       )}
                       {values.durationType === 'hours' && !errors.duration && (
                         <AppText style={styles.hintText}>
-                          Tip: For more flexible scheduling, consider using the 'Custom' frequency in the section above.
+                          {STRINGS.HABITS.FORM.LABELS.DURATION_HINT}
                         </AppText>
                       )}
                     </>
@@ -959,11 +950,11 @@ const HabitFormScreen = () => {
                     <View style={styles.divider} />
                     {/* Timeline (Dates) */}
                     <View style={styles.section}>
-                      <AppText style={styles.sectionTitle}>Timeline</AppText>
+                      <AppText style={styles.sectionTitle}>{STRINGS.HABITS.FORM.LABELS.TIMELINE}</AppText>
                       <View style={styles.dateRow}>
                         <View style={[styles.dateInput, values.isOneTime && {flex: 1}]}>
                           <AppText style={[styles.switchSublabel, {marginLeft: 0}]}>
-                            {values.isOneTime ? 'Task Date' : 'Start Date'}
+                            {values.isOneTime ? STRINGS.HABITS.FORM.LABELS.TASK_DATE : STRINGS.HABITS.FORM.LABELS.START_DATE}
                           </AppText>
                           <TouchableOpacity style={styles.dateButton} onPress={() => setShowStartDate(true)}>
                             <Icon name="calendar-outline" size={18} color={colors.primary} />
@@ -973,16 +964,16 @@ const HabitFormScreen = () => {
 
                         {!values.isOneTime && (
                           <View style={styles.dateInput}>
-                            <AppText style={[styles.switchSublabel, {marginLeft: 0}]}>End Date</AppText>
+                            <AppText style={[styles.switchSublabel, {marginLeft: 0}]}>{STRINGS.HABITS.FORM.LABELS.END_DATE}</AppText>
                             <TouchableOpacity style={styles.dateButton} onPress={() => setShowEndDate(true)}>
                               <Icon name="flag-outline" size={18} color={colors.primary} />
-                              <AppText style={styles.dateButtonText}>{values.endDate || 'Not set'}</AppText>
+                              <AppText style={styles.dateButtonText}>{values.endDate || STRINGS.HABITS.FORM.LABELS.NOT_SET}</AppText>
                             </TouchableOpacity>
                             {values.endDate !== '' && (
                               <TouchableOpacity
                                 style={styles.clearEndDateButton}
                                 onPress={() => setFieldValue('endDate', '')}>
-                                <AppText style={styles.clearEndDateText}>Clear End Date</AppText>
+                                <AppText style={styles.clearEndDateText}>{STRINGS.HABITS.FORM.LABELS.CLEAR_END_DATE}</AppText>
                               </TouchableOpacity>
                             )}
                           </View>
@@ -1038,7 +1029,7 @@ const HabitFormScreen = () => {
                   <>
                     <View style={styles.divider} />
                     <View style={styles.section}>
-                      <AppText style={styles.sectionTitle}>Habit Status</AppText>
+                      <AppText style={styles.sectionTitle}>{STRINGS.HABITS.LABELS.STATUS}</AppText>
                       <View style={styles.priorityRow}>
                         {(['active', 'paused', 'completed'] as HabitStatus[]).map(s => {
                           const isSelected = values.status === s;
@@ -1054,7 +1045,7 @@ const HabitFormScreen = () => {
                               onPress={() => setFieldValue('status', s)}>
                               <AppText
                                 style={[styles.priorityText, {color: isSelected ? sColor : colors.textSecondary}]}>
-                                {s.charAt(0).toUpperCase() + s.slice(1)}
+                                {STRINGS.HABITS.LABELS[s.toUpperCase() as keyof typeof STRINGS.HABITS.LABELS]}
                               </AppText>
                             </TouchableOpacity>
                           );
@@ -1087,14 +1078,18 @@ const HabitFormScreen = () => {
                     }}
                     disabled={!isValid || isSaving}>
                     <AppText style={styles.submitButtonText}>
-                      {isSaving ? 'Checking...' : isEdit ? 'Update Habit' : 'Create Habit'}
+                      {isSaving
+                        ? STRINGS.HABITS.SAVE.SAVING
+                        : isEdit
+                          ? STRINGS.HABITS.UPDATE.TITLE
+                          : STRINGS.HABITS.SAVE.TITLE}
                     </AppText>
                   </TouchableOpacity>
 
                   {isEdit && (
                     <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
                       <Icon name="trash-outline" size={20} color="#EF4444" style={styles.deleteIcon} />
-                      <AppText style={styles.deleteButtonText}>Delete Habit</AppText>
+                      <AppText style={styles.deleteButtonText}>{STRINGS.HABITS.LABELS.EDIT_HABIT.replace('Edit', 'Delete')}</AppText>
                     </TouchableOpacity>
                   )}
                 </View>
@@ -1105,17 +1100,17 @@ const HabitFormScreen = () => {
       </Formik>
       <ConfirmModal
         isVisible={isDeleteModalVisible}
-        title="Delete Habit"
-        message="Are you sure you want to delete this habit? This action cannot be undone and you will lose all progress."
-        confirmText="Delete"
+        title={STRINGS.HABITS.DELETE.TITLE}
+        message={STRINGS.HABITS.DELETE.MESSAGE}
+        confirmText={STRINGS.HABITS.DELETE.CONFIRM}
         onConfirm={confirmDelete}
         onCancel={() => setIsDeleteModalVisible(false)}
       />
       <ConfirmModal
         isVisible={isSaveModalVisible}
-        title={isEdit ? 'Update Habit' : 'Create Habit'}
-        message={isEdit ? 'Do you want to save the changes to this habit?' : 'Ready to start your new habit journey?'}
-        confirmText={isEdit ? 'Update' : 'Create'}
+        title={isEdit ? STRINGS.HABITS.UPDATE.TITLE : STRINGS.HABITS.SAVE.TITLE}
+        message={isEdit ? STRINGS.HABITS.UPDATE.MESSAGE : STRINGS.HABITS.SAVE.MESSAGE}
+        confirmText={isEdit ? STRINGS.HABITS.UPDATE.CONFIRM : STRINGS.HABITS.SAVE.CONFIRM}
         onConfirm={confirmSave}
         onCancel={() => setIsSaveModalVisible(false)}
       />

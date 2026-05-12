@@ -1,16 +1,16 @@
 import React, {useMemo, useEffect, useState} from 'react';
-import {View, TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-native';
+import {View, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, BackHandler} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
-import {signInWithGoogle, signInWithEmail} from '@core';
-import {useDispatch} from 'react-redux';
-import {setUser} from '@store/reducers/rootSlice';
+import {storage, logAllStorageData} from '@core/storage';
+import {setUser, setToast, signInWithEmailAction, signInWithGoogleAction} from '@store/reducers/rootSlice';
+import {useAppDispatch} from '@store';
+import {validationUtils} from '@shared/utils/validationUtils';
+import {STRINGS} from '@shared/constants/strings';
 import {useTheme, Spacing} from '@shared/theme';
-import {AppButton, AppTextInput, AppText} from '@shared/components';
+import {AppButton, AppTextInput, AppText, ConfirmModal} from '@shared/components';
 import {createStyles} from '../screens/LoginStyles';
-import {storage, secureStorage, logAllStorageData} from '@core/storage';
-import {STORAGE_KEYS} from '@core/storage/keys';
 
 interface LoginProps {
   onToggle: () => void;
@@ -18,55 +18,42 @@ interface LoginProps {
 }
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string()
-    .email('Please enter a valid email')
-    .required('Email is required')
-    .transform(value => value.replace(/\s/g, '')),
-  password: Yup.string()
-    .min(6, 'Password must be at least 6 characters')
-    .required('Password is required')
-    .transform(value => value.replace(/\s/g, '')),
+  email: validationUtils.email,
+  password: validationUtils.password,
 });
 
 const Login: React.FC<LoginProps> = ({onToggle, onSuccess}) => {
   const {colors} = useTheme();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const [showPassword, setShowPassword] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
+  const [isExitModalVisible, setIsExitModalVisible] = useState(false);
 
   useEffect(() => {
-    console.log("HELLO");
     const checkStorage = async () => {
       await logAllStorageData();
     };
     checkStorage();
+
+    const backAction = () => {
+      setIsExitModalVisible(true);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () => backHandler.remove();
   }, []);
 
   const onGoogleButtonPress = async () => {
-    try {
-      setGoogleLoading(true);
-      const userCredential = await signInWithGoogle();
+    setGoogleLoading(true);
+    const result = await dispatch(signInWithGoogleAction());
+    setGoogleLoading(false);
 
-      if (userCredential) {
-        // Persist basic user data
-        await secureStorage.setItem(STORAGE_KEYS.AUTH.USER_ID, userCredential.user.uid);
-        await secureStorage.logItem(STORAGE_KEYS.AUTH.USER_ID);
-        
-        if (userCredential.user.displayName) {
-          storage.set(STORAGE_KEYS.AUTH.DISPLAY_NAME, userCredential.user.displayName);
-        }
-        storage.set(STORAGE_KEYS.AUTH.IS_LOGGED_IN, true);
-
-        // Dispatch user data to store
-        dispatch(setUser(userCredential.user));
-        onSuccess();
-      }
-    } catch (error) {
-      console.error('Google Sign-In Error:', error);
-    } finally {
-      setGoogleLoading(false);
+    if (signInWithGoogleAction.fulfilled.match(result) && result.payload) {
+      onSuccess();
     }
   };
 
@@ -74,35 +61,23 @@ const Login: React.FC<LoginProps> = ({onToggle, onSuccess}) => {
     initialValues: {email: '', password: ''},
     validationSchema,
     onSubmit: async values => {
-      try {
-        setLoginLoading(true);
-        const userCredential = await signInWithEmail(values.email, values.password);
-        if (userCredential) {
-          // Persist basic user data to MMKV
-          storage.set(STORAGE_KEYS.AUTH.USER_ID, userCredential.user.uid);
-          if (userCredential.user.displayName) {
-            storage.set(STORAGE_KEYS.AUTH.DISPLAY_NAME, userCredential.user.displayName);
-          }
-          storage.set(STORAGE_KEYS.AUTH.IS_LOGGED_IN, true);
+      setLoginLoading(true);
+      const result = await dispatch(signInWithEmailAction({email: values.email, password: values.password}));
+      setLoginLoading(false);
 
-          dispatch(setUser(userCredential.user));
-          onSuccess();
-        }
-      } catch (error) {
-        console.error('Email Login Error:', error);
-      } finally {
-        setLoginLoading(false);
+      if (signInWithEmailAction.fulfilled.match(result) && result.payload) {
+        onSuccess();
       }
     },
   });
 
   return (
     <View style={styles.content}>
-      <AppText style={styles.title}>Login</AppText>
-      <AppText style={styles.subtitle}>Welcome to Ascendly!</AppText>
+      <AppText style={styles.title}>{STRINGS.AUTH.LABELS.LOGIN_TITLE}</AppText>
+      <AppText style={styles.subtitle}>{STRINGS.AUTH.LABELS.LOGIN_SUBTITLE}</AppText>
 
       <AppTextInput
-        placeholder="Email"
+        placeholder={STRINGS.AUTH.LABELS.EMAIL_PLACEHOLDER}
         value={formik.values.email}
         onChangeText={text => formik.setFieldValue('email', text.replace(/\s/g, ''))}
         onBlur={formik.handleBlur('email')}
@@ -116,7 +91,7 @@ const Login: React.FC<LoginProps> = ({onToggle, onSuccess}) => {
       ) : null}
 
       <AppTextInput
-        placeholder="Password"
+        placeholder={STRINGS.AUTH.LABELS.PASSWORD_PLACEHOLDER}
         value={formik.values.password}
         onChangeText={text => formik.setFieldValue('password', text.replace(/\s/g, ''))}
         onBlur={formik.handleBlur('password')}
@@ -136,14 +111,14 @@ const Login: React.FC<LoginProps> = ({onToggle, onSuccess}) => {
 
       <AppButton
         disabled={!formik.isValid || !formik.dirty || loginLoading}
-        title={loginLoading ? 'Signing In...' : 'Sign In'}
+        title={loginLoading ? STRINGS.AUTH.LABELS.SIGNING_IN : STRINGS.AUTH.LABELS.SIGN_IN_BUTTON}
         onPress={formik.handleSubmit}
         style={{marginTop: Spacing.s2}}
       />
 
       <View style={localStyles.dividerContainer}>
         <View style={[localStyles.divider, {backgroundColor: colors.border}]} />
-        <AppText style={localStyles.dividerText}>OR</AppText>
+        <AppText style={localStyles.dividerText}>{STRINGS.AUTH.LABELS.OR}</AppText>
         <View style={[localStyles.divider, {backgroundColor: colors.border}]} />
       </View>
 
@@ -156,16 +131,28 @@ const Login: React.FC<LoginProps> = ({onToggle, onSuccess}) => {
         ) : (
           <>
             <Ionicons name="logo-google" size={20} color="#DB4437" />
-            <AppText style={localStyles.googleButtonText}>Continue with Google</AppText>
+            <AppText style={localStyles.googleButtonText}>{STRINGS.AUTH.LABELS.GOOGLE_BUTTON}</AppText>
           </>
         )}
       </TouchableOpacity>
 
       <TouchableOpacity onPress={onToggle} style={localStyles.toggleContainer}>
         <AppText style={localStyles.toggleText}>
-          Don't have an account? <AppText style={localStyles.toggleLink}>Register</AppText>
+          {STRINGS.AUTH.LABELS.DONT_HAVE_ACCOUNT}
+          <AppText style={localStyles.toggleLink}>{STRINGS.AUTH.LABELS.REGISTER_LINK}</AppText>
         </AppText>
       </TouchableOpacity>
+
+      <ConfirmModal
+        isVisible={isExitModalVisible}
+        title={STRINGS.EXIT_APP.TITLE}
+        message={STRINGS.EXIT_APP.MESSAGE}
+        confirmText={STRINGS.EXIT_APP.CONFIRM}
+        cancelText={STRINGS.LOGOUT.CANCEL}
+        onConfirm={() => BackHandler.exitApp()}
+        onCancel={() => setIsExitModalVisible(false)}
+        type="logout"
+      />
     </View>
   );
 };

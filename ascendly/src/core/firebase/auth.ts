@@ -9,7 +9,7 @@ import auth, {
 } from '@react-native-firebase/auth';
 import {storage} from '@core/storage/mmkv';
 import {STORAGE_KEYS} from '@core/storage/keys';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {GoogleSignin, statusCodes} from '@react-native-google-signin/google-signin';
 import Config from 'react-native-config';
 
 console.log('All Config Variables:', JSON.stringify(Config, null, 2));
@@ -48,7 +48,7 @@ export const signInWithGoogle = async (loginType: 'user' | 'admin' = 'user') => 
 
     const idToken = signInResult.data?.idToken;
     if (!idToken) {
-      throw new Error('No ID token found');
+      return null; // Silent return if no token but no throw
     }
 
     // Create a Google credential with the token
@@ -76,8 +76,11 @@ export const signInWithGoogle = async (loginType: 'user' | 'admin' = 'user') => 
     console.log('Firebase Auth User Credential (Original):', JSON.stringify(userCredential, null, 2));
 
     return {...userCredential, user: syncedProfile || userWithOverriddenUid};
-  } catch (error) {
-    console.error('Google Sign-In Error:', error);
+  } catch (error: any) {
+    if (error.code === statusCodes.SIGN_IN_CANCELLED || error.code === statusCodes.IN_PROGRESS) {
+      // user cancelled or operation already in progress
+      return null;
+    }
     throw error;
   }
 };
@@ -132,7 +135,6 @@ export const signUpWithEmail = async (
     console.log('Firebase Email Sign-Up Success:', JSON.stringify(userCredential, null, 2));
     return {...userCredential, user: syncedProfile || userWithOverriddenUid};
   } catch (error) {
-    console.error('Email Sign-Up Error:', error);
     throw error;
   }
 };
@@ -161,7 +163,6 @@ export const signInWithEmail = async (email: string, password: string, loginType
     console.log('Firebase Email Sign-In Success:', JSON.stringify(userCredential, null, 2));
     return {...userCredential, user: syncedProfile || userWithOverriddenUid};
   } catch (error) {
-    console.error('Email Sign-In Error:', error);
     throw error;
   }
 };

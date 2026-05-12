@@ -19,13 +19,19 @@ import AppHeader from '@shared/components/AppHeader';
 import AppText from '@shared/components/AppText';
 import {ROUTES} from '@app/routes';
 import {MainStack} from '@app/navigation/navigationTypes';
+import {STRINGS} from '@shared/constants/strings';
 import {useAppDispatch, useAppSelector} from '@store';
-import {fetchHabits, updateHabit} from '@store/reducers/rootSlice';
+import {
+  fetchHabits,
+  updateHabitAsync,
+  updateUserProfileAsync,
+} from '@store/reducers/rootSlice';
 import HabitCard from '../components/HabitCard';
 import HabitListHeader from '../components/HabitListHeader';
 import {createHabitsListStyles} from '../styles/HabitsListStyles';
 import {Habit} from '@shared/types/habit';
 import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';
+import {getDayName} from '@shared/utils/habitUtils';
 
 type NavigationProp = StackNavigationProp<MainStack>;
 
@@ -47,6 +53,7 @@ const HabitsListScreen = () => {
   // Get habits and loading state from Redux
   const allHabits = useAppSelector(state => state.root.habits);
   const isRefreshing = useAppSelector(state => state.root.loading);
+  const user = useAppSelector(state => state.root.user);
 
   // Helper to get local YYYY-MM-DD string
   const getLocalDateString = (date: Date) => {
@@ -58,10 +65,9 @@ const HabitsListScreen = () => {
 
   // Filter habits based on the Full Schedule for the selected date
   const habits = useMemo(() => {
-    // Manually parse YYYY-MM-DD to get the correct day name without timezone shift
     const [year, month, day] = selectedDate.split('-').map(Number);
     const date = new Date(year, month - 1, day);
-    const dayName = date.toLocaleDateString('en-US', {weekday: 'long'});
+    const dayName = getDayName(date);
 
     return allHabits
       .filter(h => {
@@ -113,11 +119,11 @@ const HabitsListScreen = () => {
     const anytime = habits.filter(h => h.timeOfDay === 'anytime');
 
     const sections = [];
-    if (morning.length > 0) sections.push({title: 'Morning', icon: 'sunny-outline', data: morning});
-    if (afternoon.length > 0) sections.push({title: 'Afternoon', icon: 'partly-sunny-outline', data: afternoon});
-    if (evening.length > 0) sections.push({title: 'Evening', icon: 'moon-outline', data: evening});
-    if (night.length > 0) sections.push({title: 'Night', icon: 'bed-outline', data: night});
-    if (anytime.length > 0) sections.push({title: 'Anytime', icon: 'infinite-outline', data: anytime});
+    if (morning.length > 0) sections.push({title: STRINGS.HABITS.FORM.LABELS.TIME_OF_DAY.MORNING, icon: 'sunny-outline', data: morning});
+    if (afternoon.length > 0) sections.push({title: STRINGS.HABITS.FORM.LABELS.TIME_OF_DAY.AFTERNOON, icon: 'partly-sunny-outline', data: afternoon});
+    if (evening.length > 0) sections.push({title: STRINGS.HABITS.FORM.LABELS.TIME_OF_DAY.EVENING, icon: 'moon-outline', data: evening});
+    if (night.length > 0) sections.push({title: STRINGS.HABITS.FORM.LABELS.TIME_OF_DAY.NIGHT, icon: 'bed-outline', data: night});
+    if (anytime.length > 0) sections.push({title: STRINGS.HABITS.FORM.LABELS.TIME_OF_DAY.ANYTIME, icon: 'infinite-outline', data: anytime});
 
     return sections;
   }, [habits]);
@@ -175,7 +181,16 @@ const HabitsListScreen = () => {
       completions: updatedCompletions,
     };
 
-    dispatch(updateHabit(updatedHabit));
+    dispatch(updateHabitAsync(updatedHabit));
+
+    // Update User Reflection Stats
+    dispatch(
+      updateUserProfileAsync({
+        lastReflectionAt: new Date().toISOString(),
+        totalReflections: (user?.totalReflections || 0) + 1,
+      })
+    );
+
     setIsBottomSheetVisible(false);
     setSelectedHabitForNote(null);
     setReflectionNote('');
@@ -224,7 +239,7 @@ const HabitsListScreen = () => {
     <SafeAreaView style={[styles.container, styles.themedContainer]} edges={['top']}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       <AppHeader
-        title="My Habits"
+        title={STRINGS.HABITS.LIST_TITLE}
         alignLeft
         titleStyle={[styles.headerTitle, {color: colors.textPrimary}]}
         rightElement={
@@ -237,7 +252,7 @@ const HabitsListScreen = () => {
 
             <TouchableOpacity style={[styles.statsButton, {backgroundColor: colors.primary + '15'}]}>
               <Icon name="stats-chart" size={16} color={colors.primary} />
-              <AppText style={[styles.statsButtonText, {color: colors.primary}]}>Stats</AppText>
+              <AppText style={[styles.statsButtonText, {color: colors.primary}]}>{STRINGS.HABITS.LIST.STATS}</AppText>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.createButtonBox, {backgroundColor: colors.primary}]}
@@ -250,9 +265,9 @@ const HabitsListScreen = () => {
 
       <View style={styles.content}>
         <View style={styles.welcomeSection}>
-          <AppText style={[styles.welcomeText, {color: colors.textPrimary}]}>Keep up the good work! 👋</AppText>
+          <AppText style={[styles.welcomeText, {color: colors.textPrimary}]}>{STRINGS.HABITS.LIST.WELCOME}</AppText>
           <AppText style={[styles.subtitle, {color: colors.textSecondary}]}>
-            You have {activeHabitsCount} active habits today.
+            {STRINGS.HABITS.LIST.ACTIVE_COUNT(activeHabitsCount)}
           </AppText>
         </View>
 
@@ -272,7 +287,7 @@ const HabitsListScreen = () => {
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Icon name="calendar-outline" size={48} color={colors.textSecondary} />
-              <AppText style={[styles.emptyText, {color: colors.textSecondary}]}>No habits found for this day.</AppText>
+              <AppText style={[styles.emptyText, {color: colors.textSecondary}]}>{STRINGS.HABITS.LIST.EMPTY_STATE}</AppText>
             </View>
           }
           refreshControl={
@@ -311,7 +326,7 @@ const HabitsListScreen = () => {
           <View style={styles.bottomSheet}>
             <View style={styles.sheetHeader}>
               <View style={styles.sheetHandle} />
-              <AppText style={[styles.sheetTitle, {color: colors.textPrimary}]}>Today's Reflection</AppText>
+              <AppText style={[styles.sheetTitle, {color: colors.textPrimary}]}>{STRINGS.HABITS.LIST.REFLECTION_TITLE}</AppText>
               <AppText style={[styles.sheetSubtitle, {color: colors.textSecondary}]}>
                 {selectedHabitForNote?.title}
               </AppText>
@@ -320,7 +335,7 @@ const HabitsListScreen = () => {
             <View style={styles.sheetContent}>
               <TextInput
                 style={[styles.sheetInput, {color: colors.textPrimary}]}
-                placeholder="How did it go today? (Optional)"
+                placeholder={STRINGS.HABITS.LIST.REFLECTION_PLACEHOLDER}
                 placeholderTextColor={colors.textSecondary}
                 value={reflectionNote}
                 onChangeText={setReflectionNote}
@@ -332,7 +347,7 @@ const HabitsListScreen = () => {
               <TouchableOpacity
                 style={[styles.saveButton, {backgroundColor: colors.primary}]}
                 onPress={handleSaveReflection}>
-                <AppText style={styles.saveButtonText}>Save Reflection</AppText>
+                <AppText style={styles.saveButtonText}>{STRINGS.HABITS.LIST.SAVE_REFLECTION}</AppText>
               </TouchableOpacity>
             </View>
           </View>

@@ -1,6 +1,9 @@
 export const STORAGE_KEYS = {
   AUTH: {
     USER_TOKEN: 'user_token',
+    ACCESS_TOKEN: 'access_token',
+    REFRESH_TOKEN: 'refresh_token',
+    FIREBASE_TOKEN: 'firebase_token',
     USER_ID: 'user_id',
     IS_LOGGED_IN: 'is_logged_in',
     DISPLAY_NAME: 'user_display_name',

@@ -16,24 +16,37 @@ import AppText from './AppText';
 const {width} = Dimensions.get('window');
 
 const AppToast = () => {
-  const message = useAppSelector(state => state.root.toastMessage);
+  const {message, type} = useAppSelector(state => state.root.toast);
   const dispatch = useAppDispatch();
   const {colors, isDark} = useTheme();
 
   const translateY = useSharedValue(100);
   const opacity = useSharedValue(0);
 
+  // Color mapping for different toast types
+  const getBackgroundColor = () => {
+    switch (type) {
+      case 'success':
+        return '#10B981'; // Green
+      case 'error':
+        return '#EF4444'; // Red
+      case 'info':
+      default:
+        return isDark ? '#2D2D3A' : '#1E293B'; // Dark Slate
+    }
+  };
+
   useEffect(() => {
     if (message) {
-      // Animation sequence: slide in, wait, slide out
+      // Animation sequence: slide in
       opacity.value = withTiming(1, {duration: 300});
       translateY.value = withTiming(0, {duration: 400});
 
       const timer = setTimeout(() => {
+        // Slide out
         opacity.value = withTiming(0, {duration: 300});
         translateY.value = withTiming(100, {duration: 300}, () => {
-          // Clear message in Redux after animation
-          // We must do this on the JS thread
+          // Callback when animation finishes
         });
 
         // Use a second timer to clear the state so the next message can trigger
@@ -55,7 +68,7 @@ const AppToast = () => {
 
   return (
     <View style={styles.outerContainer} pointerEvents="none">
-      <Animated.View style={[styles.toastBox, {backgroundColor: isDark ? '#2D2D3A' : '#1E293B'}, animatedStyle]}>
+      <Animated.View style={[styles.toastBox, {backgroundColor: getBackgroundColor()}, animatedStyle]}>
         <AppText style={styles.toastText}>{message}</AppText>
       </Animated.View>
     </View>

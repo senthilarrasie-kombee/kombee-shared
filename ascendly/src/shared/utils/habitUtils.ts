@@ -1,21 +1,8 @@
 import {Habit} from '@shared/types/habit';
+import {STRINGS} from '@shared/constants/strings';
 
-const MONTHS_LONG = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-
-const MONTHS_SHORT = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+const MONTHS_LONG = STRINGS.MONTHS.FULL;
+const MONTHS_SHORT = STRINGS.MONTHS.SHORT;
 
 export function formatDisplayDate(dateStr: any): string {
   if (!dateStr) return 'N/A';
@@ -62,41 +49,46 @@ export function getFrequencyDescription(habit: Partial<Habit>): string {
     return `One-time task on ${month} ${day}`;
   }
 
+  if (habit.isOneTime) {
+    return STRINGS.HABITS.DESCRIPTIONS.ONE_TIME(month, day);
+  }
+
   switch (habit.frequency) {
     case 'daily':
-      return 'Every day';
+      return STRINGS.HABITS.DESCRIPTIONS.EVERY_DAY;
 
     case 'weekly':
       if (habit.daysTarget && habit.daysTarget.length > 0) {
-        if (habit.daysTarget.length === 7) return 'Every day';
-        return `Every ${habit.daysTarget.map(d => d.substring(0, 3)).join(', ')}`;
+        if (habit.daysTarget.length === 7) return STRINGS.HABITS.DESCRIPTIONS.EVERY_DAY;
+        return `${STRINGS.HABITS.DESCRIPTIONS.EVERY}${habit.daysTarget.map(d => d.substring(0, 3)).join(', ')}`;
       }
-      return `${habit.targetPerWeek} times per week`;
+      return STRINGS.HABITS.DESCRIPTIONS.TIMES_PER_WEEK(habit.targetPerWeek || 0);
 
     case 'monthly':
       if (habit.datesTarget && habit.datesTarget.length > 0) {
         const sortedDates = [...habit.datesTarget].sort((a, b) => a - b);
-        return `Every ${sortedDates.join(', ')}${sortedDates.length === 1 ? 'th' : ''} of the month`;
+        const datesStr = sortedDates.map(d => getOrdinal(d)).join(', ');
+        return `${STRINGS.HABITS.DESCRIPTIONS.EVERY}${datesStr}${STRINGS.HABITS.DESCRIPTIONS.OF_MONTH}`;
       }
-      return `${habit.targetPerMonth} times per month`;
+      return STRINGS.HABITS.DESCRIPTIONS.TIMES_PER_MONTH(habit.targetPerMonth || 0);
 
     case 'quarterly':
-      return `${getOrdinal(day)} of every 3 months`;
+      return STRINGS.HABITS.DESCRIPTIONS.OF_EVERY_3_MONTHS(getOrdinal(day));
 
     case 'half-yearly':
-      return `${getOrdinal(day)} of every 6 months`;
+      return STRINGS.HABITS.DESCRIPTIONS.OF_EVERY_6_MONTHS(getOrdinal(day));
 
     case 'yearly':
-      return `${getOrdinal(day)} of ${month} every year`;
+      return STRINGS.HABITS.DESCRIPTIONS.EVERY_YEAR(getOrdinal(day), month);
 
     case 'custom':
       if (habit.specificDatesTarget && habit.specificDatesTarget.length > 0) {
-        return `${habit.specificDatesTarget.length} specific date${habit.specificDatesTarget.length > 1 ? 's' : ''}`;
+        return STRINGS.HABITS.DESCRIPTIONS.SPECIFIC_DATES(habit.specificDatesTarget.length);
       }
-      return 'Custom schedule';
+      return STRINGS.HABITS.DESCRIPTIONS.CUSTOM_SCHEDULE;
 
     default:
-      return 'Custom schedule';
+      return STRINGS.HABITS.DESCRIPTIONS.CUSTOM_SCHEDULE;
   }
 }
 
@@ -151,4 +143,12 @@ export function calculateStreak(habit: Habit): number {
 
   // Basic count of total unique completions for now as a fallback
   return completionDates.size;
+}
+
+export function getDayName(date: Date): string {
+  // date.getDay() returns 0 for Sunday, 1 for Monday...
+  // STRINGS.DAYS.SHORT is ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+  const dayIndex = date.getDay() === 0 ? 6 : date.getDay() - 1;
+  const shortName = STRINGS.DAYS.SHORT[dayIndex] as keyof typeof STRINGS.DAYS.FULL;
+  return STRINGS.DAYS.FULL[shortName];
 }

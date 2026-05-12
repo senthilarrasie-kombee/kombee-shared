@@ -8,11 +8,13 @@ import {useTheme} from '@shared/theme';
 import AppHeader from '@shared/components/AppHeader';
 import AppText from '@shared/components/AppText';
 import ConfirmModal from '@shared/components/ConfirmModal';
+import {STRINGS} from '@shared/constants/strings';
 import {MainStack} from '@app/navigation/navigationTypes';
 import {ROUTES} from '@app/routes';
 import {createHabitDetailsStyles} from '../styles/HabitDetailsStyles';
 import {calculateStreak, formatDisplayDate} from '@shared/utils/habitUtils';
 import {useDispatch} from 'react-redux';
+import {useAppSelector} from '@store';
 import {deleteHabitAsync} from '@store/reducers/rootSlice';
 
 type HabitDetailsRouteProp = RouteProp<MainStack, typeof ROUTES.HABIT_DETAILS>;
@@ -24,10 +26,34 @@ const HabitDetailsScreen = () => {
   const {colors, isDark} = useTheme();
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<HabitDetailsRouteProp>();
-  const {habit} = route.params;
+  const initialHabit = route.params.habit;
+
+  // Select the latest habit data from Redux to ensure we see updates after editing
+  const allHabits = useAppSelector(state => state.root.habits);
+  const habit = allHabits.find(h => h.id === initialHabit.id) || initialHabit;
 
   const styles = useMemo(() => createHabitDetailsStyles(colors, isDark), [colors, isDark]);
   const dispatch = useDispatch<any>();
+
+  // Group completions by Month for history display
+  const monthlyHistory = useMemo(() => {
+    const groups: {[key: string]: string[]} = {};
+    
+    [...habit.completions]
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .forEach(c => {
+        // Date format from habits.ts is YYYY-MM-DD
+        const [year, month, day] = c.date.split('-').map(Number);
+        const date = new Date(year, month - 1, day);
+        const monthName = date.toLocaleString('default', { month: 'long' });
+        const key = `${monthName} ${year}`;
+        
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(day.toString());
+      });
+      
+    return Object.entries(groups);
+  }, [habit.completions]);
 
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
@@ -53,7 +79,7 @@ const HabitDetailsScreen = () => {
     <SafeAreaView style={[styles.container, {backgroundColor: colors.background}]} edges={['top']}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       <AppHeader
-        title="Habit Details"
+        title={STRINGS.HABITS.DETAILS_TITLE}
         showBack
         rightElement={
           <TouchableOpacity onPress={handleDelete} style={{padding: 8}}>
@@ -72,7 +98,7 @@ const HabitDetailsScreen = () => {
             <View style={[styles.statusBadge, {backgroundColor: isActive ? '#E1F9F1' : '#FFF3E0'}]}>
               <View style={[styles.statusDot, {backgroundColor: isActive ? '#10B981' : '#F59E0B'}]} />
               <AppText style={[styles.statusText, {color: isActive ? '#065F46' : '#92400E'}]}>
-                {habit.status.charAt(0).toUpperCase() + habit.status.slice(1)}
+                {STRINGS.HABITS.LABELS[habit.status.toUpperCase() as keyof typeof STRINGS.HABITS.LABELS]}
               </AppText>
             </View>
 
@@ -84,13 +110,13 @@ const HabitDetailsScreen = () => {
                     habit.priority === 'high' ? '#FFEBEB' : habit.priority === 'medium' ? '#FFF8E1' : '#E3F2FD',
                 },
               ]}>
-              <AppText
-                style={[
-                  styles.priorityText,
-                  {color: habit.priority === 'high' ? '#D32F2F' : habit.priority === 'medium' ? '#F57F17' : '#1976D2'},
-                ]}>
-                {habit.priority.toUpperCase()}
-              </AppText>
+                <AppText
+                  style={[
+                    styles.priorityText,
+                    {color: habit.priority === 'high' ? '#D32F2F' : habit.priority === 'medium' ? '#F57F17' : '#1976D2'},
+                  ]}>
+                  {STRINGS.HABITS.LABELS[habit.priority.toUpperCase() as keyof typeof STRINGS.HABITS.LABELS]}
+                </AppText>
             </View>
 
             {habit.isOneTime && (
@@ -144,26 +170,26 @@ const HabitDetailsScreen = () => {
           <View style={[styles.statCard, {backgroundColor: isDark ? '#1E1E26' : '#F8FAFC'}]}>
             <Icon name="flame" size={24} color="#FF5722" />
             <AppText style={styles.statValue}>{habit.isOneTime ? '-' : calculateStreak(habit)}</AppText>
-            <AppText style={[styles.statLabel, {color: colors.textSecondary}]}>Current Streak</AppText>
+            <AppText style={[styles.statLabel, {color: colors.textSecondary}]}>{STRINGS.HABITS.LABELS.CURRENT_STREAK}</AppText>
           </View>
           <View style={[styles.statCard, {backgroundColor: isDark ? '#1E1E26' : '#F8FAFC'}]}>
             <Icon name="calendar" size={24} color={colors.primary} />
             <AppText style={styles.statValue}>{habit.completions.length}</AppText>
-            <AppText style={[styles.statLabel, {color: colors.textSecondary}]}>Days Completed</AppText>
+            <AppText style={[styles.statLabel, {color: colors.textSecondary}]}>{STRINGS.HABITS.LABELS.DAYS_COMPLETED}</AppText>
           </View>
         </View>
 
         <View style={styles.divider} />
 
         <View style={styles.section}>
-          <AppText style={styles.sectionTitle}>Goal & Tracking</AppText>
+          <AppText style={styles.sectionTitle}>{STRINGS.HABITS.LABELS.GOAL_TRACKING}</AppText>
           <View style={[styles.goalCard, {backgroundColor: isDark ? '#1E1E26' : '#F0F4FF'}]}>
             <Icon name="ribbon-outline" size={24} color={colors.primary} style={styles.goalIcon} />
             <View style={{flex: 1}}>
               <AppText style={[styles.goalText, {color: colors.textPrimary}]}>{habit.goal}</AppText>
               {habit.durationType !== 'none' && (
                 <AppText style={{fontSize: 12, color: colors.textSecondary, marginTop: 2}}>
-                  Target: {habit.duration} {habit.durationType}
+                  {STRINGS.HABITS.LABELS.TARGET}: {habit.duration} {habit.durationType}
                 </AppText>
               )}
             </View>
@@ -186,18 +212,10 @@ const HabitDetailsScreen = () => {
 
         {!habit.isOneTime && habit.daysTarget && habit.daysTarget.length > 0 && (
           <View style={styles.section}>
-            <AppText style={styles.sectionTitle}>Selected Days</AppText>
+            <AppText style={styles.sectionTitle}>{STRINGS.HABITS.LABELS.SELECTED_DAYS}</AppText>
             <View style={styles.daysContainer}>
-              {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => {
-                const fullDays = {
-                  Mon: 'Monday',
-                  Tue: 'Tuesday',
-                  Wed: 'Wednesday',
-                  Thu: 'Thursday',
-                  Fri: 'Friday',
-                  Sat: 'Saturday',
-                  Sun: 'Sunday',
-                };
+              {STRINGS.DAYS.SHORT.map(day => {
+                const fullDays: any = STRINGS.DAYS.FULL;
                 const isTarget = habit.daysTarget.includes(fullDays[day as keyof typeof fullDays]);
 
                 return (
@@ -223,18 +241,18 @@ const HabitDetailsScreen = () => {
         <View style={styles.divider} />
 
         <View style={styles.section}>
-          <AppText style={styles.sectionTitle}>Timeline</AppText>
+          <AppText style={styles.sectionTitle}>{STRINGS.HABITS.LABELS.TIMELINE}</AppText>
           <View style={[styles.timelineContainer, {backgroundColor: isDark ? '#1E1E26' : '#F8FAFC'}]}>
             <View style={styles.timelineItem}>
               <Icon name="add-circle-outline" size={18} color={colors.textSecondary} />
-              <AppText style={[styles.timelineLabel, {color: colors.textSecondary}]}>Created on:</AppText>
+              <AppText style={[styles.timelineLabel, {color: colors.textSecondary}]}>{STRINGS.HABITS.LABELS.CREATED_ON}</AppText>
               <AppText style={[styles.timelineValue, {color: colors.textPrimary}]}>
                 {formatDisplayDate(habit.createdDate || habit.startDate)}
               </AppText>
             </View>
             <View style={styles.timelineItem}>
               <Icon name="play-circle-outline" size={18} color={colors.textSecondary} />
-              <AppText style={[styles.timelineLabel, {color: colors.textSecondary}]}>Started on:</AppText>
+              <AppText style={[styles.timelineLabel, {color: colors.textSecondary}]}>{STRINGS.HABITS.LABELS.STARTED_ON}</AppText>
               <AppText style={[styles.timelineValue, {color: colors.textPrimary}]}>
                 {formatDisplayDate(habit.startDate)}
               </AppText>
@@ -242,7 +260,7 @@ const HabitDetailsScreen = () => {
             {habit.endDate && (
               <View style={styles.timelineItem}>
                 <Icon name="stop-circle-outline" size={18} color={colors.textSecondary} />
-                <AppText style={[styles.timelineLabel, {color: colors.textSecondary}]}>Ends on:</AppText>
+                <AppText style={[styles.timelineLabel, {color: colors.textSecondary}]}>{STRINGS.HABITS.LABELS.ENDS_ON}</AppText>
                 <AppText style={[styles.timelineValue, {color: colors.textPrimary}]}>
                   {formatDisplayDate(habit.endDate)}
                 </AppText>
@@ -250,45 +268,13 @@ const HabitDetailsScreen = () => {
             )}
             <View style={[styles.timelineItem, {borderBottomWidth: 0}]}>
               <Icon name="sync-outline" size={18} color={colors.textSecondary} />
-              <AppText style={[styles.timelineLabel, {color: colors.textSecondary}]}>Last updated:</AppText>
+              <AppText style={[styles.timelineLabel, {color: colors.textSecondary}]}>{STRINGS.HABITS.LABELS.LAST_UPDATED}</AppText>
               <AppText style={[styles.timelineValue, {color: colors.textPrimary}]}>
                 {formatDisplayDate(habit.updatedAt)}
               </AppText>
             </View>
           </View>
         </View>
-
-        {habit.completions.length > 0 && (
-          <>
-            <View style={styles.divider} />
-            <View style={styles.section}>
-              <AppText style={styles.sectionTitle}>History</AppText>
-              <View style={styles.historyContainer}>
-                {[...habit.completions]
-                  .sort((a, b) => b.date.localeCompare(a.date))
-                  .map((c, index) => {
-                    const formatted = formatDisplayDate(c.date);
-                    const parts = formatted.split(',');
-                    return (
-                      <View
-                        key={`${c.date}-${index}`}
-                        style={[
-                          styles.historyChip,
-                          {
-                            backgroundColor: colors.primary + '10',
-                            borderColor: colors.primary + '30',
-                          },
-                        ]}>
-                        <AppText style={[styles.historyChipText, {color: colors.primary}]}>
-                          {parts[0]} {parts[1]}
-                        </AppText>
-                      </View>
-                    );
-                  })}
-              </View>
-            </View>
-          </>
-        )}
 
         {habit.completions.some(c => c.note) && (
           <>
@@ -302,10 +288,59 @@ const HabitDetailsScreen = () => {
                   <View
                     key={`${c.date}-${index}`}
                     style={[styles.noteItem, {backgroundColor: isDark ? '#1E1E26' : '#F8FAFC'}]}>
-                    <AppText style={[styles.noteDate, {color: colors.primary}]}>{formatDisplayDate(c.date)}</AppText>
+                    <View style={styles.noteHeader}>
+                      <Icon name="calendar-outline" size={14} color={colors.primary} style={{marginRight: 6}} />
+                      <AppText style={[styles.noteDate, {color: colors.primary}]}>{formatDisplayDate(c.date)}</AppText>
+                    </View>
                     <AppText style={[styles.noteText, {color: colors.textPrimary}]}>{c.note}</AppText>
                   </View>
                 ))}
+            </View>
+          </>
+        )}
+
+        {monthlyHistory.length > 0 && (
+          <>
+            <View style={styles.divider} />
+            <View style={styles.section}>
+              <AppText style={styles.sectionTitle}>{STRINGS.HABITS.LABELS.HISTORY}</AppText>
+              <View style={styles.historyContainer}>
+                {monthlyHistory.map(([monthYear, days], index) => (
+                  <View
+                    key={`${monthYear}-${index}`}
+                    style={[
+                      styles.historyMonthCard,
+                      {
+                        backgroundColor: isDark ? 'rgba(255,255,255,0.03)' : '#F8FAFC',
+                        borderColor: isDark ? 'rgba(255,255,255,0.05)' : '#E2E8F0',
+                      },
+                    ]}>
+                    <View style={styles.historyMonthHeader}>
+                      <Icon name="calendar-outline" size={16} color={colors.textSecondary} />
+                      <AppText style={[styles.historyMonthTitle, {color: colors.textPrimary}]}>
+                        {monthYear}
+                      </AppText>
+                    </View>
+                    <View style={styles.historyDaysGrid}>
+                      {days.map((day, dIdx) => (
+                        <View
+                          key={`day-${day}-${dIdx}`}
+                          style={[
+                            styles.historyDayBadge,
+                            {
+                              backgroundColor: '#10B98120',
+                              borderColor: '#10B98140',
+                            },
+                          ]}>
+                          <AppText style={[styles.historyDayText, {color: '#10B981'}]}>
+                            {day}
+                          </AppText>
+                        </View>
+                      ))}
+                    </View>
+                  </View>
+                ))}
+              </View>
             </View>
           </>
         )}
@@ -315,17 +350,17 @@ const HabitDetailsScreen = () => {
         <TouchableOpacity
           style={[styles.editButton, {borderColor: colors.primary}]}
           onPress={() => navigation.navigate(ROUTES.HABIT_FORM, {habit})}>
-          <AppText style={[styles.editButtonText, {color: colors.primary}]}>Edit Habit</AppText>
+          <AppText style={[styles.editButtonText, {color: colors.primary}]}>{STRINGS.HABITS.LABELS.EDIT_HABIT}</AppText>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.completeButton, {backgroundColor: colors.primary}]}>
-          <AppText style={styles.completeButtonText}>Mark as Done</AppText>
+          <AppText style={styles.completeButtonText}>{STRINGS.HABITS.LABELS.MARK_DONE}</AppText>
         </TouchableOpacity>
       </View>
       <ConfirmModal
         isVisible={isDeleteModalVisible}
-        title="Delete Habit"
-        message="Are you sure you want to delete this habit? This action cannot be undone and you will lose all progress recorded so far."
-        confirmText="Delete"
+        title={STRINGS.HABITS.DELETE.TITLE}
+        message={STRINGS.HABITS.DELETE.MESSAGE}
+        confirmText={STRINGS.HABITS.DELETE.CONFIRM}
         onConfirm={confirmDelete}
         onCancel={() => setIsDeleteModalVisible(false)}
       />
