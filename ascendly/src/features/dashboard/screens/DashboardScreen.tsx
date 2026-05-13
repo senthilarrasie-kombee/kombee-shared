@@ -129,6 +129,12 @@ const Dashboard: React.FC<DashboardType> = ({children}) => {
         />
 
         <AppButton
+          title="Latest status"
+          onPress={() => navigation.navigate(ROUTES.STATS)}
+          style={{paddingHorizontal: 30, marginBottom: 16}}
+        />
+
+        <AppButton
           title="Axios API Call Example 1"
           onPress={() => navigation.navigate(ROUTES.AXIOS_EXAMPLE)}
           style={{paddingHorizontal: 30, marginBottom: 16}}

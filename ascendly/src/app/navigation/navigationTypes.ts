@@ -18,6 +18,7 @@ type MainStack = {
   [ROUTES.AXIOS_POKEMON]: undefined;
   [ROUTES.AXIOS_PRODUCTS]: undefined;
   [ROUTES.AXIOS_WEATHER]: undefined;
+  [ROUTES.STATS]: undefined;
 };
 
 export type {MainStack};

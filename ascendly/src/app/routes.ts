@@ -19,4 +19,5 @@ export const ROUTES = {
   AXIOS_PRODUCTS: 'axiosProducts',
   AXIOS_WEATHER: 'axiosWeather',
   STRUCTURED_API: 'structuredApi',
-} as const;
+  STATS: 'stats',
+};

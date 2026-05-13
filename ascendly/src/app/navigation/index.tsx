@@ -6,7 +6,13 @@ import EditProfile from '@features/profile/screens/EditProfileScreen';
 import DrawerNavigation from './drawerNavigation';
 import HabitDetails from '@features/habits/screens/HabitDetailsScreen';
 import HabitForm from '@features/habits/screens/HabitFormScreen';
-import {AxiosExampleScreen, AxiosPokemonScreen, AxiosProductsScreen, AxiosWeatherScreen} from '@features/dashboard';
+import {
+  AxiosExampleScreen,
+  AxiosPokemonScreen,
+  AxiosProductsScreen,
+  AxiosWeatherScreen,
+  StatsScreen,
+} from '@features/dashboard';
 import {StructuredApiScreen} from '@features/structuredApi';
 import {ROUTES} from '@app/routes';
 import {navigationRef} from './navigationService';
@@ -28,6 +34,7 @@ const MainStackNavigation = () => {
         <Stack.Screen name={ROUTES.AXIOS_PRODUCTS} component={AxiosProductsScreen} />
         <Stack.Screen name={ROUTES.AXIOS_WEATHER} component={AxiosWeatherScreen} />
         <Stack.Screen name={ROUTES.STRUCTURED_API} component={StructuredApiScreen} />
+        <Stack.Screen name={ROUTES.STATS} component={StatsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

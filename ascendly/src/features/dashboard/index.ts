@@ -4,6 +4,7 @@ export {default as AxiosExampleScreen} from './screens/AxiosExampleScreen';
 export {default as AxiosPokemonScreen} from './screens/AxiosPokemonScreen';
 export {default as AxiosProductsScreen} from './screens/AxiosProductsScreen';
 export {default as AxiosWeatherScreen} from './screens/AxiosWeatherScreen';
+export {default as StatsScreen} from './screens/LatestStatusScreen';
 
 // Default export for backward compatibility if needed
 export {default} from './screens/DashboardScreen';
