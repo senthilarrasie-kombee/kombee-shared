@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTheme, FontFamily, FontSize, Spacing} from '@shared/theme';
 import AppHeader from '@shared/components/AppHeader';
@@ -41,14 +41,25 @@ const HabitsListScreen = () => {
   const dispatch = useAppDispatch();
   const styles = useMemo(() => createHabitsListStyles(colors, isDark), [colors, isDark]);
 
+  const route = useRoute<RouteProp<MainStack, typeof ROUTES.HABITS_LISTING>>();
+  const dateParam = route.params?.date;
+
   // State for selected date from calendar
   const [selectedDate, setSelectedDate] = React.useState<string>(() => {
+    if (dateParam) return dateParam;
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   });
+
+  // Handle date parameter updates from navigation
+  React.useEffect(() => {
+    if (dateParam && dateParam !== selectedDate) {
+      setSelectedDate(dateParam);
+    }
+  }, [dateParam]);
 
   // Get habits and loading state from Redux
   const allHabits = useAppSelector(state => state.root.habits);

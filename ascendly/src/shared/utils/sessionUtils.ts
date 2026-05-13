@@ -8,7 +8,7 @@ import {MainStack} from '@app/navigation/navigationTypes';
  * Returns ROUTES.DRAWER if the user is logged in within the last 10 days,
  * otherwise returns ROUTES.LOGIN.
  */
-export const getInitialRoute = (): string => {
+export const getInitialRoute = (): keyof MainStack => {
   const isLoggedIn = storage.getBoolean(STORAGE_KEYS.AUTH.IS_LOGGED_IN);
   const lastLogin = storage.getString(STORAGE_KEYS.APP.LAST_LOGIN);
 

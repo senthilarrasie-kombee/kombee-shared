@@ -1,187 +1,51 @@
-import React, {useMemo, useState, useCallback} from 'react';
+import React, {useCallback} from 'react';
 import {View, FlatList, StatusBar, TextInput, TouchableOpacity, Modal, ScrollView, RefreshControl} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useTheme, FontFamily, FontSize, Spacing} from '@shared/theme';
+import {FontFamily} from '@shared/theme';
 import AppHeader from '@shared/components/AppHeader';
 import AppText from '@shared/components/AppText';
 import AppButton from '@shared/components/AppButton';
-import {useAppSelector, useAppDispatch} from '@store';
-import {
-  fetchHabits,
-  updateHabitAsync,
-  setToast,
-  updateUserProfileAsync,
-} from '@store/reducers/rootSlice';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
 import {ROUTES} from '@app/routes';
-import {MainStack} from '@app/navigation/navigationTypes';
 import HabitCard from '../components/HabitCard';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {CATEGORIES_DATA as categoriesData} from '@shared/constants/categories';
-import {createAllHabitsStyles} from '../styles/AllHabitsStyles';
-import {asyncStorage, ASYNC_STORAGE_KEYS} from '@core/storage';
 import {STRINGS} from '@shared/constants/strings';
-
-type NavigationProp = StackNavigationProp<MainStack>;
 
 import {Habit, HabitPriority, HabitStatus, HabitFrequency, HabitTimeOfDay} from '@shared/types/habit';
 
-interface Filters {
-  categoryId: string | null;
-  priority: HabitPriority | null;
-  status: HabitStatus | null;
-  frequency: HabitFrequency | null;
-  timeOfDay: HabitTimeOfDay | null;
-  isOneTime: boolean | null;
-  isFavorite: boolean | null;
-}
+import {useAllHabits, Filters} from '../hooks/useAllHabits';
 
 const AllHabitsScreen = () => {
-  const {colors, isDark} = useTheme();
-  const navigation = useNavigation<NavigationProp>();
-  const dispatch = useAppDispatch();
-  const styles = useMemo(() => createAllHabitsStyles(colors, isDark), [colors, isDark]);
-  const allHabits = useAppSelector(state => state.root.habits);
-  const isRefreshing = useAppSelector(state => state.root.loading);
-  const user = useAppSelector(state => state.root.user);
-
-  const [searchQuery, setSearchQuery] = useState('');
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
-  const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
-  const [filters, setFilters] = useState<Filters>({
-    categoryId: null,
-    priority: null,
-    status: null,
-    frequency: null,
-    timeOfDay: null,
-    isOneTime: null,
-    isFavorite: null,
-  });
-
-  const onRefresh = useCallback(() => {
-    dispatch(fetchHabits(true));
-  }, [dispatch]);
-
-  React.useEffect(() => {
-    if (allHabits.length === 0) {
-      dispatch(fetchHabits(false));
-    }
-    loadSearchHistory();
-  }, [dispatch, allHabits.length]);
-
-  const loadSearchHistory = async () => {
-    const history = await asyncStorage.getObject<string[]>(ASYNC_STORAGE_KEYS.SEARCH_HISTORY);
-    if (history) setRecentSearches(history);
-  };
-
-  const saveSearchQuery = async (query: string) => {
-    if (!query.trim()) return;
-    const newHistory = [query, ...recentSearches.filter(s => s !== query)].slice(0, 5);
-    setRecentSearches(newHistory);
-    await asyncStorage.setObject(ASYNC_STORAGE_KEYS.SEARCH_HISTORY, newHistory);
-  };
-
-  // Bottom Sheet State for Reflections
-  const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
-  const [selectedHabitForNote, setSelectedHabitForNote] = useState<Habit | null>(null);
-  const [reflectionNote, setReflectionNote] = useState('');
-
-  const handleActionPress = useCallback((habit: Habit) => {
-    const today = new Date().toISOString().split('T')[0];
-    setSelectedHabitForNote(habit);
-    const existingCompletion = habit.completions.find(c => c.date === today);
-    setReflectionNote(existingCompletion?.note || '');
-    setIsBottomSheetVisible(true);
-  }, []);
-
-  const handleSaveReflection = () => {
-    if (!selectedHabitForNote) return;
-
-    const today = new Date().toISOString().split('T')[0];
-    const updatedCompletions = [...selectedHabitForNote.completions];
-    const todayIndex = updatedCompletions.findIndex(c => c.date === today);
-
-    if (todayIndex > -1) {
-      updatedCompletions[todayIndex] = {...updatedCompletions[todayIndex], note: reflectionNote};
-    } else {
-      updatedCompletions.push({date: today, note: reflectionNote});
-    }
-
-    const updatedHabit = {
-      ...selectedHabitForNote,
-      completions: updatedCompletions,
-    };
-
-    dispatch(updateHabitAsync(updatedHabit));
-
-    // Update User Reflection Stats
-    dispatch(
-      updateUserProfileAsync({
-        lastReflectionAt: new Date().toISOString(),
-        totalReflections: (user?.totalReflections || 0) + 1,
-      })
-    );
-
-    setIsBottomSheetVisible(false);
-    setSelectedHabitForNote(null);
-    setReflectionNote('');
-  };
-
-  // Combined search and filter logic
-  const filteredHabits = useMemo(() => {
-    let result = [...allHabits];
-
-    // Search filter
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      result = result.filter(h => h.title.toLowerCase().includes(query) || h.description.toLowerCase().includes(query));
-    }
-
-    // Advanced filters
-    if (filters.categoryId) {
-      result = result.filter(h => h.categoryId === filters.categoryId);
-    }
-    if (filters.priority) {
-      result = result.filter(h => h.priority === filters.priority);
-    }
-    if (filters.status) {
-      result = result.filter(h => h.status === filters.status);
-    }
-    if (filters.frequency) {
-      result = result.filter(h => h.frequency === filters.frequency);
-    }
-    if (filters.timeOfDay) {
-      result = result.filter(h => h.timeOfDay === filters.timeOfDay);
-    }
-    if (filters.isOneTime !== null) {
-      result = result.filter(h => h.isOneTime === filters.isOneTime);
-    }
-    if (filters.isFavorite !== null) {
-      result = result.filter(h => h.isFavorite === filters.isFavorite);
-    }
-
-    // Sort by createdDate (latest first)
-    return result.sort((a, b) => {
-      const dateA = new Date(a.createdDate || '2000-01-01').getTime();
-      const dateB = new Date(b.createdDate || '2000-01-01').getTime();
-      return dateB - dateA;
-    });
-  }, [allHabits, searchQuery, filters]);
-
-  const resetFilters = () => {
-    setFilters({
-      categoryId: null,
-      priority: null,
-      status: null,
-      frequency: null,
-      timeOfDay: null,
-      isOneTime: null,
-      isFavorite: null,
-    });
-  };
-
-  const activeFilterCount = Object.values(filters).filter(v => v !== null).length;
+  const {
+    colors,
+    isDark,
+    styles,
+    navigation,
+    allHabits,
+    filteredHabits,
+    isRefreshing,
+    searchQuery,
+    setSearchQuery,
+    isSearchFocused,
+    setIsSearchFocused,
+    recentSearches,
+    saveSearchQuery,
+    clearSearchHistory,
+    isFilterModalVisible,
+    setIsFilterModalVisible,
+    filters,
+    setFilters,
+    resetFilters,
+    activeFilterCount,
+    onRefresh,
+    handleActionPress,
+    isBottomSheetVisible,
+    setIsBottomSheetVisible,
+    selectedHabitForNote,
+    reflectionNote,
+    setReflectionNote,
+    handleSaveReflection,
+  } = useAllHabits();
 
   const renderHabitItem = useCallback(
     ({item}: {item: Habit}) => (
@@ -245,15 +109,21 @@ const AllHabitsScreen = () => {
       <View style={styles.content}>
         <View style={styles.searchContainer}>
           <View
-            style={[styles.searchBar, {backgroundColor: isDark ? '#1C1C27' : '#FFFFFF', borderColor: colors.border}]}>
-            <Icon name="search-outline" size={20} color={colors.textSecondary} style={{marginRight: 10}} />
+            style={[styles.searchBar, {backgroundColor: isDark ? '#1C1C27' : '#FFFFFF', borderColor: isSearchFocused ? colors.primary : colors.border}]}>
+            <Icon name="search-outline" size={20} color={isSearchFocused ? colors.primary : colors.textSecondary} style={{marginRight: 10}} />
             <TextInput
               placeholder={STRINGS.HABITS.ALL_HABITS.SEARCH_PLACEHOLDER}
               placeholderTextColor={colors.textSecondary + '80'}
               style={[styles.searchInput, {color: colors.textPrimary}]}
               value={searchQuery}
               onChangeText={setSearchQuery}
+              onFocus={() => setIsSearchFocused(true)}
+              onBlur={() => {
+                // Delay blur to allow clicking on recent search item
+                setTimeout(() => setIsSearchFocused(false), 200);
+              }}
               onSubmitEditing={() => saveSearchQuery(searchQuery)}
+              returnKeyType="search"
             />
             {searchQuery.length > 0 && (
               <TouchableOpacity onPress={() => setSearchQuery('')}>
@@ -261,6 +131,31 @@ const AllHabitsScreen = () => {
               </TouchableOpacity>
             )}
           </View>
+          
+          {isSearchFocused && searchQuery.length === 0 && recentSearches.length > 0 && (
+            <View style={[styles.recentSearchesContainer, {backgroundColor: isDark ? '#1C1C27' : '#FFFFFF', borderColor: colors.border}]}>
+              <View style={styles.recentSearchesHeader}>
+                <AppText style={styles.recentSearchesTitle}>Recent Searches</AppText>
+                <TouchableOpacity onPress={clearSearchHistory}>
+                  <AppText style={{color: colors.primary, fontSize: 12}}>Clear</AppText>
+                </TouchableOpacity>
+              </View>
+              {recentSearches.map((item, index) => (
+                <TouchableOpacity 
+                  key={index} 
+                  style={styles.recentSearchItem}
+                  onPress={() => {
+                    setSearchQuery(item);
+                    setIsSearchFocused(false);
+                  }}
+                >
+                  <Icon name="time-outline" size={16} color={colors.textSecondary} style={{marginRight: 10}} />
+                  <AppText style={{color: colors.textPrimary}}>{item}</AppText>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
+
           <View style={styles.resultsHeader}>
             <AppText style={[styles.resultsCount, {color: colors.textSecondary}]}>
               {STRINGS.HABITS.ALL_HABITS.RESULTS_COUNT(filteredHabits.length)}

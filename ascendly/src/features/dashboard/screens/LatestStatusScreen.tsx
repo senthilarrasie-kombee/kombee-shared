@@ -1,5 +1,7 @@
 import React, {useState, useMemo} from 'react';
 import {View, Text, TouchableOpacity, ScrollView, Dimensions} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {ROUTES} from '@app/routes';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTheme} from '@shared/theme';
 import {AppHeader, AppText} from '@shared/components';
@@ -78,41 +80,65 @@ const LineChart = ({data, color, height}: any) => {
   );
 };
 
-const StatsScreen = () => {
-  const {colors} = useTheme();
-  const styles = useMemo(() => createStyles(colors), [colors]);
-  const [viewMode, setViewMode] = useState<'month' | 'year'>('month');
+import {useLatestStatus} from '../hooks/useLatestStatus';
 
-  const trendData = [40, 65, 75, 85, 80, 97];
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+import {STRINGS} from '@shared/constants/strings';
+
+const StatsScreen = () => {
+  const {
+    colors,
+    styles,
+    viewMode,
+    setViewMode,
+    currentDate,
+    changeDate,
+    canGoForward,
+    stats
+  } = useLatestStatus();
+
+  const navigation = useNavigation<any>();
+  const months = STRINGS.MONTHS.SHORT;
+
+  const handleDatePress = (dateStr: string) => {
+    navigation.navigate(ROUTES.DRAWER, {
+      screen: ROUTES.HOME,
+      params: {
+        screen: ROUTES.HABITS_LISTING,
+        params: {date: dateStr},
+      },
+    });
+  };
 
   const renderHeaderRight = () => (
     <View style={styles.headerRight}>
       <TouchableOpacity style={styles.headerIcon}>
         <Icon name="share-outline" size={24} color={colors.textPrimary} />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.headerIcon}>
-        <Icon name="close" size={28} color={colors.textPrimary} />
-      </TouchableOpacity>
     </View>
   );
 
   const renderMonthGrid = () => {
-    const days = Array.from({length: 30}, (_, i) => i + 1);
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const days = Array.from({length: daysInMonth}, (_, i) => i + 1);
+    
     return (
       <View style={styles.monthGrid}>
         {days.map(day => {
-          const isCompleted = Math.random() > 0.3;
+          const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          const isCompleted = stats.completionsByDate[dateStr] > 0;
           return (
-            <View 
+            <TouchableOpacity 
               key={day} 
               style={[
                 styles.dayBox, 
                 {backgroundColor: isCompleted ? colors.primary : colors.primary + '10'}
               ]}
+              onPress={() => handleDatePress(dateStr)}
             >
               <Text style={[styles.dayText, {color: isCompleted ? '#FFF' : colors.textPrimary}]}>{day}</Text>
-            </View>
+            </TouchableOpacity>
           );
         })}
       </View>
@@ -122,19 +148,27 @@ const StatsScreen = () => {
   const renderYearHeatmap = () => {
     return (
       <View style={styles.heatmapContainer}>
-        {months.map(month => (
-          <View key={month} style={styles.miniMonth}>
-            <Text style={styles.miniMonthTitle}>{month}</Text>
+        {months.map((monthName, monthIndex) => (
+          <View key={monthName} style={styles.miniMonth}>
+            <Text style={styles.miniMonthTitle}>{monthName}</Text>
             <View style={styles.miniGrid}>
-              {Array.from({length: 28}, (_, i) => (
-                <View 
-                  key={i} 
-                  style={[
-                    styles.miniDay, 
-                    {backgroundColor: Math.random() > 0.4 ? colors.primary : colors.primary + '10'}
-                  ]} 
-                />
-              ))}
+              {Array.from({length: 31}, (_, i) => {
+                const day = i + 1;
+                const year = currentDate.getFullYear();
+                const dateStr = `${year}-${String(monthIndex + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const hasCompletion = stats.completionsByDate[dateStr] > 0;
+                
+                return (
+                  <TouchableOpacity 
+                    key={i} 
+                    style={[
+                      styles.miniDay, 
+                      {backgroundColor: hasCompletion ? colors.primary : colors.primary + '10'}
+                    ]} 
+                    onPress={() => handleDatePress(dateStr)}
+                  />
+                );
+              })}
             </View>
           </View>
         ))}
@@ -174,20 +208,23 @@ const StatsScreen = () => {
             <CircularProgress 
               size={70} 
               strokeWidth={8} 
-              progress={viewMode === 'month' ? 97 : 68} 
+              progress={stats.completionRate} 
               color={colors.primary} 
             />
-            <Text style={styles.progressText}>{viewMode === 'month' ? '97%' : '68%'}</Text>
+            <Text style={styles.progressText}>{stats.completionRate}%</Text>
           </View>
           <View style={styles.completionInfo}>
             <Text style={styles.completionTitle}>
-              {viewMode === 'month' ? 'April completion rate' : '2026 completion rate'}
+              {viewMode === 'month' 
+                ? `${months[currentDate.getMonth()]} completion rate` 
+                : `${currentDate.getFullYear()} completion rate`}
             </Text>
             <Text style={styles.completionSub}>
-              {viewMode === 'month' ? '61 of 63 habit days completed' : '299 of 440 habit days completed'}
+              {stats.completedCount} of {stats.targetCount} habit days completed
             </Text>
-            <Text style={styles.completionTrend}>
-              <Icon name="trending-up" size={14} color="#4CAF50" /> +6% vs March
+            <Text style={[styles.completionTrend, {color: stats.trend === '+' ? '#4CAF50' : '#F44336'}]}>
+              <Icon name={stats.trend === '+' ? "trending-up" : "trending-down"} size={14} color={stats.trend === '+' ? "#4CAF50" : "#F44336"} /> 
+              {stats.trend}{stats.trendValue}% vs {viewMode === 'month' ? 'Prev Month' : 'Prev Year'}
             </Text>
           </View>
         </View>
@@ -195,15 +232,15 @@ const StatsScreen = () => {
         {/* Stats Grid */}
         <View style={styles.statsGrid}>
           <View style={styles.statCard}>
-            <Text style={styles.statValue}>{viewMode === 'month' ? '61' : '299'}</Text>
+            <Text style={styles.statValue}>{stats.completedCount}</Text>
             <Text style={styles.statLabel}>completed</Text>
           </View>
           <View style={styles.statCard}>
-            <Text style={styles.statValue}>{viewMode === 'month' ? '19' : '27'}</Text>
+            <Text style={styles.statValue}>{stats.perfectDays}</Text>
             <Text style={styles.statLabel}>Perfect Days</Text>
           </View>
           <View style={styles.statCard}>
-            <Text style={styles.statValue}>{viewMode === 'month' ? '20' : '107'}</Text>
+            <Text style={styles.statValue}>{stats.activeDays}</Text>
             <Text style={styles.statLabel}>Active Days</Text>
           </View>
         </View>
@@ -211,25 +248,31 @@ const StatsScreen = () => {
         {/* Completion Trend */}
         <Text style={styles.sectionTitle}>Completion trend</Text>
         <View style={styles.chartCard}>
-          <LineChart data={trendData} color={colors.primary} height={120} />
+          <LineChart data={stats.trendData} color={colors.primary} height={120} />
           <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 8}}>
-            <Text style={{fontSize: 10, color: colors.textSecondary}}>Jan</Text>
-            <Text style={{fontSize: 10, color: colors.textSecondary}}>Mar</Text>
-            <Text style={{fontSize: 10, color: colors.textSecondary}}>Apr</Text>
+            <Text style={{fontSize: 10, color: colors.textSecondary}}>Low</Text>
+            <Text style={{fontSize: 10, color: colors.textSecondary}}>Med</Text>
+            <Text style={{fontSize: 10, color: colors.textSecondary}}>Today</Text>
           </View>
         </View>
 
         {/* Calendar/Heatmap */}
         <View style={styles.calendarHeader}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => changeDate('back')}>
             <Icon name="chevron-back" size={20} color={colors.textPrimary} />
           </TouchableOpacity>
           <Text style={styles.calendarTitle}>
-            {viewMode === 'month' ? 'April 2026' : '2026'}
+            {viewMode === 'month' 
+              ? `${months[currentDate.getMonth()]} ${currentDate.getFullYear()}` 
+              : `${currentDate.getFullYear()}`}
           </Text>
-          <TouchableOpacity>
-            <Icon name="chevron-forward" size={20} color={colors.textPrimary} />
-          </TouchableOpacity>
+          {canGoForward ? (
+            <TouchableOpacity onPress={() => changeDate('forward')}>
+              <Icon name="chevron-forward" size={20} color={colors.textPrimary} />
+            </TouchableOpacity>
+          ) : (
+            <View style={{ width: 20 }} />
+          )}
         </View>
 
         {viewMode === 'month' ? renderMonthGrid() : renderYearHeatmap()}

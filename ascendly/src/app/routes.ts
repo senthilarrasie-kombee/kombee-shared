@@ -20,4 +20,4 @@ export const ROUTES = {
   AXIOS_WEATHER: 'axiosWeather',
   STRUCTURED_API: 'structuredApi',
   STATS: 'stats',
-};
+} as const;

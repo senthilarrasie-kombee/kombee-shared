@@ -12,6 +12,11 @@ import {
   updateUserProfile,
   syncUserProfile,
 } from '@core/firebase/firestore';
+import {habitRepo} from '@core/storage/sqlite/repositories/HabitRepository';
+import {completionRepo} from '@core/storage/sqlite/repositories/CompletionRepository';
+import {syncQueueRepo} from '@core/storage/sqlite/repositories/SyncQueueRepository';
+import {syncService} from '@core/storage/sqlite/SyncService';
+import {runMigrations} from '@core/storage/sqlite/schema';
 import {storage, secureStorage} from '@core/storage';
 import {STORAGE_KEYS} from '@core/storage/keys';
 import {signInWithGoogle, signInWithEmail, signUpWithEmail} from '@core';
@@ -46,6 +51,36 @@ const initialState: RootState = {
   user: null,
   isAuthenticated: false,
 };
+
+// Async Thunk for Hydrating Store from SQLite
+export const hydrateStore = createAsyncThunk(
+  'root/hydrateStore',
+  async (_, {dispatch, rejectWithValue}) => {
+    try {
+      // 1. Ensure DB schema is up to date
+      await runMigrations();
+
+      const uid = await secureStorage.getItem(STORAGE_KEYS.AUTH.USER_ID);
+      if (!uid) return;
+
+      // 2. Fetch habits from SQLite
+      const habits = await habitRepo.findByUserId(uid);
+      
+      if (habits.length > 0) {
+        dispatch(setHabits(habits));
+      }
+
+      // 3. Trigger background sync
+      dispatch(fetchHabits(true));
+      syncService.processQueue(uid);
+
+      return true;
+    } catch (error) {
+      console.error('Hydration Error:', error);
+      return rejectWithValue('Failed to hydrate store');
+    }
+  }
+);
 
 // Async Thunk for fetching user profile
 export const fetchUserProfile = createAsyncThunk(
@@ -98,7 +133,12 @@ export const fetchHabits = createAsyncThunk(
 
       const habits = await getUserHabits(uid);
 
-      console.log(`Fetched ${habits.length} habits from Firestore`);
+      // Save to SQLite
+      for (const habit of habits) {
+        await habitRepo.save(uid, habit as Habit);
+      }
+
+      console.log(`Fetched ${habits.length} habits from Firestore and cached to SQLite`);
       return habits as unknown as Habit[];
     } catch (error) {
       console.error('Fetch Habits Error:', error);
@@ -118,13 +158,33 @@ export const addHabitAsync = createAsyncThunk(
 
       if (!uid) throw new Error('No user authenticated');
 
-      const result = await addHabit(uid, {
+      const habitWithDate = {
         ...habit,
         createdDate: new Date().toISOString(),
+        id: `local_${Date.now()}`, // Temporary local ID
+      } as Habit;
+
+      // 1. Save to SQLite immediately
+      await habitRepo.save(uid, {...habitWithDate, isDirty: true});
+      
+      // 2. Add to Sync Queue
+      await syncQueueRepo.enqueue({
+        entityType: 'habit',
+        entityId: habitWithDate.id.toString(),
+        operation: 'create',
+        payload: JSON.stringify(habitWithDate),
       });
 
-      console.log('✅ Habit Saved to Firestore:', result.id);
-      return result as Habit;
+      // 3. Attempt Firestore Sync in background
+      addHabit(uid, habitWithDate).then(async (result) => {
+        await habitRepo.save(uid, {...result, isDirty: false, lastSyncedAt: new Date().toISOString()});
+        // Remove from queue or mark as synced (SyncService handles this if we call it)
+        syncService.processQueue(uid);
+      }).catch(err => {
+        console.warn('Initial Firestore sync failed, will retry via queue:', err);
+      });
+
+      return habitWithDate;
     } catch (error) {
       console.error('Add Habit Error:', error);
       return rejectWithValue('Failed to add habit');
@@ -140,15 +200,33 @@ export const updateHabitAsync = createAsyncThunk(
   async (habit: Habit, {dispatch, getState, rejectWithValue}) => {
     try {
       dispatch(setLoaderVisible(true));
-
       const uid = await secureStorage.getItem(STORAGE_KEYS.AUTH.USER_ID);
-
       if (!uid) throw new Error('No user authenticated');
 
-      const result = await updateHabitFirestore(uid, habit);
+      const updatedHabit = {...habit, updatedAt: new Date().toISOString()};
 
-      console.log('✨ Habit Updated in Firestore:', habit.id);
-      return result as Habit;
+      // 1. Update SQLite immediately
+      console.log('💾 SQLite: Saving habit update offline...', updatedHabit.id);
+      await habitRepo.save(uid, {...updatedHabit, isDirty: true});
+
+      // 2. Add to Sync Queue
+      console.log('💾 SQLite: Enqueuing sync operation for', updatedHabit.id);
+      await syncQueueRepo.enqueue({
+        entityType: 'habit',
+        entityId: updatedHabit.id.toString(),
+        operation: 'update',
+        payload: JSON.stringify(updatedHabit),
+      });
+
+      // 3. Attempt Firestore Sync
+      updateHabitFirestore(uid, updatedHabit).then(async (result) => {
+        await habitRepo.save(uid, {...result, isDirty: false, lastSyncedAt: new Date().toISOString()});
+        syncService.processQueue(uid);
+      }).catch(err => {
+        console.warn('Firestore update failed, will retry via queue:', err);
+      });
+
+      return updatedHabit;
     } catch (error) {
       console.error('Update Habit Error:', error);
       return rejectWithValue('Failed to update habit');
@@ -164,14 +242,29 @@ export const deleteHabitAsync = createAsyncThunk(
   async (habitId: string | number, {dispatch, getState, rejectWithValue}) => {
     try {
       dispatch(setLoaderVisible(true));
-
       const uid = await secureStorage.getItem(STORAGE_KEYS.AUTH.USER_ID);
-
       if (!uid) throw new Error('No user authenticated');
 
-      await deleteHabitFirestore(uid, habitId.toString());
+      // 1. Soft delete in SQLite
+      await habitRepo.softDelete(habitId);
 
-      console.log('🗑️ Habit Deleted from Firestore, ID:', habitId);
+      // 2. Add to Sync Queue
+      await syncQueueRepo.enqueue({
+        entityType: 'habit',
+        entityId: habitId.toString(),
+        operation: 'delete',
+        payload: JSON.stringify({id: habitId}),
+      });
+
+      // 3. Attempt Firestore Delete
+      deleteHabitFirestore(uid, habitId.toString()).then(() => {
+        // Hard delete from SQLite if sync successful
+        habitRepo.delete(habitId);
+        syncService.processQueue(uid);
+      }).catch(err => {
+        console.warn('Firestore delete failed, will retry via queue:', err);
+      });
+
       return habitId;
     } catch (error) {
       console.error('Delete Habit Error:', error);

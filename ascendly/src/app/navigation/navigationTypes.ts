@@ -6,7 +6,7 @@ type MainStack = {
   [ROUTES.HOME]: undefined | Record<string, any>;
   [ROUTES.LOGIN]: undefined;
   [ROUTES.DASHBOARD]: undefined;
-  [ROUTES.HABITS_LISTING]: undefined;
+  [ROUTES.HABITS_LISTING]: {date?: string};
   [ROUTES.ACCOUNT]: undefined;
   [ROUTES.ALL_HABITS]: undefined;
   [ROUTES.EDIT_PROFILE]: undefined;
@@ -19,6 +19,7 @@ type MainStack = {
   [ROUTES.AXIOS_PRODUCTS]: undefined;
   [ROUTES.AXIOS_WEATHER]: undefined;
   [ROUTES.STATS]: undefined;
+  [ROUTES.STRUCTURED_API]: undefined;
 };
 
 export type {MainStack};

@@ -1,104 +1,41 @@
-import React, {useState, useMemo, useEffect} from 'react';
-import {View, Text, TouchableOpacity, BackHandler, ActivityIndicator, ScrollView} from 'react-native';
-import {apiClient} from '@core/api';
-import {createStyles} from './DashboardStyles';
+import React, {useState} from 'react';
+import {View, Text, TouchableOpacity, ActivityIndicator, ScrollView} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {DashboardType} from '@shared/types/dashboard';
-import {useTheme} from '@shared/theme';
 
 import {AppButton, AppHeader, AppText} from '@shared/components';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useNavigation} from '@react-navigation/native';
 import ConfirmModal from '@shared/components/ConfirmModal';
 import {STRINGS} from '@shared/constants/strings';
-import {ROUTES} from '@app/routes';
-import {storage, logAllStorageData, asyncStorage, ASYNC_STORAGE_KEYS} from '@core/storage';
-import {STORAGE_KEYS} from '@core/storage/keys';
-import {LOCAL_APP_VERSION, ONLINE_APP_VERSION} from '@core/config/appVersion';
-import {isDeviceRooted} from '@core';
+import {logAllStorageData} from '@core/storage';
+import {setToast} from '@store/reducers/rootSlice';
+
+import {useDashboard} from '../hooks/useDashboard';
 
 const Dashboard: React.FC<DashboardType> = ({children}) => {
-  const [count, setCount] = useState(0);
-  const {colors} = useTheme();
-  const styles = useMemo(() => createStyles(colors), [colors]);
-  const navigation = useNavigation<any>();
-  const [isExitModalVisible, setIsExitModalVisible] = useState(false);
-  const [pendingAction, setPendingAction] = useState<any>(null);
-  const [quote, setQuote] = useState('');
-  const [isQuoteLoading, setIsQuoteLoading] = useState(false);
-
-  const fetchQuote = async () => {
-    setIsQuoteLoading(true);
-    try {
-      const response = await apiClient.get('/api/random');
-      if (response.data) {
-        setQuote(`${response.data.quote} — ${response.data.author}`);
-      }
-    } catch (err: any) {
-      console.log('[Dashboard] Quote fetch failed:', err.message);
-    } finally {
-      setIsQuoteLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    // Log versions
-    console.log(`[Version] Local: ${LOCAL_APP_VERSION}, Online: ${ONLINE_APP_VERSION}`);
-
-    // Store last login
-    storage.set(STORAGE_KEYS.APP.LAST_LOGIN, new Date().toISOString());
-
-    // Update Rating Prompt Count
-    const updateRatingPromptCount = async () => {
-      const currentCount = (await asyncStorage.getObject<number>(ASYNC_STORAGE_KEYS.RATING_PROMPT_COUNT)) || 0;
-      await asyncStorage.setObject(ASYNC_STORAGE_KEYS.RATING_PROMPT_COUNT, currentCount + 1);
-      console.log(`[Dashboard] Visit count for rating: ${currentCount + 1}`);
-    };
-
-    const checkSecurity = async () => {
-      const rooted = await isDeviceRooted('Dashboard Initialization');
-      console.log(`[Security] Is device rooted: ${rooted}`);
-    };
-
-    updateRatingPromptCount();
-    checkSecurity();
-    logAllStorageData();
-    asyncStorage.logAllData();
-    fetchQuote();
-  }, []);
-
-  useEffect(() => {
-    const backAction = () => {
-      setIsExitModalVisible(true);
-      return true;
-    };
-
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
-
-    const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
-      // If we are navigating to the Login screen (likely a logout), don't show the exit modal
-      if (e.data.action.type === 'RESET' || e.data.action.name === ROUTES.LOGIN) {
-        return;
-      }
-
-      // Prevent default behavior of leaving the screen
-      e.preventDefault();
-
-      // Save the action to trigger it later if confirmed
-      setPendingAction(e.data.action);
-      setIsExitModalVisible(true);
-    });
-
-    return () => {
-      backHandler.remove();
-      unsubscribe();
-    };
-  }, [navigation]);
-
-  const confirmExit = () => {
-    setIsExitModalVisible(false);
-    // Exit the app entirely
-    BackHandler.exitApp();
-  };
+  const {
+    colors,
+    styles,
+    navigation,
+    dispatch,
+    isExitModalVisible,
+    setIsExitModalVisible,
+    quote,
+    isQuoteLoading,
+    syncQueueCount,
+    fetchQuote,
+    confirmExit,
+    cancelExit,
+    navigateToProducts,
+    navigateToWeather,
+    navigateToStructuredApi,
+    navigateToStats,
+    navigateToAxiosExample,
+    navigateToPokemon,
+    count,
+    incrementCount,
+    isOnline
+  } = useDashboard();
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -107,6 +44,46 @@ const Dashboard: React.FC<DashboardType> = ({children}) => {
         style={styles.content}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}>
+        
+        {!isOnline && (
+          <View style={{
+            backgroundColor: '#FF3B30', 
+            padding: 10, 
+            borderRadius: 12, 
+            marginBottom: 16, 
+            flexDirection: 'row', 
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <Icon name="wifi-outline" size={20} color="white" style={{marginRight: 8}} />
+            <AppText style={{color: 'white', fontWeight: 'bold'}}>
+              {STRINGS.SYNC.OFFLINE_MODE}
+            </AppText>
+          </View>
+        )}
+
+        {syncQueueCount > 0 && (
+          <View style={{
+            backgroundColor: '#FF9500', 
+            padding: 10, 
+            borderRadius: 12, 
+            marginBottom: 16, 
+            flexDirection: 'row', 
+            alignItems: 'center',
+            justifyContent: 'center',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            elevation: 3,
+          }}>
+            <Icon name="cloud-upload-outline" size={20} color="white" style={{marginRight: 8}} />
+            <AppText style={{color: 'white', fontWeight: 'bold'}}>
+              {STRINGS.SYNC.PENDING_ITEMS(syncQueueCount)}
+            </AppText>
+          </View>
+        )}
+
         <AppText>API integration module - Using Axios</AppText>
         <View style={styles.quoteContainer}>
           {isQuoteLoading ? (
@@ -124,44 +101,53 @@ const Dashboard: React.FC<DashboardType> = ({children}) => {
         <Text style={styles.counterText}>{count}</Text>
         <AppButton
           title="Increment Counter"
-          onPress={() => setCount(count + 1)}
+          onPress={incrementCount}
           style={{paddingHorizontal: 30, marginBottom: 16}}
         />
 
         <AppButton
           title="Latest status"
-          onPress={() => navigation.navigate(ROUTES.STATS)}
+          onPress={navigateToStats}
           style={{paddingHorizontal: 30, marginBottom: 16}}
         />
 
         <AppButton
           title="Axios API Call Example 1"
-          onPress={() => navigation.navigate(ROUTES.AXIOS_EXAMPLE)}
+          onPress={navigateToAxiosExample}
           style={{paddingHorizontal: 30, marginBottom: 16}}
         />
 
         <AppButton
           title="Axios API Call Example 2"
-          onPress={() => navigation.navigate(ROUTES.AXIOS_POKEMON)}
+          onPress={navigateToPokemon}
           style={{paddingHorizontal: 30, marginBottom: 16}}
         />
 
         <AppButton
           title="Axios API Call Example 3"
-          onPress={() => navigation.navigate(ROUTES.AXIOS_PRODUCTS)}
+          onPress={navigateToProducts}
           style={{paddingHorizontal: 30, marginBottom: 16}}
         />
 
         <AppButton
           title="Axios API Call Example 4"
-          onPress={() => navigation.navigate(ROUTES.AXIOS_WEATHER)}
+          onPress={navigateToWeather}
           style={{paddingHorizontal: 30, marginBottom: 16}}
         />
 
         <AppButton
           title="Structured API"
-          onPress={() => navigation.navigate(ROUTES.STRUCTURED_API)}
-          style={{paddingHorizontal: 30}}
+          onPress={navigateToStructuredApi}
+          style={{paddingHorizontal: 30, marginBottom: 16}}
+        />
+
+        <AppButton
+          title="Log All Storage Data"
+          onPress={() => {
+            dispatch(setToast('Logging data to console...'));
+            logAllStorageData();
+          }}
+          style={{paddingHorizontal: 30, backgroundColor: '#666'}}
         />
       </ScrollView>
 

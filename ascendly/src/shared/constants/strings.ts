@@ -199,7 +199,7 @@ export const STRINGS = {
     },
   },
   MONTHS: {
-    SHORT: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+    SHORT: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     FULL: [
       'January',
       'February',
@@ -226,5 +226,15 @@ export const STRINGS = {
       Sat: 'Saturday',
       Sun: 'Sunday',
     },
+  },
+  SYNC: {
+    OFFLINE_MODE: 'No Internet Connection (Offline Mode)',
+    PENDING_ITEMS: (count: number) => `${count} item${count !== 1 ? 's' : ''} pending sync`,
+  },
+  NAV: {
+    HOME: 'Home',
+    TODAY: 'Today',
+    HABITS: 'Habits',
+    ACCOUNT: 'Account',
   },
 };

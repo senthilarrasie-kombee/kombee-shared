@@ -1,5 +1,6 @@
 import React, {useMemo, useState} from 'react';
 import {View, ScrollView, TouchableOpacity, StatusBar} from 'react-native';
+import {HabitCompletion} from '@shared/types/habit';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useRoute, RouteProp, useNavigation} from '@react-navigation/native';
@@ -26,6 +27,11 @@ const HabitDetailsScreen = () => {
   const {colors, isDark} = useTheme();
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<HabitDetailsRouteProp>();
+  
+  if (!route.params) {
+    return null;
+  }
+  
   const initialHabit = route.params.habit;
 
   // Select the latest habit data from Redux to ensure we see updates after editing
@@ -276,15 +282,15 @@ const HabitDetailsScreen = () => {
           </View>
         </View>
 
-        {habit.completions.some(c => c.note) && (
+        {habit.completions.some((c: HabitCompletion) => c.note) && (
           <>
             <View style={styles.divider} />
             <View style={styles.section}>
               <AppText style={styles.sectionTitle}>Notes</AppText>
               {habit.completions
-                .filter(c => c.note)
-                .sort((a, b) => b.date.localeCompare(a.date))
-                .map((c, index) => (
+                .filter((c: HabitCompletion) => c.note)
+                .sort((a: HabitCompletion, b: HabitCompletion) => b.date.localeCompare(a.date))
+                .map((c: HabitCompletion, index: number) => (
                   <View
                     key={`${c.date}-${index}`}
                     style={[styles.noteItem, {backgroundColor: isDark ? '#1E1E26' : '#F8FAFC'}]}>
